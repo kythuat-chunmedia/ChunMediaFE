@@ -9,7 +9,7 @@ import {
 
 // ============ CONFIGURATION ============
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7156';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://be.chunmedia.vn';
 
 // ============ TOKEN STORAGE ============
 // Lưu trong memory để bảo mật hơn localStorage
