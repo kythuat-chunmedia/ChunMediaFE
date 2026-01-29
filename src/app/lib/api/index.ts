@@ -11,11 +11,11 @@ export { apiClient, tokenStorage } from "./client";
 
 // ============ ADMIN MANAGEMENT ============
 export { adminManagementApi } from "./endpoints/admin.api";
-export type { AdminFormData } from "../../types/models";
+export type { AdminFormData } from "@/app/types";
 
 // ============ USER MANAGEMENT ============
 export { userManagementApi } from "./endpoints/user.api";
-export type { UserFormData } from "../../types/models";
+export type { UserFormData } from "@/app/types";
 
 // ============ PRODUCT ============
 export { productApi } from "./endpoints/product.api";
