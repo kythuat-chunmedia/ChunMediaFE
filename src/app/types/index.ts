@@ -14,3 +14,5 @@ export * from './apiResponse.type';
 export * from './filterParams.type';
 export * from './utils.type';
 export * from './dashboard.type';
+export * from './portfolio.type';
+export * from './service.type';

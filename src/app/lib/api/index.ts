@@ -20,6 +20,9 @@ export type { UserFormData } from "@/app/types";
 // ============ PRODUCT ============
 export { productApi } from "./endpoints/product.api";
 
+// ============ PRODUCT ============
+export { portfolioApi } from "./endpoints/portfolio.api";
+
 // ============ CATEGORY ============
 export { categoryProductApi, categoryNewApi } from "./endpoints/category.api";
 
@@ -40,6 +43,9 @@ export { orderApi } from "./endpoints/order.api";
 
 // ============ CONFIG SITE ============
 export { configSiteApi } from "./endpoints/config.api";
+
+// ============ SERVICE ============
+export { serviceApi } from "./endpoints/service.api";
 
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";

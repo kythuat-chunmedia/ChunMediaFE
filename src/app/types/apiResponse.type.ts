@@ -13,7 +13,7 @@ export interface ApiResponse<T> {
 export interface PaginatedResponse<T> {
   success: boolean;
   message: string;
-  data: T[];
+  items: T[];
   pagination: {
     currentPage: number;
     pageSize: number;

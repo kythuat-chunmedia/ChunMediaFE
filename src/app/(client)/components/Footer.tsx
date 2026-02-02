@@ -1,5 +1,11 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Facebook, Linkedin, Youtube, Phone, Mail } from 'lucide-react';
+import { ConfigSite, Menu, Portfolio, Service } from '@/app/types';
+import { clientApi } from '@/app/lib/api';
+import { toSlug } from '@/app/lib/helper';
+// import { ConfigSite } from '@/app/types';
+// import { clientApi } from '@/app/lib/api';
 
 const quickLinks = [
   { href: '/', label: 'Trang Chủ' },
@@ -15,16 +21,54 @@ const serviceLinks = [
   { href: '/dich-vu#event', label: 'Sự Kiện' },
 ];
 
-export default function Footer() {
+
+
+
+
+export default async function Footer() {
+  let configSite: ConfigSite | null = null;
+  let menus: Menu[] = [];
+  let services: Service[] = [];
+  let portfolios: Portfolio[] = [];
+
+  try {
+    const [configData, menuData, serviceData, portfolioData] = await Promise.all([
+      clientApi.getConfigSite(),
+      clientApi.getMenusRoot(),
+      clientApi.getServicesFooter(),
+      clientApi.getPortfolioFooter(),
+      
+    ]);
+
+    configSite = configData;
+    menus = menuData;
+    services = serviceData;
+    portfolios = portfolioData;
+  } catch (error) {
+    console.error('Failed to fetch data:', error);
+  }
+
+
+  
   return (
     <footer className="bg-slate-800 text-gray-300">
       <div className="container mx-auto px-4 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Section */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white">Communication</h3>
+            <div className='flex justify-start items-center'>
+              <Image
+                src={configSite?.image
+                  || '/default-image.png'}
+                alt={configSite?.title || 'Tiêu đề ảnh'}
+                width={200}
+                height={50}
+                priority
+              />
+            </div>
+            {/* <h3 className="text-xl font-bold text-white">{configSite.title}</h3> */}
             <p className="text-sm leading-relaxed text-gray-400">
-              Chuyên cung cấp các dịch vụ PR, Marketing, Video và Sự kiện chuyên nghiệp.
+              {configSite?.description}
             </p>
           </div>
 
@@ -32,13 +76,14 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-white">Liên Kết Nhanh</h4>
             <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.href}>
+              {menus.map((menu) => (
+                (menu.title.toLowerCase().trim() == 'trang chủ') ? '' :
+                <li key={menu.id}>
                   <Link
-                    href={link.href}
+                    href={toSlug(menu.title)}
                     className="text-sm text-gray-400 hover:text-teal-400 transition-colors duration-200"
                   >
-                    {link.label}
+                    {menu.title}
                   </Link>
                 </li>
               ))}
@@ -49,18 +94,35 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-white">Dịch Vụ</h4>
             <ul className="space-y-2">
-              {serviceLinks.map((link) => (
-                <li key={link.href}>
+              {services.map((service) => (
+                <li key={service.id}>
                   <Link
-                    href={link.href}
+                    href={'/dich-vu'}
                     className="text-sm text-gray-400 hover:text-teal-400 transition-colors duration-200"
                   >
-                    {link.label}
+                    {service.title}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
+
+          {/* Portfolios */}
+          {/* <div className="space-y-4">
+            <h4 className="text-lg font-semibold text-white">Portfolio</h4>
+            <ul className="space-y-2">
+              {portfolios.map((portfolio) => (
+                <li key={portfolio.id}>
+                  <Link
+                    href={'portfolio'}
+                    className="text-sm text-gray-400 hover:text-teal-400 transition-colors duration-200"
+                  >
+                    {portfolio.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div> */}
 
           {/* Contact Info */}
           <div className="space-y-4">

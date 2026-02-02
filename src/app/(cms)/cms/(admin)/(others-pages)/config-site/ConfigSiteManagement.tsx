@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Label from "@/components/form/Label";
-import Input from "@/components/form/input/InputField";
+import Label from "@/app/(cms)/cms/components/form/Label";
+import Input from "@/app/(cms)/cms/components/form/input/InputField";
 import { ConfigSite, ConfigSiteFormData } from "@/app/types";
 import { PencilIcon, CheckCircleIcon } from "./icons";
 import { configSiteApi } from "@/app/lib/api/index";
@@ -152,6 +152,8 @@ export default function ConfigSiteManagement() {
     e.preventDefault();
     if (!validate()) return;
 
+    console.log(formData);
+
     try {
       setSaving(true);
       await configSiteApi.update(formData);
@@ -165,6 +167,8 @@ export default function ConfigSiteManagement() {
       setSaving(false);
     }
   };
+
+
 
   const handleUpload = async (
     file: File,

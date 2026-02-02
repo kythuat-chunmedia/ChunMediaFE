@@ -30,6 +30,8 @@ export const configSiteApi = {
       `${BASE_URL}/update`,
       data
     );
+
+    console.log(`${BASE_URL}/update`);
     if ('data' in response) {
       return (response as ApiResponse<ConfigSite>).data ?? null;
     }

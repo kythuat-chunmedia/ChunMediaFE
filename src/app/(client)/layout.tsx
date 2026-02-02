@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/app/(client)/components/Header";
 import Footer from "@/app/(client)/components/Footer";
+import { ConfigSite } from "../types";
+import { clientApi } from "../lib/api";
 
 export const metadata: Metadata = {
   title: "Communication Agency | PR, Marketing, Video & Sự Kiện",
@@ -21,6 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="vi">
       <head>

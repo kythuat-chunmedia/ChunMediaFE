@@ -32,6 +32,15 @@ export interface NewFormData {
   categoryNewId: number;
 }
 
+
+export interface NewsQueryParams {
+  pageNumber?: number;
+  pageSize?: number;
+  categoryId?: number;
+  searchTerm?: string;
+  isActive?: boolean;
+}
+
 // Filter params cho API
 export interface NewFilterParamsPagination {
   page?: number;
@@ -43,3 +52,4 @@ export interface NewFilterParamsPagination {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+

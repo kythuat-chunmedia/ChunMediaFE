@@ -1,10 +1,10 @@
 "use client";
 
-import { ProtectedRoute } from "@/components/auth/cms/ProtectedRoute";
-import { useSidebar } from "@/context/SidebarContext";
-import AppHeader from "@/layout/AppHeader";
-import AppSidebar from "@/layout/AppSidebar";
-import Backdrop from "@/layout/Backdrop";
+import { ProtectedRoute } from "@/app/(cms)/cms/components/auth/cms/ProtectedRoute";
+import { useSidebar } from "@/app/(cms)/cms/context/SidebarContext";
+import AppHeader from "@/app/(cms)/cms/layout/AppHeader";
+import AppSidebar from "@/app/(cms)/cms/layout/AppSidebar";
+import Backdrop from "@/app/(cms)/cms/layout/Backdrop";
 import React from "react";
 
 export default function AdminLayout({

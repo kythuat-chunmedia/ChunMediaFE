@@ -1,6 +1,6 @@
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import Badge from "@/components/ui/badge/Badge";
-import { PlusIcon } from "@/icons";
+import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
+import Badge from "@/app/(cms)/cms/components/ui/badge/Badge";
+import { PlusIcon } from "@/app/(cms)/cms/icons";
 import { Metadata } from "next";
 import React from "react";
 
@@ -16,7 +16,7 @@ export default function BadgePage() {
     <div>
       <PageBreadcrumb pageTitle="Badges" />
       <div className="space-y-5 sm:space-y-6">
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               With Light Background
@@ -50,7 +50,7 @@ export default function BadgePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               With Solid Background
@@ -84,7 +84,7 @@ export default function BadgePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               Light Background with Left Icon
@@ -117,7 +117,7 @@ export default function BadgePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               Solid Background with Left Icon
@@ -150,7 +150,7 @@ export default function BadgePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               Light Background with Right Icon
@@ -183,7 +183,7 @@ export default function BadgePage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
           <div className="px-6 py-5">
             <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
               Solid Background with Right Icon

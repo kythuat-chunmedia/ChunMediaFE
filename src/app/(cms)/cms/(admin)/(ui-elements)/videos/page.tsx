@@ -1,5 +1,5 @@
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import VideosExample from "@/components/ui/video/VideosExample";
+import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
+import VideosExample from "@/app/(cms)/cms/components/ui/video/VideosExample";
 import { Metadata } from "next";
 import React from "react";
 

@@ -7,9 +7,42 @@ import {
   TokenResponse,
 } from '@/app/types/auth';
 
+import type {
+  Banner,
+  CategoryNew,
+  CategoryProduct,
+  ConfigSite,
+  Menu,
+  New,
+  NewFilterParamsPagination,
+  NewsQueryParams,
+  PaginatedResponse,
+  Portfolio,
+  Product,
+  Service,
+} from '@/app/types'
+
 // ============ CONFIGURATION ============
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://be.chunmedia.vn';
+
+
+export async function fetchApi<T>(endpoint: string): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}/${endpoint}`, {
+    cache: 'no-store',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!res.ok) {
+    throw new Error(`API error ${res.status}`)
+  }
+
+  return res.json()
+}
+
+
 
 // ============ TOKEN STORAGE ============
 // Lưu trong memory để bảo mật hơn localStorage
@@ -21,11 +54,11 @@ let refreshToken: string | null = null;
 export const tokenStorage = {
   getAccessToken: () => accessToken,
   getRefreshToken: () => refreshToken,
-  
+
   setTokens: (tokens: TokenResponse) => {
     accessToken = tokens.accessToken;
     refreshToken = tokens.refreshToken;
-    
+
     // Lưu vào sessionStorage để persist khi refresh page
     // Trong production, nên dùng httpOnly cookie cho refreshToken
     if (typeof window !== 'undefined') {
@@ -33,7 +66,7 @@ export const tokenStorage = {
       sessionStorage.setItem('refreshToken', tokens.refreshToken);
     }
   },
-  
+
   clearTokens: () => {
     accessToken = null;
     refreshToken = null;
@@ -42,7 +75,7 @@ export const tokenStorage = {
       sessionStorage.removeItem('refreshToken');
     }
   },
-  
+
   // Khôi phục tokens từ sessionStorage khi app load
   restoreTokens: () => {
     if (typeof window !== 'undefined') {
@@ -88,8 +121,8 @@ class ApiClient {
       return false;
     }
 
-    const endpoint = userType === 'Admin' 
-      ? '/api/admin/auth/refresh-token' 
+    const endpoint = userType === 'Admin'
+      ? '/api/admin/auth/refresh-token'
       : '/api/client/auth/refresh-token';
 
     try {
@@ -143,14 +176,14 @@ class ApiClient {
     if (response.status === 401 && requireAuth) {
       // Kiểm tra header Token-Expired
       const tokenExpired = response.headers.get('Token-Expired') === 'true';
-      
+
       if (tokenExpired && !this.isRefreshing) {
         this.isRefreshing = true;
-        
+
         // Lấy userType từ token hiện tại
         const userType = this.getUserTypeFromToken();
         const refreshSuccess = await this.doRefreshToken(userType);
-        
+
         this.isRefreshing = false;
 
         if (refreshSuccess) {
@@ -169,14 +202,14 @@ class ApiClient {
           });
         });
       }
-      
+
       // Refresh failed - clear tokens và throw error
       tokenStorage.clearTokens();
       throw new Error('Unauthorized - Please login again');
     }
 
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(data.message || 'Request failed');
     }
@@ -266,7 +299,6 @@ export const authApi = {
     apiClient.get<ApiResponse<unknown>>('/api/client/auth/me'),
 };
 
-// ============ ADMIN API (Protected) ============
 
 export const adminApi = {
   getDashboard: () =>
@@ -285,12 +317,93 @@ export const adminApi = {
 // ============ CLIENT API (Protected) ============
 
 export const clientApi = {
-  getHome: () =>
-    apiClient.get<ApiResponse<unknown>>('/api/client/home'),
+  getBanners: () => fetchApi<Banner[]>('api/banner/get-all'),
+  // getCategoryNews: () => fetchApi<CategoryNew[]>('api/category-new/get-all'),
+  getCategoryProducts: () => fetchApi<CategoryProduct[]>('api/category-product/get-all'),
 
-  getProfile: () =>
-    apiClient.get<ApiResponse<unknown>>('/api/client/profile'),
+  // getMenus: () => fetchApi<Menu[]>('api/menu/get-all'),
+  // getNews: () => fetchApi<New[]>('api/new/get-all'),
+  // getNews: async (params?: NewFilterParamsPagination): Promise<PaginatedResponse<New>> => {
+  //   const searchParams = new URLSearchParams();
+  //   if (params?.page) searchParams.set('page', params.page.toString());
+  //   if (params?.pageSize) searchParams.set('pageSize', params.pageSize.toString());
+  //   if (params?.categoryNewId) searchParams.set('categoryNewId', params.categoryNewId.toString());
+  //   // if (params?.search) searchParams.set('search', params.search);
+  //   // if (params?.isActive !== undefined) searchParams.set('isActive', params.isActive.toString());
+  //   // if (params?.author) searchParams.set('author', params.author);
+  //   // if (params?.sortBy) searchParams.set('sortBy', params.sortBy);
+  //   // if (params?.sortOrder) searchParams.set('sortOrder', params.sortOrder);
 
-  updateProfile: (data: { fullName?: string; phoneNumber?: string }) =>
-    apiClient.put<ApiResponse<unknown>>('/api/client/profile', data),
+  //   return fetchApi(`api/new/get-paginate?${searchParams.toString()}`);
+  // },
+
+  // getCategoryNews: async (): Promise<CategoryNew[]> => {
+  //   return fetchApi('api/category-new/get-all');
+  // },
+
+
+
+  getProducts: () => fetchApi<Product[]>('api/product/get-all'),
+  getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
+
+
+  // Service Page API
+  getServicesPublic: () => fetchApi<Service[]>('api/service/get-all'),
+
+  getServiceById: (id: number) => fetchApi<Service>(`api/service/get-by-id?id=${id}`),
+
+  // Infomation Website API
+  getConfigSite: () => fetchApi<ConfigSite>('api/config-site/get'),
+  
+  // Header API
+  getMenusHeader: () => fetchApi<Menu[]>('api/menu/get-root'),
+
+  // Footer API
+  getMenusRoot: () => fetchApi<Menu[]>('api/menu/get-root'),
+  getServicesFooter: () => fetchApi<Service[]>('api/service/get-all'),
+  getPortfolioFooter: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
+
+  // News Page APIs
+  getNewsForNewPage: async (params?: NewsQueryParams): Promise<PaginatedResponse<New>> => {
+    const searchParams = new URLSearchParams();
+
+    if (params?.pageNumber) searchParams.set('pageNumber', params.pageNumber.toString());
+    if (params?.pageSize) searchParams.set('pageSize', params.pageSize.toString());
+    if (params?.categoryId) searchParams.set('categoryId', params.categoryId.toString());
+    if (params?.searchTerm) searchParams.set('searchTerm', params.searchTerm);
+    if (params?.isActive !== undefined) searchParams.set('isActive', params.isActive.toString());
+
+    const query = searchParams.toString();
+    return fetchApi<PaginatedResponse<New>>(`api/new/pagination${query ? `?${query}` : ''}`);
+  },
+
+  getCategoryNewsForNewPage: async (): Promise<CategoryNew[]> => {
+    return fetchApi<CategoryNew[]>('api/category-new/get-all');
+  },
+
+
+  // Portfolio APIs
+  getPortfolio: async (slug: string): Promise<New | null> => {
+    return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
+  },
+
+
+  // News Detail APIs
+  getNewsDetail: async (slug: string): Promise<New | null> => {
+    return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
+  },
+
+
+  // getCategoryNews: async (): Promise<PaginatedResponse<CategoryNew>> => {
+  //   return fetchApi<PaginatedResponse<CategoryNew>>('api/category-new/get-all');
+  // },
+
+
+  // getNews: async (): Promise<PaginatedResponse<New>> => {
+  //   return fetchApi<PaginatedResponse<New>>('api/new/get-paginate');
+  // },
+
+  // getCategoryNews: async (): Promise<PaginatedResponse<CategoryNew>> => {
+  //   return fetchApi<PaginatedResponse<CategoryNew>>('api/category-new/get-all');
+  // },
 };

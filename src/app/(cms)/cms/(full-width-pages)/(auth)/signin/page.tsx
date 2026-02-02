@@ -1,5 +1,5 @@
 import { AuthProvider } from "@/app/contexts/AuthContext";
-import SignInForm from "@/components/auth/cms/SignInForm";
+import SignInForm from "@/app/(cms)/cms/components/auth/cms/SignInForm";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

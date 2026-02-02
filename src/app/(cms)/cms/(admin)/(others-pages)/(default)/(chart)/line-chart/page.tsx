@@ -1,6 +1,6 @@
-import LineChartOne from "@/components/charts/line/LineChartOne";
-import ComponentCard from "@/components/common/ComponentCard";
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import LineChartOne from "@/app/(cms)/cms/components/charts/line/LineChartOne";
+import ComponentCard from "@/app/(cms)/cms/components/common/ComponentCard";
+import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
 import { Metadata } from "next";
 import React from "react";
 

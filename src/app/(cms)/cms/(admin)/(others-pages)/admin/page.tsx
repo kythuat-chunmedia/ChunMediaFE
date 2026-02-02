@@ -1,7 +1,7 @@
-import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
 import { Metadata } from "next";
 import AdminManagement from "./AdminManagement";
-import { ProtectedRoute } from "@/components/auth/cms/ProtectedRoute";
+import { ProtectedRoute } from "@/app/(cms)/cms/components/auth/cms/ProtectedRoute";
 
 
 export const metadata: Metadata = {

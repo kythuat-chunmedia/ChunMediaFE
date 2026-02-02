@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import Label from "@/components/form/Label";
-import Input from "@/components/form/input/InputField";
+import Label from "@/app/(cms)/cms/components/form/Label";
+import Input from "@/app/(cms)/cms/components/form/input/InputField";
 import { Menu, MenuFormData, MenuTreeItem } from "@/app/types";
 import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "./icons";
 import { menuApi } from "@/app/lib/api/index";

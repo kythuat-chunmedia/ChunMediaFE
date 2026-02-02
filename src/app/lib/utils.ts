@@ -50,7 +50,7 @@ export function formatDate(date: string | Date): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    // hour: '2-digit',
+    // minute: '2-digit',
   }).format(new Date(date));
 }
