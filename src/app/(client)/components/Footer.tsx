@@ -55,7 +55,7 @@ export default async function Footer() {
       <div className="container mx-auto px-4 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Section */}
-          <div className="space-y-4">
+          <div className="space-y-8">
             <div className='flex justify-start items-center'>
               <Image
                 src={configSite?.image
@@ -131,19 +131,19 @@ export default async function Footer() {
               <li className="flex items-center gap-3">
                 <Phone size={16} className="text-teal-400 shrink-0" />
                 <a
-                  href="tel:0123456789"
+                  href={`tel:${configSite?.hotline}`}
                   className="text-sm text-gray-400 hover:text-teal-400 transition-colors"
                 >
-                  0123 456 789
+                  {configSite?.hotline}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} className="text-teal-400 shrink-0" />
                 <a
-                  href="mailto:info@communication.vn"
+                  href={`mailto:${configSite?.email}`}
                   className="text-sm text-gray-400 hover:text-teal-400 transition-colors"
                 >
-                  info@communication.vn
+                  {configSite?.email}
                 </a>
               </li>
             </ul>
@@ -151,7 +151,7 @@ export default async function Footer() {
             {/* Social Links */}
             <div className="flex items-center gap-4 pt-2">
               <a
-                href="https://facebook.com"
+                href={`${configSite?.facebook}`} 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-teal-400 transition-colors"
@@ -160,7 +160,7 @@ export default async function Footer() {
                 <Facebook size={20} />
               </a>
               <a
-                href="https://linkedin.com"
+                href={`${configSite?.linkedin}`} 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-teal-400 transition-colors"
@@ -169,7 +169,7 @@ export default async function Footer() {
                 <Linkedin size={20} />
               </a>
               <a
-                href="https://youtube.com"
+                href={`${configSite?.youtube}`} 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-teal-400 transition-colors"

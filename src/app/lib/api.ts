@@ -12,6 +12,7 @@ import type {
   CategoryNew,
   CategoryProduct,
   ConfigSite,
+  ContactFormData,
   Menu,
   New,
   NewFilterParamsPagination,
@@ -347,9 +348,19 @@ export const clientApi = {
   getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
 
 
+  // Portfolios Page API
+  getPortfolioDetail: async (slug: string): Promise<Portfolio | null> => {
+    return fetchApi<Portfolio | null>(`api/portfolio/get-by-url/${slug}`);
+  },
+
+
+  // Portfolios Page API
+  getPortfoliosPublished: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
+
+
+
   // Service Page API
   getServicesPublic: () => fetchApi<Service[]>('api/service/get-all'),
-
   getServiceById: (id: number) => fetchApi<Service>(`api/service/get-by-id?id=${id}`),
 
   // Infomation Website API
@@ -392,7 +403,21 @@ export const clientApi = {
   getNewsDetail: async (slug: string): Promise<New | null> => {
     return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
   },
+  
+  // Contact APIs
+  insertContact: async (data: ContactFormData): Promise<any> => {
+    const res = await fetch(`${API_BASE_URL}/api/Contact/insert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
+    if (!res.ok) {
+      throw new Error("Gửi liên hệ thất bại");
+    }
+
+    return res.json();
+  },
 
   // getCategoryNews: async (): Promise<PaginatedResponse<CategoryNew>> => {
   //   return fetchApi<PaginatedResponse<CategoryNew>>('api/category-new/get-all');

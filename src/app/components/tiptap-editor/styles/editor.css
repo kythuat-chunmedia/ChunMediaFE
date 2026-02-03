@@ -1,0 +1,235 @@
+/* ============================================================
+   Editor placeholder
+   ============================================================ */
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
+/* ============================================================
+   Table styles
+   ============================================================ */
+.tiptap table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.tiptap td,
+.tiptap th {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.tiptap th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.tiptap .selectedCell {
+  background-color: #e0f2fe;
+}
+
+/* ============================================================
+   Code block
+   ============================================================ */
+.tiptap pre {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  overflow-x: auto;
+}
+
+.tiptap code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.tiptap pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* ============================================================
+   Blockquote
+   ============================================================ */
+.tiptap blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: #4b5563;
+  background-color: #f9fafb;
+  padding: 0.5rem 1rem;
+}
+
+/* ============================================================
+   Link
+   ============================================================ */
+.tiptap a {
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiptap a:hover {
+  color: #1d4ed8;
+}
+
+/* ============================================================
+   Lists
+   ============================================================ */
+.tiptap ul,
+.tiptap ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.tiptap li {
+  margin: 0.25rem 0;
+}
+
+.tiptap li p {
+  display: inline;
+  margin: 0;
+}
+
+/* ============================================================
+   Horizontal rule
+   ============================================================ */
+.tiptap hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+
+/* ============================================================
+   Mark / Highlight
+   ============================================================ */
+.tiptap mark {
+  background-color: #fef08a;
+  padding: 0.125rem 0;
+}
+
+/* ============================================================
+   RESIZABLE IMAGE STYLES
+   ============================================================ */
+
+/* Wrapper — block-level, centers the container */
+.tiptap-resizable-image-wrapper {
+  display: block;
+  margin: 0.5rem 0;
+  line-height: 0; /* Loại bỏ khoảng trắng dưới img */
+}
+
+/* Container — inline-block để ôm sát ảnh */
+.tiptap-resizable-image-container {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+/* Image chính */
+.tiptap-resizable-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.15s ease;
+  cursor: default;
+}
+
+/* Hover state — viền nhạt khi rê chuột */
+.tiptap-resizable-image:hover {
+  box-shadow: 0 0 0 2px #93c5fd;
+}
+
+/* Selected state — viền xanh đậm */
+.tiptap-resizable-image.selected {
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* ── Resize handles ── */
+.tiptap-resize-handle {
+  width: 10px;
+  height: 10px;
+  background-color: #ffffff;
+  border: 2px solid #3b82f6;
+  border-radius: 2px;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.1s ease;
+}
+
+.tiptap-resize-handle:hover {
+  background-color: #dbeafe;
+}
+
+/* Handle đang active (kéo) */
+.tiptap-resize-handle.active {
+  background-color: #3b82f6;
+  border-color: #2563eb;
+}
+
+/* ── Size tooltip ── */
+.tiptap-resize-tooltip {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+  font-family: ui-monospace, monospace;
+}
+
+/* ── Image toolbar row ── */
+.tiptap-image-toolbar-input {
+  width: 64px;
+  height: 24px;
+  padding: 0 4px;
+  font-size: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  text-align: center;
+  outline: none;
+}
+
+.tiptap-image-toolbar-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+/* Hide spinner arrows on number inputs */
+.tiptap-image-toolbar-input::-webkit-outer-spin-button,
+.tiptap-image-toolbar-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tiptap-image-toolbar-input[type='number'] {
+  -moz-appearance: textfield;
+}

@@ -84,17 +84,30 @@ export const contactApi = {
   /**
    * Đánh dấu đã đọc
    */
-  markAsRead: async (id: number): Promise<Contact | null> => {
-    const response = await apiClient.post<Contact | ApiResponse<Contact>>(
-      `${BASE_URL}/mark-read/${id}`,
+  // markAsRead: async (id: number): Promise<Contact | null> => {
+  //   const response = await apiClient.post<Contact | ApiResponse<Contact>>(
+  //     `${BASE_URL}/mark-as-read/${id}`,
+  //     {}
+  //   );
+  //   if ('data' in response) {
+  //     return (response as ApiResponse<Contact>).data ?? null;
+  //   }
+  //   return response as Contact;
+  // },
+
+markAsRead: async (id: number): Promise<boolean> => {
+    const response = await apiClient.put<boolean | Contact | ApiResponse<Contact>>(
+      `${BASE_URL}/mark-as-read/${id}`,
       {}
     );
-    if ('data' in response) {
-      return (response as ApiResponse<Contact>).data ?? null;
+    if (typeof response === 'boolean') {
+      return response;
     }
-    return response as Contact;
+    if (response && typeof response === 'object' && 'data' in response) {
+      return true;
+    }
+    return true;
   },
-
   /**
    * Đánh dấu chưa đọc
    */
