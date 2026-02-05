@@ -19,6 +19,11 @@ export interface ContactFormData {
   phone?: string;
   subject?: string;
   message: string;
+
+  // Anti-spam fields
+  website?: string;        // honeypot
+  formLoadedAt?: number;   // timestamp
+  recaptchaToken?: string; // reCAPTCHA v3
 }
 
 // Filter params cho API
