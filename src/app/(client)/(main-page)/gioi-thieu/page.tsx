@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import Image from 'next/image';
 import { Eye, Target, Trophy } from 'lucide-react';
-import { awards, brandHistory } from '@/app/(client)/lib/mockData';
+import { awards, brandHistory } from '@/app/lib/mockData';
 import { clientApi } from '@/app/lib/api';
 import { MemberTeam } from '@/app/types';
 

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Eye, Users, BarChart3, ArrowRight, Filter } from 'lucide-react';
 import { Portfolio } from '@/app/types';
-import { formatNumber } from '@/app/(client)/lib/api';
+import { formatNumber } from '@/app/lib/helper/index';
 
 interface PortfolioPageClientProps {
   portfolios: Portfolio[];

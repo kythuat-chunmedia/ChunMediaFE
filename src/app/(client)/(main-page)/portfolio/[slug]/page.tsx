@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Eye, Users, BarChart3, ShoppingCart, DollarSign, Check, AlertCircle } from 'lucide-react';
 import { clientApi } from '@/app/lib/api';
-import { formatNumber, formatCurrency } from '@/app/(client)/lib/api';
+import { formatNumber, formatCurrency } from '@/app/lib/helper/index';
 import { Portfolio } from '@/app/types';
 
 interface PortfolioDetailPageProps {

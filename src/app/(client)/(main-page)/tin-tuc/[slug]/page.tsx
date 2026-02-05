@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 import { clientApi } from '@/app/lib/api';
-import { formatDate } from '@/app/(client)/lib/api';
+import { formatDate } from '@/app/lib/helper/index';
 import { New, CategoryNew } from '@/app/types';
 
 interface NewsDetailPageProps {
