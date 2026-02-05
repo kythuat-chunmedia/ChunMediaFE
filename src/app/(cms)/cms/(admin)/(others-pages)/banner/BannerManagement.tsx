@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Label from "@/app/(cms)/cms/components/form/Label";
-import Input from "@/app/(cms)/cms/components/form/input/InputField";
+import Label from "@/app/components/cms/form/Label";
+import Input from "@/app/components/cms/form/input/InputField";
 import { Banner, BannerFormData } from "@/app/types";
-import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "./icons";
+import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "../../../icons";
 import { bannerApi } from "@/app/lib/api/index";
 import { uploadApi } from "@/app/lib/api/endpoints/upload.api";
 

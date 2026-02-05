@@ -1,14 +1,14 @@
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
-import CheckboxComponents from "@/app/(cms)/cms/components/form/form-elements/CheckboxComponents";
-import DefaultInputs from "@/app/(cms)/cms/components/form/form-elements/DefaultInputs";
-import DropzoneComponent from "@/app/(cms)/cms/components/form/form-elements/DropZone";
-import FileInputExample from "@/app/(cms)/cms/components/form/form-elements/FileInputExample";
-import InputGroup from "@/app/(cms)/cms/components/form/form-elements/InputGroup";
-import InputStates from "@/app/(cms)/cms/components/form/form-elements/InputStates";
-import RadioButtons from "@/app/(cms)/cms/components/form/form-elements/RadioButtons";
-import SelectInputs from "@/app/(cms)/cms/components/form/form-elements/SelectInputs";
-import TextAreaInput from "@/app/(cms)/cms/components/form/form-elements/TextAreaInput";
-import ToggleSwitch from "@/app/(cms)/cms/components/form/form-elements/ToggleSwitch";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
+import CheckboxComponents from "@/app/components/cms/form/form-elements/CheckboxComponents";
+import DefaultInputs from "@/app/components/cms/form/form-elements/DefaultInputs";
+import DropzoneComponent from "@/app/components/cms/form/form-elements/DropZone";
+import FileInputExample from "@/app/components/cms/form/form-elements/FileInputExample";
+import InputGroup from "@/app/components/cms/form/form-elements/InputGroup";
+import InputStates from "@/app/components/cms/form/form-elements/InputStates";
+import RadioButtons from "@/app/components/cms/form/form-elements/RadioButtons";
+import SelectInputs from "@/app/components/cms/form/form-elements/SelectInputs";
+import TextAreaInput from "@/app/components/cms/form/form-elements/TextAreaInput";
+import ToggleSwitch from "@/app/components/cms/form/form-elements/ToggleSwitch";
 import { Metadata } from "next";
 import React from "react";
 

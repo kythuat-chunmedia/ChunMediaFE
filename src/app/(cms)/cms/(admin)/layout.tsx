@@ -1,6 +1,6 @@
 "use client";
 
-import { ProtectedRoute } from "@/app/(cms)/cms/components/auth/cms/ProtectedRoute";
+import { ProtectedRoute } from "@/app/components/cms/auth/cms/ProtectedRoute";
 import { useSidebar } from "@/app/(cms)/cms/context/SidebarContext";
 import AppHeader from "@/app/(cms)/cms/layout/AppHeader";
 import AppSidebar from "@/app/(cms)/cms/layout/AppSidebar";

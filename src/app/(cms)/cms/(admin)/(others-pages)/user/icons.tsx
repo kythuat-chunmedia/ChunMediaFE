@@ -1,5 +1,3 @@
-// Thêm các icons này vào file icons/index.tsx của bạn nếu chưa có
-
 // Plus Icon
 export const PlusIcon = ({ className = "" }: { className?: string }) => (
   <svg

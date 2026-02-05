@@ -1,13 +1,28 @@
+export const dynamic = 'force-dynamic';
+
 import Image from 'next/image';
 import { Eye, Target, Trophy } from 'lucide-react';
-import { teamMembers, awards, brandHistory } from '@/app/(client)/lib/mockData';
+import { awards, brandHistory } from '@/app/(client)/lib/mockData';
+import { clientApi } from '@/app/lib/api';
+import { MemberTeam } from '@/app/types';
+
 
 export const metadata = {
   title: 'Giới Thiệu | Communication Agency',
   description: 'Hành trình 10 năm xây dựng thương hiệu và tạo ra những giá trị bền vững.',
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Fetch real member team data
+  let memberTeams: MemberTeam[] = [];
+
+  try {
+    const data = await clientApi.getMemberTeamsPublic();
+    memberTeams = data || [];
+  } catch (error) {
+    console.error('Failed to fetch member teams:', error);
+  }
+
   return (
     <>
       {/* Page Header */}
@@ -97,22 +112,33 @@ export default function AboutPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
-                  />
+          {memberTeams.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+              {memberTeams.map((member) => (
+                <div key={member.id} className="text-center">
+                  <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <h3 className="font-semibold text-gray-900">{member.name}</h3>
+                  <p className="text-sm text-gray-600 mt-1">{member.role}</p>
+                  {member.description && (
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                      {member.description}
+                    </p>
+                  )}
                 </div>
-                <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{member.position}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 py-10">
+              Đang cập nhật thông tin đội ngũ...
+            </p>
+          )}
         </div>
       </section>
 

@@ -163,7 +163,7 @@ export default function DashboardPage() {
   const productStats = useMemo(() => {
     const getActive = (p: any) => getField(p, 'IsActive', 'isActive', false);
     const getQuantity = (p: any) => getField(p, 'Quantity', 'quantity', 0);
-    
+
     const active = products.filter(p => getActive(p)).length;
     const outOfStock = products.filter(p => getQuantity(p) === 0).length;
     const lowStock = products.filter(p => { const qty = getQuantity(p); return qty > 0 && qty <= 10; }).length;
@@ -184,10 +184,10 @@ export default function DashboardPage() {
   const newsStats = useMemo(() => {
     const getActive = (n: any) => getField(n, 'IsActive', 'isActive', false);
     const getViews = (n: any) => getField(n, 'View', 'view', 0);
-    return { 
-      total: news.length, 
-      active: news.filter(n => getActive(n)).length, 
-      totalViews: news.reduce((sum, n) => sum + getViews(n), 0) 
+    return {
+      total: news.length,
+      active: news.filter(n => getActive(n)).length,
+      totalViews: news.reduce((sum, n) => sum + getViews(n), 0)
     };
   }, [news]);
 
@@ -232,7 +232,7 @@ export default function DashboardPage() {
 
   //#region HELPERS
   const formatCurrency = (value: number) => new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(value);
-  
+
   const formatNumber = (value: number) => {
     if (value >= 1000000) return (value / 1000000).toFixed(1) + "M";
     if (value >= 1000) return (value / 1000).toFixed(1) + "K";
@@ -510,7 +510,7 @@ export default function DashboardPage() {
                   <div key={getField(item, 'Id', 'id', index)} className="px-5 py-3 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-white/2">
                     <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${rankColors[index] || 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-500'}`}>{index + 1}</span>
                     <div className="w-16 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 overflow-hidden shrink-0">
-                      {getField(item, 'Image', 'image', '') ? <img src={getField(item, 'Image', 'image', '')} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">IMG</div>}
+                      {getField(item, 'Image', 'image', '') ? <img src={'/news/' + getField(item, 'Image', 'image', '')} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">IMG</div>}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-gray-800 dark:text-white/90 truncate">{getField(item, 'Title', 'title', '')}</p>

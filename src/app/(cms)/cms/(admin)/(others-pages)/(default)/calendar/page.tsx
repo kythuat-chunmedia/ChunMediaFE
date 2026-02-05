@@ -1,5 +1,5 @@
-import Calendar from "@/app/(cms)/cms/components/calendar/Calendar";
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
+import Calendar from "@/app/components/cms/calendar/Calendar";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
 import { Metadata } from "next";
 import React from "react";
 

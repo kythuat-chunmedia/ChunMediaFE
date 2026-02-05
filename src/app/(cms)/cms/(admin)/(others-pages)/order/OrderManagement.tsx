@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import Label from "@/app/(cms)/cms/components/form/Label";
-import Input from "@/app/(cms)/cms/components/form/input/InputField";
+import Label from "@/app/components/cms/form/Label";
+import Input from "@/app/components/cms/form/input/InputField";
 import {
   Order,
   OrderDetail,
@@ -11,7 +11,7 @@ import {
   ORDER_STATUS_CONFIG,
   ORDER_STATUS_TRANSITIONS,
 } from "@/app/types";
-import { PlusIcon, PencilIcon, TrashBinIcon, XIcon } from "./icons";
+import { PlusIcon, PencilIcon, TrashBinIcon, XIcon } from "../../../icons";
 import { orderApi, productApi } from "@/app/lib/api/index";
 
 // ============ INITIAL FORM STATE ============

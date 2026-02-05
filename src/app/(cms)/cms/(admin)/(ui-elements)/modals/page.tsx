@@ -1,9 +1,9 @@
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
-import DefaultModal from "@/app/(cms)/cms/components/example/ModalExample/DefaultModal";
-import FormInModal from "@/app/(cms)/cms/components/example/ModalExample/FormInModal";
-import FullScreenModal from "@/app/(cms)/cms/components/example/ModalExample/FullScreenModal";
-import ModalBasedAlerts from "@/app/(cms)/cms/components/example/ModalExample/ModalBasedAlerts";
-import VerticallyCenteredModal from "@/app/(cms)/cms/components/example/ModalExample/VerticallyCenteredModal";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
+import DefaultModal from "@/app/components/cms/example/ModalExample/DefaultModal";
+import FormInModal from "@/app/components/cms/example/ModalExample/FormInModal";
+import FullScreenModal from "@/app/components/cms/example/ModalExample/FullScreenModal";
+import ModalBasedAlerts from "@/app/components/cms/example/ModalExample/ModalBasedAlerts";
+import VerticallyCenteredModal from "@/app/components/cms/example/ModalExample/VerticallyCenteredModal";
 import { Metadata } from "next";
 import React from "react";
 

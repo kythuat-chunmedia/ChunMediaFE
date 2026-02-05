@@ -1,6 +1,6 @@
-import ComponentCard from "@/app/(cms)/cms/components/common/ComponentCard";
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
-import Button from "@/app/(cms)/cms/components/ui/button/Button";
+import ComponentCard from "@/app/components/cms/common/ComponentCard";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
+import Button from "@/app/components/cms/ui/button/Button";
 import { BoxIcon } from "@/app/(cms)/cms/icons";
 import { Metadata } from "next";
 import React from "react";

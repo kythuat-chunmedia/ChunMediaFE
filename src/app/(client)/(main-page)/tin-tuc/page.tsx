@@ -1,5 +1,7 @@
+export const dynamic = 'force-dynamic';
+
 import { clientApi } from '@/app/lib/api';
-import { NewsContainer } from '../../components/tin-tuc/NewsContainer';
+import { NewsContainer } from '@/app/components/client/tin-tuc/NewsContainer';
 import { New, CategoryNew, PaginatedResponse } from '@/app/types';
 
 interface PageProps {
@@ -9,6 +11,7 @@ interface PageProps {
     search?: string;
   }>;
 }
+
 
 export default async function NewsPage({ searchParams }: PageProps) {
   const params = await searchParams;

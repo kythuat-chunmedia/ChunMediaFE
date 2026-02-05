@@ -1,5 +1,5 @@
-import GridShape from "@/app/(cms)/cms/components/common/GridShape";
-import ThemeTogglerTwo from "@/app/(cms)/cms/components/common/ThemeTogglerTwo";
+import GridShape from "@/app/components/cms/common/GridShape";
+import ThemeTogglerTwo from "@/app/components/cms/common/ThemeTogglerTwo";
 
 import { ThemeProvider } from "@/app/(cms)/cms/context/ThemeContext";
 import Image from "next/image";

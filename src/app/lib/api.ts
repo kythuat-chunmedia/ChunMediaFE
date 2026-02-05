@@ -13,11 +13,13 @@ import type {
   CategoryProduct,
   ConfigSite,
   ContactFormData,
+  MemberTeam,
   Menu,
   New,
   NewFilterParamsPagination,
   NewsQueryParams,
   PaginatedResponse,
+  Partner,
   Portfolio,
   Product,
   Service,
@@ -30,7 +32,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://be.chunmedia.vn
 
 export async function fetchApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_BASE_URL}/${endpoint}`, {
-    cache: 'no-store',
+    // cache: 'no-store',
+    next: { revalidate: 60 },
     headers: {
       'Content-Type': 'application/json',
     },
@@ -345,6 +348,8 @@ export const clientApi = {
 
 
   getProducts: () => fetchApi<Product[]>('api/product/get-all'),
+  getMemberTeamsPublic: () => fetchApi<MemberTeam[]>('api/member-team/get-all'),
+  getPartnerPublic: () => fetchApi<Partner[]>('api/partner/get-all'),
   getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
 
 
@@ -406,7 +411,11 @@ export const clientApi = {
   
   // Contact APIs
   insertContact: async (data: ContactFormData): Promise<any> => {
-    const res = await fetch(`${API_BASE_URL}/api/Contact/insert`, {
+
+
+    console.log(JSON.stringify(data));
+    console.log(`${API_BASE_URL}/api/contact/insert`);
+    const res = await fetch(`${API_BASE_URL}/api/contact/insert`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

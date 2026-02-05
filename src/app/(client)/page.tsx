@@ -1,13 +1,25 @@
+export const dynamic = 'force-dynamic';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Play } from 'lucide-react';
-import { partners } from '@/app/(client)/lib/mockData';
-import { OutstandingPortfolio } from './components/home/OutstandingPortfolio';
+import { OutstandingPortfolio } from '@/app/components/client/home/OutstandingPortfolio';
 import { clientApi } from '../lib/api';
+import { Partner } from '@/app/types';
 
 
 export default async function HomePage() {
   const portfolios = await clientApi.getPortfolios();
+
+  // Fetch real partner data
+  let partners: Partner[] = [];
+
+  try {
+    const data = await clientApi.getPartnerPublic();
+    partners = data || [];
+  } catch (error) {
+    console.error('Failed to fetch partners:', error);
+  }
 
   return (
     <>
@@ -76,36 +88,38 @@ export default async function HomePage() {
       <OutstandingPortfolio portfolios={portfolios} />
 
       {/* Partners Section */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Đối Tác Của Chúng Tôi
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Những thương hiệu đã tin tưởng và hợp tác cùng chúng tôi
-            </p>
-          </div>
+      {partners.length > 0 && (
+        <section className="section-padding bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Đối Tác Của Chúng Tôi
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Những thương hiệu đã tin tưởng và hợp tác cùng chúng tôi
+              </p>
+            </div>
 
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
-            {partners.map((partner, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300"
-              >
-                <div className="relative w-24 h-16">
-                  <Image
-                    src={partner}
-                    alt={`Partner ${index + 1}`}
-                    fill
-                    className="object-contain"
-                  />
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
+              {partners.map((partner) => (
+                <div
+                  key={partner.id}
+                  className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300"
+                >
+                  <div className="relative w-24 h-16">
+                    <Image
+                      src={partner.image}
+                      alt={partner.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

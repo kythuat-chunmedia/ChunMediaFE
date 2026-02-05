@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/app/(client)/components/Header";
-import Footer from "@/app/(client)/components/Footer";
+import Header from "@/app/components/client/Header";
+import Footer from "@/app/components/client/Footer";
 import { ConfigSite } from "../types";
 import { clientApi } from "../lib/api";
 

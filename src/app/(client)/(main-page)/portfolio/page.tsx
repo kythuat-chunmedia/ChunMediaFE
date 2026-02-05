@@ -1,6 +1,9 @@
+export const dynamic = 'force-dynamic';
+
 import { Portfolio } from '@/app/types';
 import { clientApi } from '@/app/lib/api';
-import PortfolioPageClient from '../../components/portfolio/PortfolioPageClient';
+import PortfolioPageClient from '@/app/components/client/portfolio/PortfolioPageClient';
+
 
 export default async function PortfolioPage() {
   let portfolios: Portfolio[] = [];

@@ -16,3 +16,5 @@ export * from './utils.type';
 export * from './dashboard.type';
 export * from './portfolio.type';
 export * from './service.type';
+export * from './memberTeam.type';
+export * from './partner.type';

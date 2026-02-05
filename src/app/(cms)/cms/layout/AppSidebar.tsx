@@ -9,7 +9,7 @@ import {
   HorizontaLDots
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { House, Info, UserCog, Users, Package, Newspaper, Menu, ReceiptText, Contact, GalleryThumbnails, BriefcaseBusiness, Share } from "lucide-react";
+import { House, Info, UserCog, Users, Package, Newspaper, Menu, ReceiptText, Contact, GalleryThumbnails, BriefcaseBusiness, Share, Flame, Handshake } from "lucide-react";
 import { useAdminProfile } from '@/app/contexts/AdminProfileContext';
 
 type NavItem = {
@@ -71,11 +71,11 @@ const AppSidebar: React.FC = () => {
       name: "Quản lý Portfolio",
       path: "/cms/portfolio",
     },
-    {
-      icon: <ReceiptText />,
-      name: "Quản lý Đơn hàng",
-      path: "/cms/order",
-    },
+    // {
+    //   icon: <ReceiptText />,
+    //   name: "Quản lý Đơn hàng",
+    //   path: "/cms/order",
+    // },
     {
       icon: <Contact />,
       name: "Quản lý Liên hệ",
@@ -85,6 +85,16 @@ const AppSidebar: React.FC = () => {
       icon: <GalleryThumbnails />,
       name: "Quản lý Banner",
       path: "/cms/banner",
+    },
+    {
+      icon: <Handshake />,
+      name: "Quản lý Đối tác",
+      path: "/cms/partner",
+    },
+    {
+      icon: <Flame />,
+      name: "Quản lý Thành viên",
+      path: "/cms/member-team",
     },
   ];
 

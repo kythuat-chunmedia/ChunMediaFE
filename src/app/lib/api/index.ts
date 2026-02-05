@@ -47,6 +47,12 @@ export { configSiteApi } from "./endpoints/config.api";
 // ============ SERVICE ============
 export { serviceApi } from "./endpoints/service.api";
 
+// ============ SERVICE ============
+export { partnerApi } from "./endpoints/partner.api";
+
+// ============ SERVICE ============
+export { memberTeamApi } from "./endpoints/memberTeam.api";
+
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";
 // export { uploadApi, uploadHelpers } from "./endpoints/upload.api";

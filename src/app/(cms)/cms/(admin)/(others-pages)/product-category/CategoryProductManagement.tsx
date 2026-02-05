@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Label from "@/app/(cms)/cms/components/form/Label";
-import Input from "@/app/(cms)/cms/components/form/input/InputField";
+import Label from "@/app/components/cms/form/Label";
+import Input from "@/app/components/cms/form/input/InputField";
 import { CategoryProduct, CategoryProductFormData } from "@/app/types";
-import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "./icons";
+import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "../../../icons";
 import { categoryProductApi } from "@/app/lib/api/index";
 
 // ============ INITIAL FORM DATA ============

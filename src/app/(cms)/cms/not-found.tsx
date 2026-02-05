@@ -1,4 +1,4 @@
-import GridShape from "@/app/(cms)/cms/components/common/GridShape";
+import GridShape from "@/app/components/cms/common/GridShape";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

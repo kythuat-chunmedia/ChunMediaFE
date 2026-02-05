@@ -1,4 +1,4 @@
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
 import PortfolioManagement from "./PortfolioManagement";
 import { Metadata } from "next";
 

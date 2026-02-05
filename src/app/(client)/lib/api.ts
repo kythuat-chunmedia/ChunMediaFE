@@ -42,36 +42,6 @@ export function toSlug(text: string): string {
     .trim();
 }
 
-// // Generic fetch function
-// async function fetchApi<T>(endpoint: string): Promise<T | null> {
-//   try {
-//     const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
-//       next: { revalidate: 60 }, // Revalidate every 60 seconds
-//     });
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(`Error fetching ${endpoint}:`, error);
-//     return null;
-//   }
-// }
-
-// // API functions for each model
-// export const api = {
-//   getBanners: () => fetchApi<import('@/app/(client)/types').Banner[]>('Banner/get-all'),
-//   getCategoryNews: () => fetchApi<import('@/app/(client)/types').CategoryNew[]>('CategoryNew/get-all'),
-//   getCategoryProducts: () => fetchApi<import('@/app/(client)/types').CategoryProduct[]>('CategoryProduct/get-all'),
-//   getConfigSite: () => fetchApi<import('@/app/(client)/types').ConfigSite[]>('ConfigSite/get-all'),
-//   getContacts: () => fetchApi<import('@/app/(client)/types').Contact[]>('Contact/get-all'),
-//   getMenus: () => fetchApi<import('@/app/(client)/types').Menu[]>('Menu/get-all'),
-//   getNews: () => fetchApi<import('@/app/(client)/types').New[]>('New/get-all'),
-//   getProducts: () => fetchApi<import('@/app/(client)/types').Product[]>('Product/get-all'),
-//   getPortfolios: () => fetchApi<import('@/app/(client)/types').Portfolio[]>('Portfolio/get-all'),
-// };
-
 // Format number to display (e.g., 5000000 -> 5M+)
 export function formatNumber(num: number): string {
   if (num >= 1000000000) {

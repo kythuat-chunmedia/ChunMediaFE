@@ -1,7 +1,6 @@
 "use client";
-import { ThemeToggleButton } from "@/app/(cms)/cms/components/common/ThemeToggleButton";
-import NotificationDropdown from "@/app/(cms)/cms/components/header/NotificationDropdown";
-import UserDropdown from "@/app/(cms)/cms/components/header/UserDropdown";
+import { ThemeToggleButton } from "@/app/components/cms/common/ThemeToggleButton";
+import UserDropdown from "@/app/components/cms/header/UserDropdown";
 import { useSidebar } from "@/app/(cms)/cms/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";

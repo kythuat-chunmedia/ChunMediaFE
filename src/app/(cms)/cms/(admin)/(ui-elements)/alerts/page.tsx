@@ -1,6 +1,6 @@
-import ComponentCard from "@/app/(cms)/cms/components/common/ComponentCard";
-import PageBreadcrumb from "@/app/(cms)/cms/components/common/PageBreadCrumb";
-import Alert from "@/app/(cms)/cms/components/ui/alert/Alert";
+import ComponentCard from "@/app/components/cms/common/ComponentCard";
+import PageBreadcrumb from "@/app/components/cms/common/PageBreadCrumb";
+import Alert from "@/app/components/cms/ui/alert/Alert";
 import { Metadata } from "next";
 import React from "react";
 
