@@ -1127,18 +1127,18 @@ export default function PortfolioManagement() {
                     <td className="px-4 py-4 text-center">
                       {portfolio.isPublished ? (
                         <span className="inline-flex items-center gap-1 text-success-600 dark:text-success-400">
-                          <CheckCircleIcon className="w-4 h-4" />
+                          <CheckCircleIcon className="w-6 h-6" />
                           <span className="text-xs">Public</span>
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-gray-400">
-                          <XIcon className="w-4 h-4" />
+                          <XIcon className="w-6 h-6" />
                           <span className="text-xs">Draft</span>
                         </span>
                       )}
                     </td>
 
-                    <td className="px-4 py-4 text-center">
+                    <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => handleDelete(portfolio.id)}
                         disabled={loading}

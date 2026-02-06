@@ -53,6 +53,9 @@ export { partnerApi } from "./endpoints/partner.api";
 // ============ SERVICE ============
 export { memberTeamApi } from "./endpoints/memberTeam.api";
 
+// ============ SEO METADATA ============
+export { seoMetadataApi } from "./endpoints/seoMetadata.api";
+
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";
 // export { uploadApi, uploadHelpers } from "./endpoints/upload.api";

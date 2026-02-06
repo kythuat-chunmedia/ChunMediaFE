@@ -7,6 +7,7 @@ import { ArrowLeft, Calendar, User } from 'lucide-react';
 import { clientApi } from '@/app/lib/api';
 import { formatDate } from '@/app/lib/helper/index';
 import { New, CategoryNew } from '@/app/types';
+import SeoMetadataSetter from '@/app/lib/helper/SeoMetadataSetter';
 
 interface NewsDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -76,6 +77,9 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
   return (
     <>
+      <SeoMetadataSetter />
+
+
       {/* Page Header */}
       <section className="page-header-gradient text-white py-12 lg:py-16">
         <div className="container mx-auto px-4">

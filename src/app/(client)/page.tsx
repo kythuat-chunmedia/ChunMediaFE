@@ -6,6 +6,7 @@ import { ArrowRight, Play } from 'lucide-react';
 import { OutstandingPortfolio } from '@/app/components/client/home/OutstandingPortfolio';
 import { clientApi } from '../lib/api';
 import { Partner } from '@/app/types';
+import SeoMetadataSetter from '../lib/helper/SeoMetadataSetter';
 
 
 export default async function HomePage() {
@@ -23,6 +24,8 @@ export default async function HomePage() {
 
   return (
     <>
+<SeoMetadataSetter />
+
       {/* Hero Section */}
       <section className="relative hero-gradient text-white">
         <div className="absolute inset-0 overflow-hidden">

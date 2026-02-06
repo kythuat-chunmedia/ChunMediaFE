@@ -913,7 +913,7 @@ export default function OrderManagement() {
                     onClick={() => handleEdit(selectedOrder)}
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
                   >
-                    <PencilIcon className="w-4 h-4" />
+                    <PencilIcon className="w-6 h-6" />
                     Sửa
                   </button>
                 </div>

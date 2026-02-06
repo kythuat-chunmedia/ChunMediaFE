@@ -224,7 +224,7 @@ export default function ContactManagement() {
                   disabled={loading}
                   className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-600 bg-brand-50 rounded-lg hover:bg-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:hover:bg-brand-500/20 transition-colors disabled:opacity-50"
                 >
-                  <CheckCircleIcon className="w-4 h-4" />
+                  <CheckCircleIcon className="w-6 h-6" />
                   Đánh dấu tất cả đã đọc
                 </button>
               )}
@@ -395,7 +395,7 @@ export default function ContactManagement() {
                       >
                         {contact.isRead ? (
                           <>
-                            <CheckCircleIcon className="w-3 h-3" />
+                            <CheckCircleIcon className="w-6 h-6" />
                             Đã đọc
                           </>
                         ) : (

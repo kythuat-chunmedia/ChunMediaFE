@@ -22,6 +22,7 @@ import type {
   Partner,
   Portfolio,
   Product,
+  SeoMetadata,
   Service,
 } from '@/app/types'
 
@@ -351,6 +352,12 @@ export const clientApi = {
   getMemberTeamsPublic: () => fetchApi<MemberTeam[]>('api/member-team/get-all'),
   getPartnerPublic: () => fetchApi<Partner[]>('api/partner/get-all'),
   getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
+  // getSeoMetadata: () => fetchApi<SeoMetadata[]>('api/public/seo/by-slug'),
+
+  getSeoMetadata: (slug: string) =>
+    fetchApi<SeoMetadata>(
+      `api/public/seo/by-slug?slug=${encodeURIComponent(slug)}`
+    ),
 
 
   // Portfolios Page API

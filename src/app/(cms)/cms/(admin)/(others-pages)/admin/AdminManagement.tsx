@@ -604,12 +604,12 @@ export default function AdminManagement() {
                       >
                         {admin.isActive ? (
                           <span className="inline-flex items-center gap-1 text-success-600 dark:text-success-400">
-                            <CheckCircleIcon className="w-4 h-4" />
+                            <CheckCircleIcon className="w-6 h-6" />
                             <span className="text-xs">Hoạt động</span>
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-gray-400">
-                            <XIcon className="w-4 h-4" />
+                            <XIcon className="w-6 h-6" />
                             <span className="text-xs">Vô hiệu</span>
                           </span>
                         )}

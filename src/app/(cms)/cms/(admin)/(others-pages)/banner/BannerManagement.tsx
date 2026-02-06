@@ -544,12 +544,12 @@ export default function BannerManagement() {
                     <td className="px-4 py-4 text-center">
                       {banner.isActive ? (
                         <span className="inline-flex items-center gap-1 text-success-600 dark:text-success-400">
-                          <CheckCircleIcon className="w-4 h-4" />
+                          <CheckCircleIcon className="w-6 h-6" />
                           <span className="text-xs">Hiện</span>
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-gray-400">
-                          <XIcon className="w-4 h-4" />
+                          <XIcon className="w-6 h-6" />
                           <span className="text-xs">Ẩn</span>
                         </span>
                       )}

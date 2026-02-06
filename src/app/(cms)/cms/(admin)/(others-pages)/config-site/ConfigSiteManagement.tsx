@@ -313,7 +313,7 @@ export default function ConfigSiteManagement() {
         {/* Save status */}
         {saved && (
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-success-50 text-success-700 rounded-lg dark:bg-success-500/10 dark:text-success-400">
-            <CheckCircleIcon className="w-5 h-5" />
+            <CheckCircleIcon className="w-6 h-6" />
             <span className="text-sm font-medium">Đã lưu thành công!</span>
           </div>
         )}

@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { clientApi } from '@/app/lib/api';
 import { Service } from '@/app/types';
-import DynamicIcon from '@/app/components/shared/DynamicIcon';  
+import DynamicIcon from '@/app/components/shared/DynamicIcon';
+import SeoMetadataSetter from '@/app/lib/helper/SeoMetadataSetter';
+
 
 
 export const metadata = {
@@ -36,7 +38,10 @@ const processSteps = [
   },
 ];
 
+
+
 export default async function ServicesPage() {
+
   let services: Service[] = [];
 
   try {
@@ -51,6 +56,8 @@ export default async function ServicesPage() {
 
   return (
     <>
+      <SeoMetadataSetter />
+
       {/* Page Header */}
       <section className="page-header-gradient text-white py-16 lg:py-20">
         <div className="container mx-auto px-4 text-center">
@@ -88,8 +95,8 @@ export default async function ServicesPage() {
                     <div className="flex flex-col lg:flex-row lg:items-start gap-8">
                       {/* ✅ Icon - Sử dụng DynamicIcon */}
                       <div className="w-16 h-16 bg-teal-100 rounded-xl flex items-center justify-center shrink-0">
-                        <DynamicIcon 
-                          name={service.icon || "Megaphone"} 
+                        <DynamicIcon
+                          name={service.icon || "Megaphone"}
                           className="w-8 h-8 text-teal-600"
                           fallback={<span className="text-2xl">🎯</span>}
                         />
