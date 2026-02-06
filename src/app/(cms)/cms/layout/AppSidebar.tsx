@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
   ChevronDownIcon,
-  HorizontaLDots
+  HorizontaLDots,
+  SitemapIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
 import { House, Info, UserCog, Users, Package, Newspaper, Menu, ReceiptText, Contact, GalleryThumbnails, BriefcaseBusiness, Share, Flame, Handshake } from "lucide-react";
@@ -119,6 +120,11 @@ const AppSidebar: React.FC = () => {
         icon: <Menu />,
         name: "Quản lý Menu",
         path: "/cms/menu",
+      },
+      {
+        icon: <SitemapIcon />,
+        name: "Quản lý Sitemap",
+        path: "/cms/sitemap",
       },
 
     );

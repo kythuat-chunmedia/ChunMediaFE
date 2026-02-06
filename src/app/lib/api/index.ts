@@ -56,6 +56,9 @@ export { memberTeamApi } from "./endpoints/memberTeam.api";
 // ============ SEO METADATA ============
 export { seoMetadataApi } from "./endpoints/seoMetadata.api";
 
+// ============ SITEMAP ============
+export { sitemapApi } from "./endpoints/sitemap.api";
+
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";
 // export { uploadApi, uploadHelpers } from "./endpoints/upload.api";

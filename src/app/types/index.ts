@@ -19,3 +19,4 @@ export * from './service.type';
 export * from './memberTeam.type';
 export * from './partner.type';
 export * from './seoMetadata.type';
+export * from './sitemap.type';
