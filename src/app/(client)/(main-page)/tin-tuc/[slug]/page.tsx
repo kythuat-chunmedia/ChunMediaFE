@@ -90,16 +90,15 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             <ArrowLeft size={18} />
             Quay lại Tin Tức
           </Link>
-
-          <span className={`badge ${getCategoryBadgeClass(news.categoryNewId)} mb-4`}>
-            {category?.name || 'Chưa phân loại'}
-          </span>
           
           <h1 className="text-2xl lg:text-3xl font-bold mb-4 max-w-4xl">
             {news.title}
           </h1>
           
           <div className="flex flex-wrap items-center gap-4 text-sm text-teal-100">
+                      <span className={`badge ${getCategoryBadgeClass(news.categoryNewId)}`}>
+            {category?.name || 'Chưa phân loại'}
+          </span>
             <span className="flex items-center gap-2">
               <Calendar size={16} />
               {formatDate(news.createdAt)}

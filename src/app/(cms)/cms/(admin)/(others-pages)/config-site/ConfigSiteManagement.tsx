@@ -88,6 +88,8 @@ export default function ConfigSiteManagement() {
           aboutImage: config.aboutImage || "",
           aboutText: config.aboutText || "",
           aboutUrl: config.aboutUrl || "",
+          gtmScript: config.gtmScript || "",
+          gtmBody: config.gtmBody || "",
           facebook: config.facebook || "",
           zalo: config.zalo || "",
           instagram: config.instagram || "",
@@ -544,7 +546,7 @@ export default function ConfigSiteManagement() {
                 </div>
 
                 {/* Preview Google Map */}
-                {formData.googleMap && (
+                {/* {formData.googleMap && (
                   <div>
                     <Label>Xem trước bản đồ</Label>
                     <div
@@ -552,7 +554,37 @@ export default function ConfigSiteManagement() {
                       dangerouslySetInnerHTML={{ __html: formData.googleMap }}
                     />
                   </div>
-                )}
+                )} */}
+
+
+                <div>
+                  <Label>Google Tag Manager Script</Label>
+                  <textarea
+                    name="gtmScript"
+                    rows={3}
+                    placeholder='Nhập đoạn script Google Tag Manager...'
+                    value={formData.gtmScript || ""}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 focus:border-brand-300 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:border-gray-700 font-mono"
+                  />
+                  <p className="mt-1.5 text-xs text-gray-500">
+                    Embed code từ Google Tag Manager Script
+                  </p>
+                </div>
+                <div>
+                  <Label>Google Tag Manager Body</Label>
+                  <textarea
+                    name="gtmBody"
+                    rows={3}
+                    placeholder='Nhập đoạn body Google Tag Manager...'
+                    value={formData.gtmBody || ""}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 focus:border-brand-300 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:border-gray-700 font-mono"
+                  />
+                  <p className="mt-1.5 text-xs text-gray-500">
+                    Embed code từ Google Tag Manager Body
+                  </p>
+                </div>
               </div>
             )}
           </div>

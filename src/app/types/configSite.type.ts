@@ -18,6 +18,9 @@ export interface ConfigSite {
   aboutImage?: string | null;
   aboutText?: string | null;
   aboutUrl?: string | null;
+  // GTM (Google Tag Manager)
+  gtmScript?: string | null;
+  gtmBody?: string | null;
   // Mạng xã hội
   facebook?: string | null;
   zalo?: string | null;
@@ -50,6 +53,9 @@ export interface ConfigSiteFormData {
   aboutImage?: string;
   aboutText?: string;
   aboutUrl?: string;
+  // GTM (Google Tag Manager)
+  gtmScript?: string | null;
+  gtmBody?: string | null;
   // Mạng xã hội
   facebook?: string;
   zalo?: string;

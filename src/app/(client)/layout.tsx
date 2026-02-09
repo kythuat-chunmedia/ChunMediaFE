@@ -4,6 +4,7 @@ import Header from "@/app/components/client/Header";
 import Footer from "@/app/components/client/Footer";
 import { ConfigSite } from "../types";
 import { clientApi } from "../lib/api";
+import CallToAction from "../components/client/CallToAction";
 
 // ✅ Dynamic metadata từ ConfigSite API
 export async function generateMetadata(): Promise<Metadata> {
@@ -51,11 +52,19 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let config: ConfigSite | null = null;
+
+  try {
+    config = await clientApi.getConfigSite();
+  } catch (error) {
+    console.error("Failed to fetch ConfigSite for GTM:", error);
+  }
+
   return (
     <html lang="vi">
       <head>
@@ -65,12 +74,31 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        {config?.gtmScript && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: config.gtmScript.replace(
+                /<\/?script>/g,
+                ""
+              ),
+            }}
+          />
+        )}
       </head>
       <body className="font-sans antialiased bg-white text-gray-900">
+        {config?.gtmBody && (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: config.gtmBody,
+            }}
+          />
+        )}
+
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="grow">{children}</main>
           <Footer />
+          <CallToAction />
         </div>
       </body>
     </html>

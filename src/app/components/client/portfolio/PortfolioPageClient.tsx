@@ -123,12 +123,17 @@ export default function PortfolioPageClient({ portfolios, years, industries }: P
                 >
                   {/* Image */}
                   <div className="image-zoom relative aspect-4/3">
-                    <Image
-                      src={portfolio.thumbnailUrl}
-                      alt={portfolio.title}
-                      fill
-                      className="object-cover"
-                    />
+                    <Link
+                      href={`/portfolio/${portfolio.slug}`}
+                      className="transition-colors"
+                    >
+                      <Image
+                        src={portfolio.thumbnailUrl}
+                        alt={portfolio.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </Link>
                     <div className="absolute top-4 left-4 flex gap-2">
                       <span
                         className={`text-white text-xs px-3 py-1 rounded-full ${serviceType.color}`}
@@ -182,13 +187,13 @@ export default function PortfolioPageClient({ portfolios, years, industries }: P
                       </div>
                     </div>
 
-                    <Link
+                    {/* <Link
                       href={`/portfolio/${portfolio.slug}`}
                       className="inline-flex items-center gap-2 text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
                     >
                       Xem chi tiết
                       <ArrowRight size={16} />
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               );

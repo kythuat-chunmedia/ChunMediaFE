@@ -23,12 +23,18 @@ export function NewsCard({ news, categoryName }: NewsCardProps) {
   return (
     <article className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
       <div className="image-zoom relative aspect-video">
-        <Image
-          src={`/news/${news.image}` || '/placeholder-news.jpg'}
-          alt={news.title}
-          fill
-          className="object-cover"
-        />
+        <Link
+          href={`/tin-tuc/${news.url}` ? `/tin-tuc/${toSlug(news.title)}` : '/tin-tuc/404'}
+          className="transition-colors"
+        >
+
+          <Image
+            src={`/news/${news.image}` || '/placeholder-news.jpg'}
+            alt={news.title}
+            fill
+            className="object-cover"
+          />
+        </Link>
         {news.categoryNewId === 3 && (
           <div className="absolute top-4 right-4">
             <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
@@ -65,13 +71,13 @@ export function NewsCard({ news, categoryName }: NewsCardProps) {
           )}
         </div>
 
-        <Link
+        {/* <Link
           href={`/tin-tuc/${news.url}` ? `/tin-tuc/${toSlug(news.title)}` : '/tin-tuc/404'}
           className="inline-flex items-center gap-2 text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
         >
           Đọc thêm
           <ArrowRight size={16} />
-        </Link>
+        </Link> */}
       </div>
     </article>
   );

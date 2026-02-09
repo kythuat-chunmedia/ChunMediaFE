@@ -654,7 +654,7 @@ export default function ContactContent({ config }: ContactContentProps) {
       )}
 
       {/* Floating Contact */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
+      {/* <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
         {config?.hotline && (
           <a
             href={`tel:${config.hotline.replace(/\s/g, '')}`}
@@ -675,7 +675,7 @@ export default function ContactContent({ config }: ContactContentProps) {
             <MessageCircle size={24} />
           </a>
         )}
-      </div>
+      </div> */}
     </>
   );
 }

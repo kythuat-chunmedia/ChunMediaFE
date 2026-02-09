@@ -111,11 +111,11 @@ const AppSidebar: React.FC = () => {
         name: "Người lý Admin",
         path: "/cms/admin",
       },
-      {
-        icon: <Users />,
-        name: "Quản lý Người dùng",
-        path: "/cms/user",
-      },
+      // {
+      //   icon: <Users />,
+      //   name: "Quản lý Người dùng",
+      //   path: "/cms/user",
+      // },
       {
         icon: <Menu />,
         name: "Quản lý Menu",
@@ -128,80 +128,6 @@ const AppSidebar: React.FC = () => {
       },
 
     );
-    //     icon: <House />,
-    //     name: "Trang chủ",
-    //     path: "/cms",
-    //   },
-    //   {
-    //     icon: <Info />,
-    //     name: "Thông tin chung Website",
-    //     path: "/cms/config-site",
-    //   },
-    //   {
-    //     icon: <UserCog />,
-    //     name: "Người lý Admin",
-    //     path: "/cms/admin",
-    //   },
-    //   {
-    //     icon: <Users />,
-    //     name: "Quản lý Người dùng",
-    //     path: "/cms/user",
-    //   },
-    //   {
-    //     icon: <Menu />,
-    //     name: "Quản lý Menu",
-    //     path: "/cms/menu",
-    //   },
-
-    //   {
-    //     icon: <Package />,
-    //     name: "Quản lý Sản phẩm",
-    //     subItems: [
-    //       {
-    //         name: "Thế loại Sản phẩm",
-    //         path: "/cms/product-category",
-    //         pro: false
-    //       },
-    //       {
-    //         name: "Sản phẩm",
-    //         path: "/cms/product",
-    //         pro: false
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     icon: <Newspaper />,
-    //     name: "Quản lý Bài Viết",
-    //     subItems: [
-    //       {
-    //         name: "Thế loại Bài Viết",
-    //         path: "/cms/news-category",
-    //         pro: false
-    //       },
-    //       {
-    //         name: "Bài Viết",
-    //         path: "/cms/news",
-    //         pro: false
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     icon: <ReceiptText />,
-    //     name: "Quản lý Đơn hàng",
-    //     path: "/cms/order",
-    //   },
-    //   {
-    //     icon: <Contact />,
-    //     name: "Quản lý Liên hệ",
-    //     path: "/cms/contact",
-    //   },
-    //   {
-    //     icon: <GalleryThumbnails />,
-    //     name: "Quản lý Banner",
-    //     path: "/cms/banner",
-    //   },
-
-    // ];
   }
 
   navItems.unshift(

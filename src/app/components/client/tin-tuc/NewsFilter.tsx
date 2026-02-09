@@ -35,7 +35,7 @@ export function NewsFilter({
 
 
   return (
-    <section className="py-6 bg-white border-b sticky top-0 z-10">
+    <section className="py-6 bg-white border-b border-b-[#0e887d] sticky top-0 z-10">
       <div className="container mx-auto px-4">
         {/* Search Bar */}
         <form onSubmit={handleSearchSubmit} className="mb-4">
@@ -62,7 +62,7 @@ export function NewsFilter({
         </form>
 
         {/* Category Buttons */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 pt-4">
           <button
             onClick={() => onCategoryChange(null)}
             disabled={isLoading}

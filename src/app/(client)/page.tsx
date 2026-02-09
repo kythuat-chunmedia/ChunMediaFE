@@ -24,7 +24,7 @@ export default async function HomePage() {
 
   return (
     <>
-<SeoMetadataSetter />
+      <SeoMetadataSetter />
 
       {/* Hero Section */}
       <section className="relative hero-gradient text-white">
@@ -34,7 +34,7 @@ export default async function HomePage() {
             alt="Hero Background"
             fill
             className="object-cover opacity-20"
-            priority
+            fetchPriority='high' 
           />
         </div>
         <div className="relative container mx-auto px-4 py-20 lg:py-32">
@@ -72,8 +72,8 @@ export default async function HomePage() {
               Về Chúng Tôi
             </h2>
             <p className="text-gray-600 leading-relaxed mb-8">
-              Với hơn 10 năm kinh nghiệm trong ngành truyền thông, chúng tôi tự hào là đối tác tin cậy 
-              của hàng trăm thương hiệu lớn nhỏ. Chúng tôi chuyên cung cấp các giải pháp truyền thông 
+              Với hơn 10 năm kinh nghiệm trong ngành truyền thông, chúng tôi tự hào là đối tác tin cậy
+              của hàng trăm thương hiệu lớn nhỏ. Chúng tôi chuyên cung cấp các giải pháp truyền thông
               toàn diện từ PR, Marketing, sản xuất Video đến tổ chức Sự kiện.
             </p>
             <Link
