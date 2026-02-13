@@ -35,6 +35,7 @@ export default async function HomePage() {
             fill
             className="object-cover opacity-20"
             fetchPriority='high' 
+            priority
           />
         </div>
         <div className="relative container mx-auto px-4 py-20 lg:py-32">

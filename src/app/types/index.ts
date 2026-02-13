@@ -20,3 +20,5 @@ export * from './memberTeam.type';
 export * from './partner.type';
 export * from './seoMetadata.type';
 export * from './sitemap.type';
+export * from './template.type';
+export * from './categoryTemplate.type';

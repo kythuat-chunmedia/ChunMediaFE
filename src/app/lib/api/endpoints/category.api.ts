@@ -8,6 +8,8 @@ import {
     PaginatedResponse,
     FilterParams,
     CategoryNewFilterParams,
+    TemplateCategory,
+    TemplateCategoryFormData,
 } from "@/app/types";
 
 // ============ CATEGORY PRODUCT (Danh mục sản phẩm) ============
@@ -303,6 +305,63 @@ export const categoryNewApi = {
   getPublic: async (): Promise<CategoryNew[]> => {
     const response = await apiClient.get<CategoryNew[] | ApiResponse<CategoryNew[]>>(
       NEWS_CAT_PUBLIC,
+      undefined,
+      { requireAuth: false }
+    );
+    return normalizeArrayResponse(response);
+  },
+};
+
+
+
+
+
+
+
+
+// ============ CATEGORY TEMPLATE (Danh mục Giao diện) ============
+
+
+const TEM_BASE_URL = "/api/category-template";
+const TEM_PUBLIC_URL = "/api/public/templates/categories";
+
+
+
+export const categoryTemplateApi = {
+  // ============ ADMIN ============
+
+  getAllNoPaging: async (): Promise<TemplateCategory[]> => {
+    const response = await apiClient.get<TemplateCategory[]>(`${TEM_BASE_URL}/get-all`);
+    return normalizeArrayResponse(response);
+  },
+
+  getById: async (id: number): Promise<TemplateCategory | null> => {
+    const response = await apiClient.get<TemplateCategory | ApiResponse<TemplateCategory>>(
+      `${TEM_BASE_URL}/${id}`
+    );
+    if ("data" in response) return (response as ApiResponse<TemplateCategory>).data ?? null;
+    return response as TemplateCategory;
+  },
+
+  create: async (data: TemplateCategoryFormData): Promise<TemplateCategory> => {
+    const response = await apiClient.post<TemplateCategory>(`${TEM_BASE_URL}/insert`, data);
+    return response as TemplateCategory;
+  },
+
+  update: async (data: TemplateCategory): Promise<TemplateCategory> => {
+    const response = await apiClient.put<TemplateCategory>(`${TEM_BASE_URL}/update`, data);
+    return response as TemplateCategory;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(`${TEM_BASE_URL}/delete/${id}`);
+  },
+
+  // ============ PUBLIC ============
+
+  getPublic: async (): Promise<TemplateCategory[]> => {
+    const response = await apiClient.get<TemplateCategory[]>(
+      TEM_PUBLIC_URL,
       undefined,
       { requireAuth: false }
     );

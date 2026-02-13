@@ -24,6 +24,9 @@ import type {
   Product,
   SeoMetadata,
   Service,
+  Template,
+  TemplateCategory,
+  TemplateFilterParams,
 } from '@/app/types'
 
 // ============ CONFIGURATION ============
@@ -323,41 +326,41 @@ export const adminApi = {
 
 export const clientApi = {
   getBanners: () => fetchApi<Banner[]>('api/banner/get-all'),
-  // getCategoryNews: () => fetchApi<CategoryNew[]>('api/category-new/get-all'),
   getCategoryProducts: () => fetchApi<CategoryProduct[]>('api/category-product/get-all'),
 
-  // getMenus: () => fetchApi<Menu[]>('api/menu/get-all'),
-  // getNews: () => fetchApi<New[]>('api/new/get-all'),
-  // getNews: async (params?: NewFilterParamsPagination): Promise<PaginatedResponse<New>> => {
-  //   const searchParams = new URLSearchParams();
-  //   if (params?.page) searchParams.set('page', params.page.toString());
-  //   if (params?.pageSize) searchParams.set('pageSize', params.pageSize.toString());
-  //   if (params?.categoryNewId) searchParams.set('categoryNewId', params.categoryNewId.toString());
-  //   // if (params?.search) searchParams.set('search', params.search);
-  //   // if (params?.isActive !== undefined) searchParams.set('isActive', params.isActive.toString());
-  //   // if (params?.author) searchParams.set('author', params.author);
-  //   // if (params?.sortBy) searchParams.set('sortBy', params.sortBy);
-  //   // if (params?.sortOrder) searchParams.set('sortOrder', params.sortOrder);
-
-  //   return fetchApi(`api/new/get-paginate?${searchParams.toString()}`);
-  // },
-
-  // getCategoryNews: async (): Promise<CategoryNew[]> => {
-  //   return fetchApi('api/category-new/get-all');
-  // },
-
-
+  getTemplates: () => fetchApi<Template[]>('api/template/get-all'),
 
   getProducts: () => fetchApi<Product[]>('api/product/get-all'),
   getMemberTeamsPublic: () => fetchApi<MemberTeam[]>('api/member-team/get-all'),
   getPartnerPublic: () => fetchApi<Partner[]>('api/partner/get-all'),
   getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
-  // getSeoMetadata: () => fetchApi<SeoMetadata[]>('api/public/seo/by-slug'),
 
   getSeoMetadata: (slug: string) =>
     fetchApi<SeoMetadata>(
       `api/public/seo/by-slug?slug=${encodeURIComponent(slug)}`
     ),
+
+
+  // Template API
+  getTemplatePublished: () => fetchApi<Template[]>('api/template/get-all'),
+  getCategoryTemplatePublished: () => fetchApi<TemplateCategory[]>('api/category-template/get-all'),
+  getTemplateDetail: async (slug: string): Promise<Template | null> => {
+    return fetchApi<Template | null>(`api/public/template/${encodeURIComponent(slug)}`);
+  },
+  getPaginated: (params?: TemplateFilterParams): Promise<PaginatedResponse<Template>> => {
+    const sp = new URLSearchParams();
+    if (params?.page) sp.set('pageNumber', params.page.toString());
+    if (params?.pageSize) sp.set('pageSize', params.pageSize.toString());
+    if (params?.categoryTemplateId) sp.set('category', params.categoryTemplateId.toString());
+    if (params?.search) sp.set('searchTerm', params.search);
+    if (params?.isPopular !== undefined) sp.set('isPopular', params.isPopular.toString());
+    if (params?.isActive !== undefined) sp.set('isActive', params.isActive.toString());
+    if (params?.sortBy) sp.set('sortBy', params.sortBy);
+    if (params?.sortDesc !== undefined) sp.set('sortDesc', params.sortDesc.toString());
+
+    const query = sp.toString();
+    return fetchApi<PaginatedResponse<Template>>(`api/template/pagination${query ? `?${query}` : ''}`);
+  },
 
 
   // Portfolios Page API
@@ -377,7 +380,7 @@ export const clientApi = {
 
   // Infomation Website API
   getConfigSite: () => fetchApi<ConfigSite>('api/config-site/get'),
-  
+
   // Header API
   getMenusHeader: () => fetchApi<Menu[]>('api/menu/get-root'),
 
@@ -415,7 +418,7 @@ export const clientApi = {
   getNewsDetail: async (slug: string): Promise<New | null> => {
     return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
   },
-  
+
   // Contact APIs
   insertContact: async (data: ContactFormData): Promise<any> => {
 
@@ -435,16 +438,4 @@ export const clientApi = {
     return res.json();
   },
 
-  // getCategoryNews: async (): Promise<PaginatedResponse<CategoryNew>> => {
-  //   return fetchApi<PaginatedResponse<CategoryNew>>('api/category-new/get-all');
-  // },
-
-
-  // getNews: async (): Promise<PaginatedResponse<New>> => {
-  //   return fetchApi<PaginatedResponse<New>>('api/new/get-paginate');
-  // },
-
-  // getCategoryNews: async (): Promise<PaginatedResponse<CategoryNew>> => {
-  //   return fetchApi<PaginatedResponse<CategoryNew>>('api/category-new/get-all');
-  // },
 };

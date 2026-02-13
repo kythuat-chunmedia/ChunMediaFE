@@ -24,7 +24,7 @@ export { productApi } from "./endpoints/product.api";
 export { portfolioApi } from "./endpoints/portfolio.api";
 
 // ============ CATEGORY ============
-export { categoryProductApi, categoryNewApi } from "./endpoints/category.api";
+export { categoryProductApi, categoryNewApi, categoryTemplateApi } from "./endpoints/category.api";
 
 // ============ BANNER ============
 export { bannerApi } from "./endpoints/banner.api";
@@ -58,6 +58,9 @@ export { seoMetadataApi } from "./endpoints/seoMetadata.api";
 
 // ============ SITEMAP ============
 export { sitemapApi } from "./endpoints/sitemap.api";
+
+// ============ TEMPLATE ============
+export { templateApi } from "./endpoints/template.api";
 
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";

@@ -10,7 +10,7 @@ import {
   SitemapIcon
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { House, Info, UserCog, Users, Package, Newspaper, Menu, ReceiptText, Contact, GalleryThumbnails, BriefcaseBusiness, Share, Flame, Handshake } from "lucide-react";
+import { House, Info, UserCog, Users, Package, Newspaper, Menu, ReceiptText, Contact, GalleryThumbnails, BriefcaseBusiness, Share, Flame, Handshake, LayoutTemplate } from "lucide-react";
 import { useAdminProfile } from '@/app/contexts/AdminProfileContext';
 
 type NavItem = {
@@ -125,6 +125,22 @@ const AppSidebar: React.FC = () => {
         icon: <SitemapIcon />,
         name: "Quản lý Sitemap",
         path: "/cms/sitemap",
+      },
+      {
+        icon: <LayoutTemplate />,
+        name: "Quản lý Giao diện",
+        subItems: [
+          {
+            name: "Thể loại Giao diện",
+            path: "/cms/template-category",
+            pro: false
+          },
+          {
+            name: "Giao diện",
+            path: "/cms/template",
+            pro: false
+          },
+        ],
       },
 
     );
