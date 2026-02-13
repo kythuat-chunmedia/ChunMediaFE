@@ -235,9 +235,10 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
                 <p className="text-xs text-gray-500">Đang tải demo...</p>
               </div>
             )} */}
-
+{/* 
+ src={`http://localhost:5048${demoUrl}`} */}
             <iframe
-              src={`http://localhost:5048${demoUrl}`}
+              src={`https://be.chunmedia.vn${demoUrl}`}
               title={`Demo — ${template.name}`}
               onLoad={() => setIframeLoaded(true)}
               className="border-0"
