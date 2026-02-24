@@ -29,7 +29,53 @@ const AppSidebar: React.FC = () => {
 
   const othersItems: NavItem[] = [];
 
-  let navItems: NavItem[] = [
+
+
+  const navItems: NavItem[] = React.useMemo(() => {
+  const items: NavItem[] = [
+    {
+      icon: <House />,
+      name: "Trang chủ",
+      path: "/cms",
+    },
+  ];
+
+  // Admin items
+  if (profile?.role === "Admin" || profile?.role === "SuperAdmin") {
+    items.push(
+      {
+        icon: <Info />,
+        name: "Thông tin chung Website",
+        path: "/cms/config-site",
+      },
+      {
+        icon: <UserCog />,
+        name: "Người lý Admin",
+        path: "/cms/admin",
+      },
+      {
+        icon: <Menu />,
+        name: "Quản lý Menu",
+        path: "/cms/menu",
+      },
+      {
+        icon: <SitemapIcon />,
+        name: "Quản lý Sitemap",
+        path: "/cms/sitemap",
+      },
+      {
+        icon: <LayoutTemplate />,
+        name: "Quản lý Giao diện",
+        subItems: [
+          { name: "Thể loại Giao diện", path: "/cms/template-category" },
+          { name: "Giao diện", path: "/cms/template" },
+        ],
+      },
+    );
+  }
+
+  // Common items
+  items.push(
     {
       icon: <Package />,
       name: "Quản lý Sản phẩm",
@@ -72,15 +118,26 @@ const AppSidebar: React.FC = () => {
       name: "Quản lý Portfolio",
       path: "/cms/portfolio",
     },
-    // {
-    //   icon: <ReceiptText />,
-    //   name: "Quản lý Đơn hàng",
-    //   path: "/cms/order",
-    // },
     {
       icon: <Contact />,
       name: "Quản lý Liên hệ",
-      path: "/cms/contact",
+      subItems: [
+        {
+          name: "Liên hệ thường",
+          path: "/cms/contact",
+          pro: false
+        },
+        {
+          name: "Liên hệ từ Landing Page",
+          path: "/cms/contact-request",
+          pro: false
+        },
+        {
+          name: "Chức năng Website",
+          path: "/cms/feature",
+          pro: false
+        },
+      ],
     },
     {
       icon: <GalleryThumbnails />,
@@ -97,62 +154,11 @@ const AppSidebar: React.FC = () => {
       name: "Quản lý Thành viên",
       path: "/cms/member-team",
     },
-  ];
-
-  if (profile?.role === "Admin" || profile?.role === "SuperAdmin") {
-    navItems.unshift(
-      {
-        icon: <Info />,
-        name: "Thông tin chung Website",
-        path: "/cms/config-site",
-      },
-      {
-        icon: <UserCog />,
-        name: "Người lý Admin",
-        path: "/cms/admin",
-      },
-      // {
-      //   icon: <Users />,
-      //   name: "Quản lý Người dùng",
-      //   path: "/cms/user",
-      // },
-      {
-        icon: <Menu />,
-        name: "Quản lý Menu",
-        path: "/cms/menu",
-      },
-      {
-        icon: <SitemapIcon />,
-        name: "Quản lý Sitemap",
-        path: "/cms/sitemap",
-      },
-      {
-        icon: <LayoutTemplate />,
-        name: "Quản lý Giao diện",
-        subItems: [
-          {
-            name: "Thể loại Giao diện",
-            path: "/cms/template-category",
-            pro: false
-          },
-          {
-            name: "Giao diện",
-            path: "/cms/template",
-            pro: false
-          },
-        ],
-      },
-
-    );
-  }
-
-  navItems.unshift(
-    {
-      icon: <House />,
-      name: "Trang chủ",
-      path: "/cms",
-    },
   );
+
+  return items;
+}, [profile?.role]); // ← chỉ tạo lại khi role thay đổi
+
 
 
 
@@ -311,7 +317,7 @@ const AppSidebar: React.FC = () => {
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
-  }, [pathname, isActive]);
+  }, [pathname, isActive, navItems]);
 
   useEffect(() => {
     // Set the height of the submenu items when the submenu is opened

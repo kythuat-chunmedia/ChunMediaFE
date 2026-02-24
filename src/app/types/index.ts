@@ -22,3 +22,4 @@ export * from './seoMetadata.type';
 export * from './sitemap.type';
 export * from './template.type';
 export * from './categoryTemplate.type';
+export * from './contactRequest.type';

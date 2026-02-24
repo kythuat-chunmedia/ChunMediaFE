@@ -62,41 +62,11 @@ export { sitemapApi } from "./endpoints/sitemap.api";
 // ============ TEMPLATE ============
 export { templateApi } from "./endpoints/template.api";
 
+// ============ CONTACT REQUEST ============
+export { contactRequestApi } from "./endpoints/contactRequest.api";
+
+// ============ FEATURE ============
+export { featureApi } from "./endpoints/feature.api";
+
 // ============ UPLOAD ============
 export { uploadApi } from "./endpoints/upload.api";
-// export { uploadApi, uploadHelpers } from "./endpoints/upload.api";
-
-// ============================================================
-// QUICK REFERENCE - Cách sử dụng
-// ============================================================
-/*
-
-// 1. Import API service
-import { productApi, bannerApi, authHelpers } from "@/lib/api";
-
-// 2. Sử dụng trong component
-const fetchProducts = async () => {
-  try {
-    const response = await productApi.getAll({ page: 1, pageSize: 10 });
-    if (response.success) {
-      setProducts(response.data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// 3. CRUD operations
-await productApi.create(formData);
-await productApi.update(id, formData);
-await productApi.delete(id);
-
-// 4. Auth
-await adminAuthApi.login({ usernameOrEmail, password });
-authHelpers.isAuthenticated();
-authHelpers.clearSession();
-
-// 5. Upload
-await uploadApi.uploadImage(file);
-
-*/

@@ -13,6 +13,9 @@ import type {
   CategoryProduct,
   ConfigSite,
   ContactFormData,
+  CreateContactRequestPayload,
+  Feature,
+  LandingFormData,
   MemberTeam,
   Menu,
   New,
@@ -437,5 +440,63 @@ export const clientApi = {
 
     return res.json();
   },
+
+
+
+  // Feature stats for hero section
+  getFeatures: () => fetchApi<Feature[]>("api/feature/get-active"),
+
+  // Submit contact request (POST - không cần auth)
+  insertContactRequest: async (formData: LandingFormData): Promise<any> => {
+    const payload = mapFormDataToPayload(formData);
+
+    const res = await fetch(`${API_BASE_URL}/api/contact-request/insert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData?.message || `Gửi yêu cầu thất bại (${res.status})`);
+    }
+
+    return res.json();
+  },
+};
+
+// ============ MAPPER: FormData → BE Payload ============
+
+function mapFormDataToPayload(fd: LandingFormData): CreateContactRequestPayload {
+  return {
+    fullName: fd.fullName,
+    phone: fd.phone,
+    email: fd.email,
+    company: fd.company || null,
+    position: fd.position || null,
+    city: fd.city || null,
+    source: fd.source || null,
+    websiteType: fd.websiteType!,
+    otherTypeDescription: fd.otherTypeDescription || null,
+    industry: fd.industry,
+    hasWebsite: fd.hasWebsite!,
+    currentUrl: fd.currentUrl || null,
+    currentIssue: fd.currentIssue || null,
+    features: fd.features,
+    pageCount: fd.pageCount || null,
+    language: fd.language,
+    specialRequirements: fd.specialRequirements || null,
+    hasLogo: fd.hasLogo!,
+    brandColor: fd.brandColor || null,
+    designStyles: fd.designStyles,
+    referenceWebsites: fd.referenceWebsites.filter((r) => r.url.trim() !== ""),
+    contentReady: fd.contentReady!,
+    hasDomain: fd.hasDomain,
+    budget: fd.budget!,
+    timeline: fd.timeline!,
+    paymentMethod: fd.paymentMethod || null,
+    addons: fd.addons,
+    notes: fd.notes || null,
+  };
 
 };

@@ -1,0 +1,49 @@
+@import 'tailwindcss';
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+/* ==========================================
+   Google Font - Be Vietnam Pro
+   ========================================== */
+/* @import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap"); */
+
+/* ==========================================
+   Landing Page Custom Styles
+   ========================================== */
+
+/* Custom select arrow */
+.landing-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+/* Grid overlay for background */
+.grid-overlay {
+  background-image: linear-gradient(
+      rgba(99, 102, 241, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Custom scrollbar */
+.landing-page ::-webkit-scrollbar {
+  width: 6px;
+}
+.landing-page ::-webkit-scrollbar-track {
+  background: transparent;
+}
+.landing-page ::-webkit-scrollbar-thumb {
+  background: #2a3456;
+  border-radius: 3px;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}

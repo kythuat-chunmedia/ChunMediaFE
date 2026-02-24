@@ -134,7 +134,7 @@
 //       <div className="shrink-0 border-b border-gray-800/50 bg-dark2/80 backdrop-blur-xl">
 //         <div className="flex items-center justify-between px-4 h-14 gap-4">
 //           <div className="flex items-center gap-3 min-w-0">
-//             <Link href={`/portfolio/${template.slug}`} className="shrink-0 w-8 h-8 rounded-lg bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
+//             <Link href={`/hub/${template.slug}`} className="shrink-0 w-8 h-8 rounded-lg bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
 //               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
 //             </Link>
 //             <div className="min-w-0">
@@ -261,7 +261,7 @@
 //         <p className="text-[10px] text-gray-600">
 //           💡 Đây là giao diện thật — bạn có thể scroll, click và tương tác như website thực tế
 //         </p>
-//         <Link href={`/portfolio/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
+//         <Link href={`/hub/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
 //           Quay lại chi tiết
 //           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
 //         </Link>
@@ -444,7 +444,7 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
             {/* Back + Title */}
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <Link
-                href={`/portfolio/${template.slug}`}
+                href={`/hub/${template.slug}`}
                 className="shrink-0 w-8 h-8 rounded-lg bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white active:bg-gray-700 transition-colors"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -543,12 +543,12 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
 
             {/* Iframe */}
             <div className="relative w-full h-full rounded-xl overflow-hidden bg-white" style={{ borderRadius: "0.75rem" }}>
-              {!iframeLoaded && (
+              {/* {!iframeLoaded && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#0d1117]">
                   <div className="w-8 h-8 border-2 border-mint/30 border-t-mint rounded-full animate-spin" />
                   <p className="text-[10px] text-gray-500 mt-3">Đang tải demo...</p>
                 </div>
-              )}
+              )} */}
               <iframe
                 src={`${process.env.NEXT_PUBLIC_API_URL}${demoUrl}`}
                 title={`Demo — ${template.name}`}
@@ -582,7 +582,7 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
           <p className="text-[9px] text-gray-600 flex-1">
             💡 Tương tác trực tiếp với demo
           </p>
-          <Link href={`/portfolio/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
+          <Link href={`/hub/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
             Quay lại
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
@@ -600,7 +600,7 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
       <div className="shrink-0 border-b border-gray-800/50 bg-dark2/80 backdrop-blur-xl">
         <div className="flex items-center justify-between px-4 h-14 gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <Link href={`/portfolio/${template.slug}`} className="shrink-0 w-8 h-8 rounded-lg bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
+            <Link href={`/hub/${template.slug}`} className="shrink-0 w-8 h-8 rounded-lg bg-gray-800/50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-800 transition-colors">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
               </svg>
@@ -749,7 +749,7 @@ export default function DemoViewer({ template, demoUrl }: { template: TemplateLo
         <p className="text-[10px] text-gray-600">
           💡 Đây là giao diện thật — bạn có thể scroll, click và tương tác như website thực tế
         </p>
-        <Link href={`/portfolio/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
+        <Link href={`/hub/${template.slug}`} className="text-[10px] text-mint hover:underline flex items-center gap-1">
           Quay lại chi tiết
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
