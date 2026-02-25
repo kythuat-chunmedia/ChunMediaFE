@@ -14,8 +14,8 @@ export function SuccessState() {
         Cảm ơn bạn đã gửi yêu cầu. Đội ngũ của chúng tôi sẽ liên hệ bạn trong vòng{" "}
         <strong className="text-white">2 giờ làm việc</strong>.
       </p>
-      <div className="mt-8 p-5 bg-[#0f1629] border border-[#2a3456] rounded-xl inline-flex flex-col md:flex-row gap-4 md:gap-8">
-        {/* {[
+      {/* <div className="mt-8 p-5 bg-[#0f1629] border border-[#2a3456] rounded-xl inline-flex flex-col md:flex-row gap-4 md:gap-8">
+        {[
           { icon: "📞", label: "Gọi ngay", value: siteConfig.phone },
           { icon: "💬", label: "Zalo chat", value: siteConfig.zalo },
           { icon: "📧", label: "Email", value: siteConfig.email },
@@ -25,8 +25,8 @@ export function SuccessState() {
             <div className="text-[13px] text-[#94a3b8]">{item.label}</div>
             <div className="text-[15px] font-bold text-[#f1f5f9]">{item.value}</div>
           </div>
-        ))} */}
-      </div>
+        ))}
+      </div> */}
     </div>
   );
 }

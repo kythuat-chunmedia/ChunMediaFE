@@ -1,14 +1,14 @@
-// import { redirect } from "next/navigation";
-
-// export default function Home() {
-//   redirect("/landing");
-// }
-
-
-
 
 import { LandingPage } from "@/app/components/landing";
+import BackgroundEffects from "@/app/components/landing/BackgroundEffects";
+import Header from "@/app/components/landing/Header";
 
 export default function LandingRoute() {
-  return <LandingPage />;
+  return (
+    <>
+      <BackgroundEffects />
+      <Header />
+      <LandingPage />
+    </>
+  );
 }

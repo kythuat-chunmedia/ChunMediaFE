@@ -444,7 +444,7 @@ export const clientApi = {
 
 
   // Feature stats for hero section
-  getFeatures: () => fetchApi<Feature[]>("api/feature/get-active"),
+  getFeatures: () => fetchApi<Feature[]>("api/feature/get-all"),
 
   // Submit contact request (POST - không cần auth)
   insertContactRequest: async (formData: LandingFormData): Promise<any> => {

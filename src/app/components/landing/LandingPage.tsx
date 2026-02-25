@@ -18,6 +18,7 @@ import StepDesign from "./StepDesign";
 import StepBudget from "./StepBudget";
 import StepReview from "./StepReview";
 import { SuccessState, TrustSection } from "./SuccessAndTrust";
+// import { Header } from "./Header";
 
 export default function LandingPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -125,10 +126,11 @@ export default function LandingPage() {
     }
   };
 
+
   return (
     <div className="landing-page font-vietnam bg-[#0a0e1a] text-[#f1f5f9] min-h-screen overflow-x-hidden relative">
-      <BackgroundEffects />
-      <Navbar />
+
+      
       <HeroSection features={features} />
 
       <div ref={formRef} id="form-section" className="relative z-1 max-w-[960px] mx-auto px-4 md:px-6 pb-24">

@@ -218,3 +218,9 @@ body {
     @apply text-4xl lg:text-5xl;
   }
 }
+
+
+
+#histats_counter{
+  display: none !important;
+}

@@ -6,11 +6,13 @@ import Input from "@/app/components/cms/form/input/InputField";
 import { Feature, FeatureFormData } from "@/app/types";
 import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "../../../icons";
 import { featureApi } from "@/app/lib/api/endpoints/feature.api";
+// import DynamicIcon from "@/app/components/shared/DynamicIcon";
 
 // ============ INITIAL FORM DATA ============
 const initialFormData: FeatureFormData = {
   name: "",
   code: "",
+  value: "",
   description: "",
   icon: "",
   category: "",
@@ -110,6 +112,7 @@ export default function FeatureManagement() {
     setFormData({
       name: feature.name,
       code: feature.code,
+      value: feature.name, // Assuming 'value' is same as 'name' for display purposes
       description: feature.description || "",
       icon: feature.icon || "",
       category: feature.category || "",
@@ -487,7 +490,9 @@ export default function FeatureManagement() {
 
                     {/* Icon */}
                     <td className="px-4 py-4">
-                      <span className="text-xl">{feature.icon || "—"}</span>
+                      <span className="text-xl text-white">
+                        {feature.icon || "—"}         
+                      </span>
                     </td>
 
                     {/* Name */}

@@ -21,30 +21,30 @@ export function validateStep(
       break;
 
     case 2:
-      if (!formData.websiteType)
+      if (!formData.websiteType === null)
         errors.websiteType = "Vui lòng chọn loại website";
-      if (!formData.industry)
+      if (!formData.industry === null)
         errors.industry = "Vui lòng chọn ngành nghề";
-      if (!formData.hasWebsite)
+      if (!formData.hasWebsite === null)
         errors.hasWebsite = "Vui lòng chọn";
       break;
 
     case 3:
-      if (!formData.language)
+      if (!formData.language === null)
         errors.language = "Vui lòng chọn ngôn ngữ website";
       break;
 
     case 4:
-      if (!formData.hasLogo)
+      if (!formData.hasLogo === null)
         errors.hasLogo = "Vui lòng chọn";
-      if (!formData.contentReady)
+      if (!formData.contentReady === null)
         errors.contentReady = "Vui lòng chọn";
       break;
 
     case 5:
-      if (!formData.budget)
+      if (!formData.budget === null)
         errors.budget = "Vui lòng chọn ngân sách";
-      if (!formData.timeline)
+      if (!formData.timeline === null)
         errors.timeline = "Vui lòng chọn thời gian hoàn thành";
       break;
 

@@ -57,7 +57,7 @@ export default function StepWebsiteType({ formData, errors, updateField }: Props
         </FormGroup>
         <FormGroup label="Đã có website chưa?" required error={errors.hasWebsite}>
           <SelectEnum
-            value={formData.hasWebsite}
+            value={formData.hasWebsite } 
             onChange={(v) => updateField("hasWebsite", v)}
             options={HAS_WEBSITE_OPTIONS}
             error={errors.hasWebsite}

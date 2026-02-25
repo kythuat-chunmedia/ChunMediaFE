@@ -334,6 +334,7 @@ export interface Feature {
 export interface FeatureFormData {
   name: string;
   code: string;
+  value: string;
   description: string;
   icon: string;
   category: string;
