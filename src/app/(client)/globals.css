@@ -2,6 +2,8 @@
 
 /* Custom CSS Variables */
 :root {
+  --primary: #0A9396;
+  --secondary: #94D2BD;
   --color-primary: #0d9488;
   --color-primary-dark: #134e4a;
   --color-secondary: #f0fdfa;

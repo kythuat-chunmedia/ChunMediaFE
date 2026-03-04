@@ -1,83 +1,54 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, User, ArrowRight, Briefcase } from 'lucide-react';
+import { Calendar, User, Briefcase } from 'lucide-react';
 import { New } from '@/app/types';
 import { formatDate } from '@/app/lib/utils';
 import { toSlug } from '@/app/lib/helper';
 
-interface NewsCardProps {
-  news: New;
-  categoryName: string;
-}
+interface NewsCardProps { news: New; categoryName: string; }
+
+const BADGE_MAP: Record<number, string> = {
+  1: 'bg-[rgba(10,147,150,0.1)] text-[#0A9396] border-[rgba(10,147,150,0.25)]',
+  2: 'bg-blue-50 text-blue-700 border-blue-200',
+  3: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+};
 
 export function NewsCard({ news, categoryName }: NewsCardProps) {
-  const getCategoryBadgeClass = (categoryId: number) => {
-    switch (categoryId) {
-      case 1: return 'bg-teal-100 text-teal-800';
-      case 2: return 'bg-blue-100 text-blue-800';
-      case 3: return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  const badgeClass = BADGE_MAP[news.categoryNewId] ?? 'bg-gray-50 text-gray-600 border-gray-200';
+  const href = `/tin-tuc/${toSlug(news.title)}`;
 
   return (
-    <article className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
-      <div className="image-zoom relative aspect-video">
-        <Link
-          href={`/tin-tuc/${news.url}` ? `/tin-tuc/${toSlug(news.title)}` : '/tin-tuc/404'}
-          className="transition-colors"
-        >
-
+    <article className="group bg-white border border-[rgba(10,147,150,0.1)] rounded-2xl overflow-hidden shadow-[0_2px_20px_rgba(10,147,150,0.05)] hover:border-[rgba(10,147,150,0.3)] hover:shadow-[0_8px_32px_rgba(10,147,150,0.1)] transition-all duration-300 hover:-translate-y-0.5">
+      <div className="relative aspect-video overflow-hidden">
+        <Link href={href}>
           <Image
-            src={`/news/${news.image}` || '/placeholder-news.jpg'}
+            src={`${news.image}` || '/placeholder-news.jpg'}
             alt={news.title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </Link>
         {news.categoryNewId === 3 && (
-          <div className="absolute top-4 right-4">
-            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
-              <Briefcase size={12} />
-              Tuyển Dụng
+          <div className="absolute top-3 right-3">
+            <span className="bg-red-500 text-white font-['Nunito_Sans'] text-[0.68rem] font-700 px-3 py-1 rounded-lg flex items-center gap-1">
+              <Briefcase size={10} /> Tuyển Dụng
             </span>
           </div>
         )}
       </div>
 
       <div className="p-6">
-        <span className={`badge ${getCategoryBadgeClass(news.categoryNewId)} mb-3`}>
+        <span className={`inline-block border font-['Nunito_Sans'] text-[0.68rem] font-700 px-3 py-1 rounded-lg mb-3 ${badgeClass}`}>
           {categoryName}
         </span>
-
-        <h3 className="font-semibold text-lg text-gray-900 mb-3 line-clamp-2">
+        <h3 className="font-['Be_Vietnam_Pro'] font-bold text-[#1A1A1A] mb-2 line-clamp-2 group-hover:text-[#0A9396] transition-colors duration-200">
           {news.title}
         </h3>
-
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {news.description}
-        </p>
-
-        <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-          <span className="flex items-center gap-1">
-            <Calendar size={14} />
-            {formatDate(news.createdAt)}
-          </span>
-          {news.author && (
-            <span className="flex items-center gap-1">
-              <User size={14} />
-              {news.author}
-            </span>
-          )}
+        <p className="font-['Nunito_Sans'] text-[#6C757D] text-sm mb-4 line-clamp-2 leading-relaxed">{news.description}</p>
+        <div className="flex items-center gap-4 font-['Nunito_Sans'] text-xs text-[#95A5A6]">
+          <span className="flex items-center gap-1"><Calendar size={12} />{formatDate(news.createdAt)}</span>
+          {news.author && <span className="flex items-center gap-1"><User size={12} />{news.author}</span>}
         </div>
-
-        {/* <Link
-          href={`/tin-tuc/${news.url}` ? `/tin-tuc/${toSlug(news.title)}` : '/tin-tuc/404'}
-          className="inline-flex items-center gap-2 text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
-        >
-          Đọc thêm
-          <ArrowRight size={16} />
-        </Link> */}
       </div>
     </article>
   );

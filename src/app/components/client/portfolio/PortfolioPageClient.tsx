@@ -3,9 +3,10 @@
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, Users, BarChart3, ArrowRight, Filter } from 'lucide-react';
+import { Eye, Users, BarChart3, Filter } from 'lucide-react';
 import { Portfolio } from '@/app/types';
 import { formatNumber } from '@/app/lib/helper/index';
+import { PageHeader } from '@/app/components/shared/PageHeader';
 
 interface PortfolioPageClientProps {
   portfolios: Portfolio[];
@@ -13,197 +14,105 @@ interface PortfolioPageClientProps {
   industries: string[];
 }
 
-export default function PortfolioPageClient({ portfolios, years, industries }: PortfolioPageClientProps) {
+const SERVICE_MAP: Record<string, { label: string; color: string }> = {
+  'Fashion & Beauty': { label: 'Marketing', color: 'bg-[#0A9396]' },
+  'Fashion':          { label: 'Marketing', color: 'bg-[#0A9396]' },
+  'Technology':       { label: 'Sự Kiện',   color: 'bg-blue-600' },
+  'F&B (Food & Beverage)': { label: 'Video', color: 'bg-orange-500' },
+  'F&B':              { label: 'Video',      color: 'bg-orange-500' },
+  'Healthcare':       { label: 'PR',         color: 'bg-purple-600' },
+  'Finance & Banking':{ label: 'Sự Kiện',   color: 'bg-blue-600' },
+  'Finance':          { label: 'Sự Kiện',   color: 'bg-blue-600' },
+};
+const getServiceType = (industry?: string | null) =>
+  SERVICE_MAP[industry ?? ''] ?? { label: 'Video', color: 'bg-orange-500' };
+
+const selectClass = "px-4 py-2 bg-white border border-[rgba(10,147,150,0.2)] rounded-xl font-['Nunito_Sans'] text-sm text-[#1A1A1A] focus:outline-none focus:border-[#0A9396] focus:ring-2 focus:ring-[rgba(10,147,150,0.12)] transition-all";
+
+export default function PortfolioPageClient({ portfolios = [], years = [], industries = [] }: PortfolioPageClientProps) {
   const [selectedYear, setSelectedYear] = useState('Tất cả');
   const [selectedIndustry, setSelectedIndustry] = useState('Tất cả');
 
-  const filteredPortfolios = useMemo(() => {
-    return portfolios.filter((portfolio) => {
-      const yearMatch = selectedYear === 'Tất cả' || portfolio.year.toString() === selectedYear;
-      const industryMatch = selectedIndustry === 'Tất cả' || portfolio.industry === selectedIndustry;
-      return yearMatch && industryMatch;
-    });
-  }, [portfolios, selectedYear, selectedIndustry]);
-
-  const getServiceType = (industry: string | null | undefined) => {
-    switch (industry) {
-      case 'Fashion & Beauty':
-      case 'Fashion':
-        return { label: 'Marketing', color: 'bg-teal-600' };
-      case 'Technology':
-        return { label: 'Sự Kiện', color: 'bg-blue-600' };
-      case 'F&B (Food & Beverage)':
-      case 'F&B':
-        return { label: 'Video', color: 'bg-orange-500' };
-      case 'Healthcare':
-        return { label: 'PR', color: 'bg-purple-600' };
-      case 'Finance & Banking':
-      case 'Finance':
-        return { label: 'Sự Kiện', color: 'bg-blue-600' };
-      case 'E-commerce':
-        return { label: 'E-commerce', color: 'bg-pink-600' };
-      case 'Education':
-        return { label: 'Education', color: 'bg-indigo-600' };
-      case 'Real Estate':
-        return { label: 'Real Estate', color: 'bg-amber-600' };
-      default:
-        return { label: 'Video', color: 'bg-orange-500' };
-    }
-  };
+  const filtered = useMemo(() =>
+    (portfolios ?? []).filter((p) => {
+      const y = selectedYear === 'Tất cả' || p.year.toString() === selectedYear;
+      const i = selectedIndustry === 'Tất cả' || p.industry === selectedIndustry;
+      return y && i;
+    }), [portfolios, selectedYear, selectedIndustry]);
 
   return (
     <>
-      {/* Page Header */}
-      <section className="page-header-gradient text-white py-16 lg:py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-4">Portfolio</h1>
-          <p className="text-teal-100 max-w-2xl mx-auto">
-            Những dự án thành công và kết quả ấn tượng của chúng tôi
-          </p>
-        </div>
-      </section>
+      <PageHeader badge="Portfolio" title="Portfolio" description="Những dự án thành công và kết quả ấn tượng của chúng tôi" />
 
       {/* Filters */}
-      <section className="py-8 bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 mb-6">
-            <Filter className="w-5 h-5 text-teal-600" />
-            <h2 className="font-semibold text-gray-900">Bộ Lọc Dự Án</h2>
+      <section className="py-6 px-4 bg-white border-b border-[rgba(10,147,150,0.1)] sticky top-0 z-10 backdrop-blur-sm">
+        <div className="max-w-[1400px] mx-auto flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-[#0A9396]" />
+            <span className="font-['Be_Vietnam_Pro'] text-sm font-700 text-[#1A1A1A]">Lọc</span>
           </div>
-
-          <div className="flex flex-wrap gap-6">
-            {/* Year Filter */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">Năm</span>
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-              >
-                {years.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Industry Filter */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">Ngành</span>
-              <select
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-              >
-                {industries.map((industry) => (
-                  <option key={industry} value={industry}>
-                    {industry}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="font-['Nunito_Sans'] text-sm text-[#6C757D]">Năm</span>
+            <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className={selectClass}>
+              {years.map((y) => <option key={y}>{y}</option>)}
+            </select>
           </div>
-
-          <p className="text-sm text-gray-500 mt-4">Hiển thị {filteredPortfolios.length} dự án</p>
+          <div className="flex items-center gap-3">
+            <span className="font-['Nunito_Sans'] text-sm text-[#6C757D]">Ngành</span>
+            <select value={selectedIndustry} onChange={(e) => setSelectedIndustry(e.target.value)} className={selectClass}>
+              {industries.map((i) => <option key={i}>{i}</option>)}
+            </select>
+          </div>
+          <span className="font-['Nunito_Sans'] text-xs text-[#95A5A6] ml-auto">Hiển thị {filtered.length} dự án</span>
         </div>
       </section>
 
-      {/* Portfolio Grid */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
+      {/* Grid */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPortfolios.map((portfolio) => {
-              const serviceType = getServiceType(portfolio.industry);
-
+            {filtered.map((portfolio) => {
+              const st = getServiceType(portfolio.industry);
               return (
-                <div
-                  key={portfolio.id}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover"
-                >
+                <div key={portfolio.id} className="group bg-white border border-[rgba(10,147,150,0.12)] rounded-2xl overflow-hidden shadow-[0_2px_20px_rgba(10,147,150,0.06)] hover:border-[rgba(10,147,150,0.35)] hover:shadow-[0_12px_40px_rgba(10,147,150,0.12)] transition-all duration-400 hover:-translate-y-1">
                   {/* Image */}
-                  <div className="image-zoom relative aspect-4/3">
-                    <Link
-                      href={`/portfolio/${portfolio.slug}`}
-                      className="transition-colors"
-                    >
-                      <Image
-                        src={portfolio.thumbnailUrl}
-                        alt={portfolio.title}
-                        fill
-                        className="object-cover"
-                      />
+                  <div className="relative aspect-4/3 overflow-hidden">
+                    <Link href={`/portfolio/${portfolio.slug}`}>
+                      <Image src={portfolio.thumbnailUrl} alt={portfolio.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                     </Link>
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      <span
-                        className={`text-white text-xs px-3 py-1 rounded-full ${serviceType.color}`}
-                      >
-                        {serviceType.label}
-                      </span>
-                      <span className="bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">
-                        {portfolio.year}
-                      </span>
+                    <div className="absolute top-3 left-3 flex gap-2">
+                      <span className={`${st.color} text-white font-['Nunito_Sans'] text-[0.7rem] font-700 px-3 py-1 rounded-lg`}>{st.label}</span>
+                      <span className="bg-[#EE9B00] text-white font-['Nunito_Sans'] text-[0.7rem] font-700 px-3 py-1 rounded-lg">{portfolio.year}</span>
                     </div>
                   </div>
 
-                  {/* Content */}
                   <div className="p-6">
-                    <p className="text-xs text-gray-500 mb-2">{portfolio.industry || 'N/A'}</p>
-                    <h3 className="font-semibold text-lg text-gray-900 mb-3 line-clamp-2">
-                      {portfolio.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {portfolio.shortDescription || 'Xem chi tiết dự án để biết thêm thông tin.'}
-                    </p>
+                    <p className="font-['Nunito_Sans'] text-[0.7rem] text-[#95A5A6] mb-1.5">{portfolio.industry || 'N/A'}</p>
+                    <h3 className="font-['Be_Vietnam_Pro'] font-bold text-[#1A1A1A] mb-2 line-clamp-2">{portfolio.title}</h3>
+                    <p className="font-['Nunito_Sans'] text-[#6C757D] text-sm mb-4 line-clamp-2">{portfolio.shortDescription}</p>
 
                     {/* KPIs */}
-                    <div className="grid grid-cols-3 gap-4 mb-4 py-4 border-t border-gray-100">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
-                          <Eye className="w-4 h-4" />
+                    <div className="grid grid-cols-3 gap-3 pt-4 border-t border-[rgba(10,147,150,0.08)]">
+                      {[
+                        { icon: <Eye className="w-3.5 h-3.5" />, label: 'Reach', value: formatNumber(portfolio.reach) },
+                        { icon: <Users className="w-3.5 h-3.5" />, label: 'Engagement', value: formatNumber(portfolio.engagement) },
+                        { icon: <BarChart3 className="w-3.5 h-3.5" />, label: 'Conversion', value: `${portfolio.conversionRate}%` },
+                      ].map(({ icon, label, value }) => (
+                        <div key={label} className="text-center">
+                          <div className="flex justify-center text-[rgba(10,147,150,0.4)] mb-1">{icon}</div>
+                          <p className="font-['Nunito_Sans'] text-[0.65rem] text-[#95A5A6]">{label}</p>
+                          <p className="font-['Be_Vietnam_Pro'] text-sm font-bold text-[#0A9396]">{value}</p>
                         </div>
-                        <p className="text-xs text-gray-500">Reach</p>
-                        <p className="font-semibold text-teal-600">
-                          {formatNumber(portfolio.reach)}
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
-                          <Users className="w-4 h-4" />
-                        </div>
-                        <p className="text-xs text-gray-500">Engagement</p>
-                        <p className="font-semibold text-teal-600">
-                          {formatNumber(portfolio.engagement)}
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <div className="flex items-center justify-center gap-1 text-gray-400 mb-1">
-                          <BarChart3 className="w-4 h-4" />
-                        </div>
-                        <p className="text-xs text-gray-500">Conversion</p>
-                        <p className="font-semibold text-teal-600">
-                          {portfolio.conversionRate}%
-                        </p>
-                      </div>
+                      ))}
                     </div>
-
-                    {/* <Link
-                      href={`/portfolio/${portfolio.slug}`}
-                      className="inline-flex items-center gap-2 text-teal-600 font-medium text-sm hover:text-teal-700 transition-colors"
-                    >
-                      Xem chi tiết
-                      <ArrowRight size={16} />
-                    </Link> */}
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {filteredPortfolios.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-gray-500">Không tìm thấy dự án phù hợp với bộ lọc</p>
-            </div>
+          {filtered.length === 0 && (
+            <p className="text-center font-['Nunito_Sans'] text-[#6C757D] py-16">Không tìm thấy dự án phù hợp</p>
           )}
         </div>
       </section>

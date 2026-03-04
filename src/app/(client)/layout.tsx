@@ -5,6 +5,25 @@ import Footer from "@/app/components/client/Footer";
 import { ConfigSite } from "../types";
 import { clientApi } from "../lib/api";
 import CallToAction from "../components/client/CallToAction";
+import { Be_Vietnam_Pro, Nunito_Sans, JetBrains_Mono } from 'next/font/google'
+
+
+const displayFont = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  variable: '--font-display',
+  weight: "400"
+})
+
+const bodyFont = Nunito_Sans({
+  subsets: ['vietnamese'],
+  variable: '--font-body',
+})
+
+const monoFont = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-code',
+})
+
 
 // ✅ Dynamic metadata từ ConfigSite API
 export async function generateMetadata(): Promise<Metadata> {
@@ -85,7 +104,7 @@ export default async function RootLayout({
           />
         )}
       </head>
-      <body className="font-sans antialiased bg-white text-gray-900">
+      <body className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} font-sans antialiased bg-white text-gray-900`}>
         {config?.gtmBody && (
           <div
             dangerouslySetInnerHTML={{

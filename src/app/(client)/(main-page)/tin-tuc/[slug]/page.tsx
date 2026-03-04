@@ -118,7 +118,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
             {/* Featured Image */}
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-lg mb-10">
               <Image
-                src={`/news/${news.image}` || '/placeholder-news.jpg'}
+                src={`${news.image}` || '/placeholder-news.jpg'}
                 alt={news.title}
                 fill
                 className="object-cover"
