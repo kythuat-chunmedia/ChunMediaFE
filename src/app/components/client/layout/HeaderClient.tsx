@@ -21,7 +21,8 @@ export default function HeaderClient({ configSite, menus }: Props) {
     href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white shadow-sm font-['Be_Vietnam_Pro'] font-extrabold text-lg tracking-tight" >
+      {/* <div className="col-start-2 mx-auto px-4"> */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}

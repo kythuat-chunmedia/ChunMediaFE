@@ -29,13 +29,13 @@ export default function Header({ config }: HeaderProps) {
         ? "bg-white/95 backdrop-blur-xl shadow-[0_2px_20px_rgba(10,147,150,0.08)] border-b border-[rgba(10,147,150,0.1)]"
         : "bg-white/80 backdrop-blur-sm border-b border-[rgba(10,147,150,0.06)]"
     }`}>
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 
         <Link href="/hub" className="flex items-center gap-2.5">
           {logoUrl ? (
             <Image src={logoUrl} alt={siteName} width={32} height={32} className="w-8 h-8 rounded-lg object-contain" />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0A9396] to-[#94D2BD] flex items-center justify-center shadow-[0_2px_8px_rgba(10,147,150,0.35)]">
+            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-[#0A9396] to-[#94D2BD] flex items-center justify-center shadow-[0_2px_8px_rgba(10,147,150,0.35)]">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
                 <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
@@ -43,7 +43,7 @@ export default function Header({ config }: HeaderProps) {
             </div>
           )}
           <span className="font-['Be_Vietnam_Pro'] font-extrabold text-lg tracking-tight">
-            <span className="bg-gradient-to-br from-[#0A9396] to-[#94D2BD] bg-clip-text text-transparent">
+            <span className="bg-linear-to-br from-[#0A9396] to-[#94D2BD] bg-clip-text text-transparent">
               {siteName.split(" ")[0] || "Template"}
             </span>
             <span className="text-[#6C757D] font-light ml-1">
@@ -57,15 +57,15 @@ export default function Header({ config }: HeaderProps) {
             <a key={item.href} href={item.href}
               className="font-['Nunito_Sans'] text-sm text-[#6C757D] hover:text-[#0A9396] transition-colors duration-200 relative group">
               {item.label}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-gradient-to-r from-[#0A9396] to-[#94D2BD] group-hover:w-full transition-all duration-300" />
+              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-linear-to-r from-[#0A9396] to-[#94D2BD] group-hover:w-full transition-all duration-300" />
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
           <a href="#contact"
-            className="relative overflow-hidden inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-br from-[#0A9396] to-[#94D2BD] text-white rounded-xl font-['Nunito_Sans'] font-bold text-sm shadow-[0_4px_14px_rgba(10,147,150,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(10,147,150,0.4)] transition-all duration-300 group">
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+            className="relative overflow-hidden inline-flex items-center gap-2 px-5 py-2 bg-linear-to-br from-[#0A9396] to-[#94D2BD] text-white rounded-xl font-['Nunito_Sans'] font-bold text-sm shadow-[0_4px_14px_rgba(10,147,150,0.3)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(10,147,150,0.4)] transition-all duration-300 group">
+            <span className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
             Liên hệ ngay
           </a>
           <button className="md:hidden text-[#6C757D] hover:text-[#0A9396] p-1 transition-colors" onClick={() => setMobileOpen(!mobileOpen)}>

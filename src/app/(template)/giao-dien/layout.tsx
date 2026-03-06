@@ -4,16 +4,16 @@ import { clientApi } from "@/app/lib/api";
 import { Be_Vietnam_Pro, JetBrains_Mono, Nunito_Sans, Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-});
+// const outfit = Outfit({
+//   subsets: ["latin"],
+//   variable: "--font-outfit",
+// });
 
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  variable: "--font-space-mono",
-  weight: "400"
-});
+// const spaceMono = Space_Mono({
+//   subsets: ["latin"],
+//   variable: "--font-space-mono",
+//   weight: "400"
+// });
 
 
 const displayFont = Be_Vietnam_Pro({
@@ -77,7 +77,7 @@ export default async function RootLayout({
   const config = await getConfig();
 
   return (
-    <html lang="vi"  className={`${outfit.variable} ${spaceMono.variable}`}>
+    <html lang="vi" className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}>
       <head>
         {/* Google Analytics */}
         {config?.googleAnalytics && (
@@ -97,7 +97,7 @@ export default async function RootLayout({
         )}
       </head>
       <body
-      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} min-h-screen bg-dark text-white overflow-x-hidden font-outfit antialiased`}>
+      className={`min-h-screen bg-dark text-white overflow-x-hidden font-outfit antialiased`}>
         {/* GTM Body Noscript */}
         {config?.gtmBody && (
           <noscript dangerouslySetInnerHTML={{ __html: config.gtmBody }} />
