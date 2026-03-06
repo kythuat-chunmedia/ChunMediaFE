@@ -13,6 +13,7 @@ export interface Service {
   icon?: string;
   isActive: boolean;
   displayOrder: number;
+  slug?: string; 
   features: ServiceFeature[];
 }
 

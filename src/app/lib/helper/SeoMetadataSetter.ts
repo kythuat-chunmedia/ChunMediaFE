@@ -20,8 +20,8 @@ export default function SeoMetadataSetter() {
         // ❌ Không có bản ghi → không chỉnh metadata
         if (!seo) return;
 
-        console.log(slug);
-        console.log(seo);
+        // console.log(slug);
+        // console.log(seo);
 
         applyMetadata(seo);
       } catch (error) {

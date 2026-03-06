@@ -13,14 +13,10 @@ interface Props {
 
 export default function StepContact({ formData, errors, updateField }: Props) {
   return (
-    <div className="animate-stepFadeIn">
-      <StepHeader
-        icon="👤"
-        iconBg="rgba(99,102,241,0.15)"
-        iconColor="#818cf8"
+    <div>
+      <StepHeader icon="👤" iconBg="rgba(10,147,150,0.1)" iconColor="#0A9396"
         title="Thông tin liên hệ"
-        description="Để chúng tôi có thể liên hệ và tư vấn cho bạn nhanh nhất"
-      />
+        description="Để chúng tôi có thể liên hệ và tư vấn cho bạn nhanh nhất" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <FormGroup label="Họ và tên" required error={errors.fullName}>
           <TextInput value={formData.fullName} onChange={(v) => updateField("fullName", v)} placeholder="Nguyễn Văn A" error={errors.fullName} />

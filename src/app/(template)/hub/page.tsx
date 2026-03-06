@@ -1,4 +1,5 @@
-import Header from "@/app/components/template/Header";
+// import Header from "@/app/components/template/Header";
+import Header from "@/app/components/client/Header";
 import HeroSection from "@/app/components/template/HeroSection";
 import FolderStructureSection from "@/app/components/template/FolderStructureSection";
 import TemplateGrid from "@/app/components/template/TemplateGrid";
@@ -20,10 +21,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header config={config} />
+      <Header />
+      {/* <Header config={config} /> */}
       <main>
         <HeroSection config={config} templateCount={templates.length} />
-        <FolderStructureSection />
+        {/* <FolderStructureSection /> */}
         <TemplateGrid templates={templates} categories={categories} />
         <ContactSection config={config} />
       </main>

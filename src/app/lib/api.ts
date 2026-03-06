@@ -27,37 +27,36 @@ import type {
   Product,
   SeoMetadata,
   Service,
+  ServicePageData,
   Template,
   TemplateCategory,
   TemplateFilterParams,
-} from '@/app/types'
+} from '@/app/types';
 
-// ============ CONFIGURATION ============
+// ─────────────────────────────────────────────────────────────
+// CONFIGURATION
+// ─────────────────────────────────────────────────────────────
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://be.chunmedia.vn';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'https://be.chunmedia.vn';
 
+// ─────────────────────────────────────────────────────────────
+// BASE FETCH HELPER (public / no-auth)
+// ─────────────────────────────────────────────────────────────
 
 export async function fetchApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_BASE_URL}/${endpoint}`, {
-    // cache: 'no-store',
     next: { revalidate: 60 },
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+    headers: { 'Content-Type': 'application/json' },
+  });
 
-  if (!res.ok) {
-    throw new Error(`API error ${res.status}`)
-  }
-
-  return res.json()
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  return res.json();
 }
 
-
-
-// ============ TOKEN STORAGE ============
-// Lưu trong memory để bảo mật hơn localStorage
-// Kết hợp với httpOnly cookie cho refresh token trong production
+// ─────────────────────────────────────────────────────────────
+// TOKEN STORAGE
+// ─────────────────────────────────────────────────────────────
 
 let accessToken: string | null = null;
 let refreshToken: string | null = null;
@@ -69,9 +68,6 @@ export const tokenStorage = {
   setTokens: (tokens: TokenResponse) => {
     accessToken = tokens.accessToken;
     refreshToken = tokens.refreshToken;
-
-    // Lưu vào sessionStorage để persist khi refresh page
-    // Trong production, nên dùng httpOnly cookie cho refreshToken
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('accessToken', tokens.accessToken);
       sessionStorage.setItem('refreshToken', tokens.refreshToken);
@@ -87,7 +83,7 @@ export const tokenStorage = {
     }
   },
 
-  // Khôi phục tokens từ sessionStorage khi app load
+  /** Khôi phục tokens từ sessionStorage khi app load */
   restoreTokens: () => {
     if (typeof window !== 'undefined') {
       accessToken = sessionStorage.getItem('accessToken');
@@ -97,7 +93,9 @@ export const tokenStorage = {
   },
 };
 
-// ============ API CLIENT ============
+// ─────────────────────────────────────────────────────────────
+// API CLIENT (auth-aware, auto token refresh)
+// ─────────────────────────────────────────────────────────────
 
 interface RequestConfig extends RequestInit {
   requireAuth?: boolean;
@@ -105,49 +103,42 @@ interface RequestConfig extends RequestInit {
 
 class ApiClient {
   private baseUrl: string;
-  private isRefreshing: boolean = false;
+  private isRefreshing = false;
   private refreshSubscribers: ((token: string) => void)[] = [];
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
   }
 
-  // Subscribe để chờ token mới khi đang refresh
-  private subscribeTokenRefresh(callback: (token: string) => void) {
-    this.refreshSubscribers.push(callback);
+  private subscribeTokenRefresh(cb: (token: string) => void) {
+    this.refreshSubscribers.push(cb);
   }
 
-  // Notify tất cả subscribers khi có token mới
   private onTokenRefreshed(newToken: string) {
-    this.refreshSubscribers.forEach((callback) => callback(newToken));
+    this.refreshSubscribers.forEach((cb) => cb(newToken));
     this.refreshSubscribers = [];
   }
 
-  // Refresh token
   private async doRefreshToken(userType: 'Admin' | 'User'): Promise<boolean> {
-    const currentAccessToken = tokenStorage.getAccessToken();
-    const currentRefreshToken = tokenStorage.getRefreshToken();
+    const curAccess = tokenStorage.getAccessToken();
+    const curRefresh = tokenStorage.getRefreshToken();
+    if (!curAccess || !curRefresh) return false;
 
-    if (!currentAccessToken || !currentRefreshToken) {
-      return false;
-    }
-
-    const endpoint = userType === 'Admin'
-      ? '/api/admin/auth/refresh-token'
-      : '/api/client/auth/refresh-token';
+    const endpoint =
+      userType === 'Admin'
+        ? '/api/admin/auth/refresh-token'
+        : '/api/client/auth/refresh-token';
 
     try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      const res = await fetch(`${this.baseUrl}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          accessToken: currentAccessToken,
-          refreshToken: currentRefreshToken,
+          accessToken: curAccess,
+          refreshToken: curRefresh,
         } as RefreshTokenRequest),
       });
-
-      const data: AuthResponse = await response.json();
-
+      const data: AuthResponse = await res.json();
       if (data.success && data.tokens) {
         tokenStorage.setTokens(data.tokens);
         return true;
@@ -158,55 +149,40 @@ class ApiClient {
     }
   }
 
-  // Main request method
-  async request<T>(
-    endpoint: string,
-    config: RequestConfig = {}
-  ): Promise<T> {
+  async request<T>(endpoint: string, config: RequestConfig = {}): Promise<T> {
     const { requireAuth = true, ...fetchConfig } = config;
 
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...fetchConfig.headers,
+      ...(fetchConfig.headers as Record<string, string>),
     };
 
-    // Thêm Authorization header nếu cần auth
     if (requireAuth) {
       const token = tokenStorage.getAccessToken();
-      if (token) {
-        (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
-      }
+      if (token) headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+    const res = await fetch(`${this.baseUrl}${endpoint}`, {
       ...fetchConfig,
       headers,
     });
 
-    // Handle 401 - Token expired
-    if (response.status === 401 && requireAuth) {
-      // Kiểm tra header Token-Expired
-      const tokenExpired = response.headers.get('Token-Expired') === 'true';
+    if (res.status === 401 && requireAuth) {
+      const tokenExpired = res.headers.get('Token-Expired') === 'true';
 
       if (tokenExpired && !this.isRefreshing) {
         this.isRefreshing = true;
-
-        // Lấy userType từ token hiện tại
-        const userType = this.getUserTypeFromToken();
-        const refreshSuccess = await this.doRefreshToken(userType);
-
+        const ok = await this.doRefreshToken(this.getUserTypeFromToken());
         this.isRefreshing = false;
 
-        if (refreshSuccess) {
+        if (ok) {
           const newToken = tokenStorage.getAccessToken();
           if (newToken) {
             this.onTokenRefreshed(newToken);
-            // Retry request với token mới
             return this.request<T>(endpoint, config);
           }
         }
       } else if (this.isRefreshing) {
-        // Chờ token mới
         return new Promise((resolve) => {
           this.subscribeTokenRefresh(async () => {
             resolve(await this.request<T>(endpoint, config));
@@ -214,25 +190,18 @@ class ApiClient {
         });
       }
 
-      // Refresh failed - clear tokens và throw error
       tokenStorage.clearTokens();
       throw new Error('Unauthorized - Please login again');
     }
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Request failed');
-    }
-
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Request failed');
     return data;
   }
 
-  // Helper để lấy userType từ JWT token
   private getUserTypeFromToken(): 'Admin' | 'User' {
     const token = tokenStorage.getAccessToken();
     if (!token) return 'User';
-
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.UserType || 'User';
@@ -241,11 +210,9 @@ class ApiClient {
     }
   }
 
-  // Shorthand methods
   get<T>(endpoint: string, config?: RequestConfig) {
     return this.request<T>(endpoint, { ...config, method: 'GET' });
   }
-
   post<T>(endpoint: string, body?: unknown, config?: RequestConfig) {
     return this.request<T>(endpoint, {
       ...config,
@@ -253,7 +220,6 @@ class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
   }
-
   put<T>(endpoint: string, body?: unknown, config?: RequestConfig) {
     return this.request<T>(endpoint, {
       ...config,
@@ -261,7 +227,6 @@ class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
   }
-
   patch<T>(endpoint: string, body?: unknown, config?: RequestConfig) {
     return this.request<T>(endpoint, {
       ...config,
@@ -269,7 +234,6 @@ class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
   }
-
   delete<T>(endpoint: string, config?: RequestConfig) {
     return this.request<T>(endpoint, { ...config, method: 'DELETE' });
   }
@@ -277,79 +241,99 @@ class ApiClient {
 
 export const apiClient = new ApiClient(API_BASE_URL);
 
-// ============ AUTH API ============
+// ─────────────────────────────────────────────────────────────
+// AUTH API
+// ─────────────────────────────────────────────────────────────
 
 export const authApi = {
-  // Admin Auth
+  // Admin
   adminLogin: (data: LoginRequest) =>
     apiClient.post<AuthResponse>('/api/admin/auth/login', data, { requireAuth: false }),
-
   adminLogout: () =>
     apiClient.post<ApiResponse<boolean>>('/api/admin/auth/logout'),
-
   adminRefresh: (data: RefreshTokenRequest) =>
     apiClient.post<AuthResponse>('/api/admin/auth/refresh-token', data, { requireAuth: false }),
-
   getAdminMe: () =>
     apiClient.get<ApiResponse<unknown>>('/api/admin/auth/me'),
 
-  // User Auth
+  // User
   userLogin: (data: LoginRequest) =>
     apiClient.post<AuthResponse>('/api/client/auth/login', data, { requireAuth: false }),
-
   userRegister: (data: RegisterUserRequest) =>
     apiClient.post<AuthResponse>('/api/client/auth/register', data, { requireAuth: false }),
-
   userLogout: () =>
     apiClient.post<ApiResponse<boolean>>('/api/client/auth/logout'),
-
   userRefresh: (data: RefreshTokenRequest) =>
     apiClient.post<AuthResponse>('/api/client/auth/refresh-token', data, { requireAuth: false }),
-
   getUserMe: () =>
     apiClient.get<ApiResponse<unknown>>('/api/client/auth/me'),
 };
 
+// ─────────────────────────────────────────────────────────────
+// ADMIN API
+// ─────────────────────────────────────────────────────────────
 
 export const adminApi = {
   getDashboard: () =>
     apiClient.get<ApiResponse<unknown>>('/api/admin/dashboard'),
-
   getUsers: () =>
     apiClient.get<ApiResponse<unknown>>('/api/admin/users'),
-
   getAdmins: () =>
     apiClient.get<ApiResponse<unknown>>('/api/admin/admins'),
-
   toggleUserStatus: (userId: number) =>
     apiClient.patch<ApiResponse<unknown>>(`/api/admin/users/${userId}/toggle-status`),
 };
 
-// ============ CLIENT API (Protected) ============
+// ─────────────────────────────────────────────────────────────
+// CLIENT API (public — no auth required)
+// ─────────────────────────────────────────────────────────────
 
 export const clientApi = {
-  getBanners: () => fetchApi<Banner[]>('api/banner/get-all'),
-  getCategoryProducts: () => fetchApi<CategoryProduct[]>('api/category-product/get-all'),
 
-  getTemplates: () => fetchApi<Template[]>('api/template/get-all'),
-
-  getProducts: () => fetchApi<Product[]>('api/product/get-all'),
-  getMemberTeamsPublic: () => fetchApi<MemberTeam[]>('api/member-team/get-all'),
-  getPartnerPublic: () => fetchApi<Partner[]>('api/partner/get-all'),
-  getPortfolios: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
+  // ── Site config ────────────────────────────────────────────
+  getConfigSite: () =>
+    fetchApi<ConfigSite>('api/config-site/get'),
 
   getSeoMetadata: (slug: string) =>
-    fetchApi<SeoMetadata>(
-      `api/public/seo/by-slug?slug=${encodeURIComponent(slug)}`
-    ),
+    fetchApi<SeoMetadata>(`api/public/seo/by-slug?slug=${encodeURIComponent(slug)}`),
 
+  // ── Navigation ─────────────────────────────────────────────
+  getMenusHeader: () =>
+    fetchApi<Menu[]>('api/menu/get-root'),
+  getMenusRoot: () =>
+    fetchApi<Menu[]>('api/menu/get-root'),
 
-  // Template API
-  getTemplatePublished: () => fetchApi<Template[]>('api/template/get-all'),
-  getCategoryTemplatePublished: () => fetchApi<TemplateCategory[]>('api/category-template/get-all'),
-  getTemplateDetail: async (slug: string): Promise<Template | null> => {
-    return fetchApi<Template | null>(`api/public/template/${encodeURIComponent(slug)}`);
-  },
+  // ── Banners ────────────────────────────────────────────────
+  getBanners: () =>
+    fetchApi<Banner[]>('api/banner/get-all'),
+
+  // ── Features (hero stats) ───────────────────────────────────
+  getFeatures: () =>
+    fetchApi<Feature[]>('api/feature/get-all'),
+
+  // ── Partners ───────────────────────────────────────────────
+  getPartnerPublic: () =>
+    fetchApi<Partner[]>('api/partner/get-all'),
+
+  // ── Team ───────────────────────────────────────────────────
+  getMemberTeamsPublic: () =>
+    fetchApi<MemberTeam[]>('api/member-team/get-all'),
+
+  // ── Products ───────────────────────────────────────────────
+  getProducts: () =>
+    fetchApi<Product[]>('api/product/get-all'),
+  getCategoryProducts: () =>
+    fetchApi<CategoryProduct[]>('api/category-product/get-all'),
+
+  // ── Templates ──────────────────────────────────────────────
+  getTemplates: () =>
+    fetchApi<Template[]>('api/template/get-all'),
+  getTemplatePublished: () =>
+    fetchApi<Template[]>('api/template/get-all'),
+  getCategoryTemplatePublished: () =>
+    fetchApi<TemplateCategory[]>('api/category-template/get-all'),
+  getTemplateDetail: (slug: string) =>
+    fetchApi<Template | null>(`api/public/template/${encodeURIComponent(slug)}`),
   getPaginated: (params?: TemplateFilterParams): Promise<PaginatedResponse<Template>> => {
     const sp = new URLSearchParams();
     if (params?.page) sp.set('pageNumber', params.page.toString());
@@ -360,112 +344,99 @@ export const clientApi = {
     if (params?.isActive !== undefined) sp.set('isActive', params.isActive.toString());
     if (params?.sortBy) sp.set('sortBy', params.sortBy);
     if (params?.sortDesc !== undefined) sp.set('sortDesc', params.sortDesc.toString());
-
-    const query = sp.toString();
-    return fetchApi<PaginatedResponse<Template>>(`api/template/pagination${query ? `?${query}` : ''}`);
+    const q = sp.toString();
+    return fetchApi<PaginatedResponse<Template>>(`api/template/pagination${q ? `?${q}` : ''}`);
   },
 
+  // ── Services ───────────────────────────────────────────────
+  /** Danh sách tất cả service — dùng cho menu, footer, trang /dich-vu */
+  getServicesPublic: () =>
+    fetchApi<Service[]>('api/service/get-all'),
+  getServicesFooter: () =>
+    fetchApi<Service[]>('api/service/get-all'),
 
-  // Portfolios Page API
-  getPortfolioDetail: async (slug: string): Promise<Portfolio | null> => {
-    return fetchApi<Portfolio | null>(`api/portfolio/get-by-url/${slug}`);
+  /** Chi tiết service theo slug — dùng cho trang /dich-vu/[slug]
+   *  Trả về ServicePageData với đầy đủ sections (hero, highlights, pricing…)
+   *  Gọi: clientApi.getServicePage(slug)
+   */
+  // getServicePage: (slug: string) =>
+  //   fetchApi<ServicePageData>(`api/service/get-by-slug/${encodeURIComponent(slug)}`),
+
+  getServiceById: (id: number) =>
+    fetchApi<Service>(`api/service/get-by-id?id=${id}`),
+
+
+  // THÊM MỚI — gọi khi select row để load full landing page data
+  getServicePage: (slug: string) =>
+    fetchApi<ServicePageData>(`api/service/get-by-slug/${slug}`),
+
+
+//   getServicePage: async (slug: string) => {
+//     const url = `/api/service/get-by-slug/${slug}`;
+//     console.log("getServicePage calling URL:", url);
+//     const result = await fetchApi<ServicePageData>(url);
+//     console.log("getServicePage result:", result);
+//     return result;
+// },
+
+  // ── Portfolios ─────────────────────────────────────────────
+  getPortfolios: () =>
+    fetchApi<Portfolio[]>('api/portfolio/get-all'),
+  getPortfoliosPublished: () =>
+    fetchApi<Portfolio[]>('api/portfolio/get-all'),
+  getPortfolioFooter: () =>
+    fetchApi<Portfolio[]>('api/portfolio/get-all'),
+  getPortfolioDetail: (slug: string) =>
+    fetchApi<Portfolio | null>(`api/portfolio/get-by-url/${slug}`),
+
+  // ── News ───────────────────────────────────────────────────
+  getNewsForNewPage: (params?: NewsQueryParams): Promise<PaginatedResponse<New>> => {
+    const sp = new URLSearchParams();
+    if (params?.pageNumber) sp.set('pageNumber', params.pageNumber.toString());
+    if (params?.pageSize) sp.set('pageSize', params.pageSize.toString());
+    if (params?.categoryId) sp.set('categoryId', params.categoryId.toString());
+    if (params?.searchTerm) sp.set('searchTerm', params.searchTerm);
+    if (params?.isActive !== undefined) sp.set('isActive', params.isActive.toString());
+    const q = sp.toString();
+    return fetchApi<PaginatedResponse<New>>(`api/new/pagination${q ? `?${q}` : ''}`);
   },
+  getCategoryNewsForNewPage: () =>
+    fetchApi<CategoryNew[]>('api/category-new/get-all'),
+  getNewsDetail: (slug: string) =>
+    fetchApi<New | null>(`api/new/get-by-url/${slug}`),
+  getPortfolio: (slug: string) =>
+    fetchApi<New | null>(`api/new/get-by-url/${slug}`),
 
-
-  // Portfolios Page API
-  getPortfoliosPublished: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
-
-
-
-  // Service Page API
-  getServicesPublic: () => fetchApi<Service[]>('api/service/get-all'),
-  getServiceById: (id: number) => fetchApi<Service>(`api/service/get-by-id?id=${id}`),
-
-  // Infomation Website API
-  getConfigSite: () => fetchApi<ConfigSite>('api/config-site/get'),
-
-  // Header API
-  getMenusHeader: () => fetchApi<Menu[]>('api/menu/get-root'),
-
-  // Footer API
-  getMenusRoot: () => fetchApi<Menu[]>('api/menu/get-root'),
-  getServicesFooter: () => fetchApi<Service[]>('api/service/get-all'),
-  getPortfolioFooter: () => fetchApi<Portfolio[]>('api/portfolio/get-all'),
-
-  // News Page APIs
-  getNewsForNewPage: async (params?: NewsQueryParams): Promise<PaginatedResponse<New>> => {
-    const searchParams = new URLSearchParams();
-
-    if (params?.pageNumber) searchParams.set('pageNumber', params.pageNumber.toString());
-    if (params?.pageSize) searchParams.set('pageSize', params.pageSize.toString());
-    if (params?.categoryId) searchParams.set('categoryId', params.categoryId.toString());
-    if (params?.searchTerm) searchParams.set('searchTerm', params.searchTerm);
-    if (params?.isActive !== undefined) searchParams.set('isActive', params.isActive.toString());
-
-    const query = searchParams.toString();
-    return fetchApi<PaginatedResponse<New>>(`api/new/pagination${query ? `?${query}` : ''}`);
-  },
-
-  getCategoryNewsForNewPage: async (): Promise<CategoryNew[]> => {
-    return fetchApi<CategoryNew[]>('api/category-new/get-all');
-  },
-
-
-  // Portfolio APIs
-  getPortfolio: async (slug: string): Promise<New | null> => {
-    return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
-  },
-
-
-  // News Detail APIs
-  getNewsDetail: async (slug: string): Promise<New | null> => {
-    return fetchApi<New | null>(`api/new/get-by-url/${slug}`);
-  },
-
-  // Contact APIs
-  insertContact: async (data: ContactFormData): Promise<any> => {
-
-
-    console.log(JSON.stringify(data));
-    console.log(`${API_BASE_URL}/api/contact/insert`);
+  // ── Contacts (POST) ────────────────────────────────────────
+  /** Form liên hệ đơn giản (header / footer / trang liên hệ) */
+  insertContact: async (data: ContactFormData): Promise<unknown> => {
     const res = await fetch(`${API_BASE_URL}/api/contact/insert`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
-    if (!res.ok) {
-      throw new Error("Gửi liên hệ thất bại");
-    }
-
+    if (!res.ok) throw new Error('Gửi liên hệ thất bại');
     return res.json();
   },
 
-
-
-  // Feature stats for hero section
-  getFeatures: () => fetchApi<Feature[]>("api/feature/get-all"),
-
-  // Submit contact request (POST - không cần auth)
-  insertContactRequest: async (formData: LandingFormData): Promise<any> => {
-    const payload = mapFormDataToPayload(formData);
-
+  /** Form báo giá chi tiết (landing page multi-step) */
+  insertContactRequest: async (formData: LandingFormData): Promise<unknown> => {
     const res = await fetch(`${API_BASE_URL}/api/contact-request/insert`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(mapFormDataToPayload(formData)),
     });
-
     if (!res.ok) {
-      const errorData = await res.json().catch(() => null);
-      throw new Error(errorData?.message || `Gửi yêu cầu thất bại (${res.status})`);
+      const err = await res.json().catch(() => null);
+      throw new Error(err?.message || `Gửi yêu cầu thất bại (${res.status})`);
     }
-
     return res.json();
   },
 };
 
-// ============ MAPPER: FormData → BE Payload ============
+// ─────────────────────────────────────────────────────────────
+// MAPPER: LandingFormData → BE Payload
+// ─────────────────────────────────────────────────────────────
 
 function mapFormDataToPayload(fd: LandingFormData): CreateContactRequestPayload {
   return {
@@ -489,7 +460,7 @@ function mapFormDataToPayload(fd: LandingFormData): CreateContactRequestPayload 
     hasLogo: fd.hasLogo!,
     brandColor: fd.brandColor || null,
     designStyles: fd.designStyles,
-    referenceWebsites: fd.referenceWebsites.filter((r) => r.url.trim() !== ""),
+    referenceWebsites: fd.referenceWebsites.filter((r) => r.url.trim() !== ''),
     contentReady: fd.contentReady!,
     hasDomain: fd.hasDomain,
     budget: fd.budget!,
@@ -498,5 +469,4 @@ function mapFormDataToPayload(fd: LandingFormData): CreateContactRequestPayload 
     addons: fd.addons,
     notes: fd.notes || null,
   };
-
-};
+}

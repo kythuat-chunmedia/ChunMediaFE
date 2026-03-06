@@ -6,6 +6,7 @@ import {
     ServiceFilterParams,
     ApiResponse,
     PaginatedResponse,
+    ServicePageData,
 } from "@/app/types";
 
 const BASE_URL = "/api/service";
@@ -82,22 +83,18 @@ export const serviceApi = {
     },
 
     /**
-     * Xóa service và tất cả features
+     * Xóa service và tất cả features + landing page sections
      */
-    // Nếu apiClient.delete có signature như này:
-    // delete<T>(url: string, params?: Record<string, any>, config?: RequestConfig): Promise<T>
-
     delete: async (id: number): Promise<boolean> => {
         const response = await apiClient.delete<boolean | ApiResponse<boolean>>(
             `${BASE_URL}/delete`,
-            { params: { id } }  // ✅ Truyền qua params
+            { params: { id } }
         );
         if (typeof response === 'boolean') {
             return response;
         }
         return (response as ApiResponse<boolean>).success ?? true;
     },
-
 
     /**
      * Xóa nhiều services
@@ -133,6 +130,33 @@ export const serviceApi = {
     uploadIcon: (file: File) =>
         apiClient.upload<ApiResponse<{ url: string }>>(`${BASE_URL}/upload-icon`, file, "icon"),
 
+    // ============ LANDING PAGE ============
+
+    /**
+     * Lấy toàn bộ data landing page theo slug
+     * Dùng để populate form khi edit, và render trang /dich-vu/[slug] ở FE
+     * Endpoint: GET /api/service/get-by-slug/{slug}
+     * Returns: ServicePageData (hero, highlights, pricing, process, awards, team, cta...)
+     * Returns null nếu không tìm thấy (404)
+     */
+    getBySlug: async (slug: string): Promise<ServicePageData | null> => {
+        try {
+            const response = await apiClient.get<ServicePageData | ApiResponse<ServicePageData>>(
+                `${BASE_URL}/get-by-slug/${slug}`
+            );
+            if ('data' in response) {
+                return (response as ApiResponse<ServicePageData>).data ?? null;
+            }
+            return response as ServicePageData;
+        } catch (error: any) {
+            // 404 = slug chưa có landing page → trả null, không throw
+            if (error?.response?.status === 404 || error?.status === 404) {
+                return null;
+            }
+            throw error;
+        }
+    },
+
     // ============ PUBLIC ENDPOINTS ============
 
     /**
@@ -160,5 +184,28 @@ export const serviceApi = {
             return (response as ApiResponse<Service>).data ?? null;
         }
         return response as Service;
+    },
+
+    /**
+     * Lấy landing page data theo slug (public, không cần auth)
+     * Dùng cho trang /dich-vu/[slug] phía người dùng
+     */
+    getPublicBySlug: async (slug: string): Promise<ServicePageData | null> => {
+        try {
+            const response = await apiClient.get<ServicePageData | ApiResponse<ServicePageData>>(
+                `${BASE_URL}/get-by-slug/${slug}`,
+                undefined,
+                { requireAuth: false }
+            );
+            if ('data' in response) {
+                return (response as ApiResponse<ServicePageData>).data ?? null;
+            }
+            return response as ServicePageData;
+        } catch (error: any) {
+            if (error?.response?.status === 404 || error?.status === 404) {
+                return null;
+            }
+            throw error;
+        }
     },
 };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/app/lib/config";
 import { clientApi } from "@/app/lib/api";
-import { Outfit, Space_Mono } from "next/font/google";
+import { Be_Vietnam_Pro, JetBrains_Mono, Nunito_Sans, Outfit, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -14,6 +14,23 @@ const spaceMono = Space_Mono({
   variable: "--font-space-mono",
   weight: "400"
 });
+
+
+const displayFont = Be_Vietnam_Pro({
+  subsets: ['vietnamese'],
+  variable: '--font-display',
+  weight: "400"
+})
+
+const bodyFont = Nunito_Sans({
+  subsets: ['vietnamese'],
+  variable: '--font-body',
+})
+
+const monoFont = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-code',
+})
 
 
 // Fetch config at build time for metadata
@@ -79,7 +96,8 @@ export default async function RootLayout({
           <script dangerouslySetInnerHTML={{ __html: config.gtmScript }} />
         )}
       </head>
-      <body className="min-h-screen bg-dark text-white overflow-x-hidden font-outfit antialiased">
+      <body
+      className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} min-h-screen bg-dark text-white overflow-x-hidden font-outfit antialiased`}>
         {/* GTM Body Noscript */}
         {config?.gtmBody && (
           <noscript dangerouslySetInnerHTML={{ __html: config.gtmBody }} />

@@ -8,6 +8,7 @@ import SeoMetadataSetter from '@/app/lib/helper/SeoMetadataSetter';
 import { PageHeader } from '@/app/components/shared/PageHeader';
 import { Check, ArrowRight } from 'lucide-react';
 
+// ── Hardcode process chỉ dùng làm fallback nếu service không có slug ──
 const processSteps = [
   { step: 1, title: 'Tư Vấn & Phân Tích', description: 'Lắng nghe và phân tích nhu cầu, mục tiêu của khách hàng để đưa ra giải pháp phù hợp nhất.', tag: 'Discovery' },
   { step: 2, title: 'Lập Kế Hoạch', description: 'Xây dựng chiến lược và kế hoạch chi tiết với timeline và KPIs cụ thể.', tag: 'Strategy' },
@@ -44,10 +45,18 @@ export default async function ServicesPage() {
           ) : (
             <div className="space-y-6">
               {activeServices.map((service) => {
-                const slug = service.title
-                  .toLowerCase().normalize('NFD')
-                  .replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd')
-                  .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                // ── Ưu tiên slug từ DB, fallback normalize title ──────
+                const slug = (service as any).slug
+                  || service.title
+                      .toLowerCase()
+                      .normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, '')
+                      .replace(/đ/g, 'd')
+                      .replace(/[^a-z0-9]+/g, '-')
+                      .replace(/(^-|-$)/g, '');
+
+                // Có slug trong DB → có trang detail riêng
+                const hasDetailPage = !!(service as any).slug;
 
                 return (
                   <div
@@ -69,9 +78,32 @@ export default async function ServicesPage() {
                       </div>
 
                       <div className="grow">
-                        <h2 className="font-['Be_Vietnam_Pro'] text-xl font-bold tracking-[-0.02em] text-[#1A1A1A] mb-3">
-                          {service.title}
-                        </h2>
+                        {/* Title — link nếu có detail page */}
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          {hasDetailPage ? (
+                            <Link
+                              href={`/dich-vu/${slug}`}
+                              className="font-['Be_Vietnam_Pro'] text-xl font-bold tracking-[-0.02em] text-[#1A1A1A] hover:text-[#0A9396] transition-colors duration-200"
+                            >
+                              {service.title}
+                            </Link>
+                          ) : (
+                            <h2 className="font-['Be_Vietnam_Pro'] text-xl font-bold tracking-[-0.02em] text-[#1A1A1A]">
+                              {service.title}
+                            </h2>
+                          )}
+
+                          {/* Badge "Xem chi tiết" nếu có detail page */}
+                          {hasDetailPage && (
+                            <Link
+                              href={`/dich-vu/${slug}`}
+                              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-[#0A9396] border border-[rgba(10,147,150,0.3)] rounded-full hover:bg-[rgba(10,147,150,0.06)] hover:border-[#0A9396] transition-all duration-200 shrink-0 font-['Nunito_Sans']"
+                            >
+                              Xem chi tiết <ArrowRight className="w-3 h-3" />
+                            </Link>
+                          )}
+                        </div>
+
                         <p className="font-['Nunito_Sans'] text-[#6C757D] text-sm leading-[1.8] mb-6">
                           {service.description}
                         </p>
@@ -91,6 +123,18 @@ export default async function ServicesPage() {
                                   </span>
                                 </div>
                               ))}
+                          </div>
+                        )}
+
+                        {/* CTA bottom — mobile */}
+                        {hasDetailPage && (
+                          <div className="sm:hidden mt-5">
+                            <Link
+                              href={`/dich-vu/${slug}`}
+                              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0A9396] hover:gap-2.5 transition-all duration-200 font-['Nunito_Sans']"
+                            >
+                              Xem chi tiết <ArrowRight className="w-4 h-4" />
+                            </Link>
                           </div>
                         )}
                       </div>
