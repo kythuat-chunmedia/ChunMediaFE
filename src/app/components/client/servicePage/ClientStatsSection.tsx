@@ -8,72 +8,109 @@ interface ClientStatsSectionProps {
 
 export default function ClientStatsSection({ data }: ClientStatsSectionProps) {
   if (!data) return null;
+
+  const logos = data.logos ?? [];
+  // Duplicate enough times to fill screen seamlessly
+  const track = [...logos, ...logos, ...logos];
+
   return (
-    <section className="py-14 bg-gray-50 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Big client count */}
-        <div className="flex flex-col lg:flex-row items-center gap-6 mb-12">
+    <section className="py-6 bg-white overflow-hidden border-y border-gray-100">
+      <style>{`
+        @keyframes marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-33.333%); }
+        }
+        .marquee-track {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          /* width = 3× content so we only need to move 1/3 */
+          width: max-content;
+          animation: marquee 28s linear infinite;
+          will-change: transform;
+        }
+        .marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      {/* Header — only shown if sectionTitle or totalClients exist */}
+      {(data.sectionTitle || data.totalClients) && (
+        <div className="max-w-7xl mx-auto px-8 mb-6 flex items-center gap-4">
           {data.totalClients && (
-            <div className="flex items-baseline gap-3">
-              <span
-                className="text-6xl lg:text-7xl font-black"
-                style={{
-                  backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {data.totalClients}
-              </span>
-              {data.description && (
-                <span className="text-xl lg:text-2xl font-bold text-gray-700 max-w-xs leading-tight">
-                  {data.description}
-                </span>
-              )}
-            </div>
+            <span
+              className="text-4xl font-black"
+              style={{
+                backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              {data.totalClients}
+            </span>
+          )}
+          {data.description && (
+            <span className="text-base font-semibold text-gray-600 max-w-xs leading-snug">
+              {data.description}
+            </span>
           )}
           {data.sectionTitle && (
-            <div className="lg:ml-auto">
-              <h2 className="text-2xl font-bold text-gray-800">{data.sectionTitle}</h2>
-            </div>
+            <h2 className="ml-auto text-lg font-bold text-gray-700">{data.sectionTitle}</h2>
           )}
         </div>
+      )}
 
-        {/* Logo grid */}
-        {data.logos && data.logos.length > 0 && (
-          <div className="relative">
-            <div
-              className="absolute inset-y-0 left-0 w-16 pointer-events-none z-10"
-              style={{ background: "linear-gradient(to right, #f9fafb, transparent)" }}
-            />
-            <div
-              className="absolute inset-y-0 right-0 w-16 pointer-events-none z-10"
-              style={{ background: "linear-gradient(to left, #f9fafb, transparent)" }}
-            />
-            <div className="flex flex-wrap justify-center gap-6 items-center">
-              {data.logos.map((logo, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-center px-6 py-3 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow grayscale hover:grayscale-0 transition-all"
-                  style={{ minWidth: 120, minHeight: 56 }}
+      {/* Marquee strip */}
+      {logos.length > 0 && (
+        <div
+          className="relative w-full overflow-hidden"
+          style={{
+            /* fade edges */
+            maskImage:
+              "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          }}
+        >
+          <div className="marquee-track">
+            {track.map((logo, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-center flex-shrink-0"
+                style={{ padding: "0 40px", minWidth: 140, height: 64 }}
+              >
+                <img
+                  src={logo.logoUrl}
+                  alt={logo.name}
+                  style={{
+                    height: 40,
+                    maxWidth: 120,
+                    objectFit: "contain",
+                    filter: "grayscale(0%)",
+                    transition: "opacity 0.2s",
+                    opacity: 0.85,
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.85")}
+                  onError={(e) => {
+                    const el = e.target as HTMLImageElement;
+                    el.style.display = "none";
+                    const span = el.nextElementSibling as HTMLElement;
+                    if (span) span.style.display = "block";
+                  }}
+                />
+                <span
+                  className="hidden text-xs font-semibold text-gray-400"
+                  style={{ maxWidth: 100, textAlign: "center" }}
                 >
-                  <img
-                    src={logo.logoUrl}
-                    alt={logo.name}
-                    className="h-8 object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                      (e.target as HTMLImageElement).parentElement!.querySelector("span")!.style.display = "block";
-                    }}
-                  />
-                  <span className="hidden text-sm font-semibold text-gray-500">{logo.name}</span>
-                </div>
-              ))}
-            </div>
+                  {logo.name}
+                </span>
+              </div>
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -17,7 +17,7 @@ interface Service {
   features: { id: number; content: string; displayOrder: number; isActive: boolean }[];
 }
 import { PlusIcon, PencilIcon, TrashBinIcon, CheckCircleIcon, XIcon } from "../../../icons";
-import { serviceApi } from "@/app/lib/api/index";
+import { serviceApi, uploadApi } from "@/app/lib/api/index";
 import { X, Plus, ChevronUp, ChevronDown, ImageIcon, Users, Trophy, Zap, Settings, LayoutTemplate, Loader2, BookOpen, Building2, Lightbulb, FolderOpen, MessageSquare, HelpCircle } from "lucide-react";
 import IconPicker from "@/app/components/shared/IconPicker";
 import DynamicIcon from "@/app/components/shared/DynamicIcon";
@@ -162,7 +162,6 @@ function mapPageDTOtoLanding(page: ServicePageData): LandingPageForm {
     metaTitle: s(page.metaTitle),
     metaDescription: s(page.metaDescription),
 
-    // 1. Hero
     hero: page.hero ? {
       badge: s(page.hero.badge),
       title: s(page.hero.title),
@@ -173,13 +172,9 @@ function mapPageDTOtoLanding(page: ServicePageData): LandingPageForm {
       ctaSecondaryText: s(page.hero.ctaSecondaryText),
       ctaSecondaryUrl: s(page.hero.ctaSecondaryUrl),
       heroImageUrl: s(page.hero.heroImageUrl),
-      stats: (page.hero.stats ?? []).map(st => ({
-        value: s(st.value),
-        label: s(st.label),
-      })),
+      stats: (page.hero.stats ?? []).map(st => ({ value: s(st.value), label: s(st.label) })),
     } : initialLandingPage.hero,
 
-    // 2. About Service
     about: page.about ? {
       sectionTitle: s(page.about.sectionTitle),
       sectionSubtitle: s(page.about.sectionSubtitle),
@@ -188,40 +183,23 @@ function mapPageDTOtoLanding(page: ServicePageData): LandingPageForm {
       videoUrl: s(page.about.videoUrl),
       ctaText: s(page.about.ctaText),
       ctaUrl: s(page.about.ctaUrl),
-      stats: (page.about.stats ?? []).map(st => ({
-        value: s(st.value),
-        label: s(st.label),
-        icon: s(st.icon),
-      })),
+      stats: (page.about.stats ?? []).map(st => ({ value: s(st.value), label: s(st.label), icon: s(st.icon) })),
     } : initialLandingPage.about,
 
-    // 3. Highlights
     highlights: (page.highlights ?? []).map((h, i) => ({
-      icon: s(h.icon),
-      title: s(h.title),
-      description: s(h.description),
-      displayOrder: i + 1,
-      isActive: true,
+      icon: s(h.icon), title: s(h.title), description: s(h.description), displayOrder: i + 1, isActive: true,
     })),
 
-    // 4. Pricing
     pricing: page.pricing ? {
       title: s(page.pricing.title),
       subtitle: s(page.pricing.subtitle),
       packages: (page.pricing.packages ?? []).map((p, i) => ({
-        name: s(p.name),
-        price: s(p.price),
-        priceNote: s(p.priceNote),
-        isPopular: p.isPopular ?? false,
-        ctaText: s(p.ctaText),
-        ctaUrl: s(p.ctaUrl),
-        displayOrder: i + 1,
-        features: Array.isArray(p.features) ? p.features.map(f => String(f ?? "")) : [],
-        isActive: true,
+        name: s(p.name), price: s(p.price), priceNote: s(p.priceNote),
+        isPopular: p.isPopular ?? false, ctaText: s(p.ctaText), ctaUrl: s(p.ctaUrl),
+        displayOrder: i + 1, features: Array.isArray(p.features) ? p.features.map(f => String(f ?? "")) : [], isActive: true,
       })),
     } : initialLandingPage.pricing,
 
-    // 5. About Company
     aboutCompany: page.aboutCompany ? {
       sectionTitle: s(page.aboutCompany.sectionTitle),
       sectionSubtitle: s(page.aboutCompany.sectionSubtitle),
@@ -229,130 +207,148 @@ function mapPageDTOtoLanding(page: ServicePageData): LandingPageForm {
       imageUrl: s(page.aboutCompany.imageUrl),
       ctaText: s(page.aboutCompany.ctaText),
       ctaUrl: s(page.aboutCompany.ctaUrl),
-      stats: (page.aboutCompany.stats ?? []).map(st => ({
-        value: s(st.value),
-        label: s(st.label),
-        icon: s(st.icon),
-      })),
+      stats: (page.aboutCompany.stats ?? []).map(st => ({ value: s(st.value), label: s(st.label), icon: s(st.icon) })),
     } : initialLandingPage.aboutCompany,
 
-    // 6. Client Stats
     clientStats: page.clientStats ? {
       sectionTitle: s(page.clientStats.sectionTitle),
       totalClients: s(page.clientStats.totalClients),
       description: s(page.clientStats.description),
-      logos: (page.clientStats.logos ?? []).map(l => ({
-        name: s(l.name),
-        logoUrl: s(l.logoUrl),
-      })),
+      logos: (page.clientStats.logos ?? []).map(l => ({ name: s(l.name), logoUrl: s(l.logoUrl) })),
     } : initialLandingPage.clientStats,
 
-    // 7. Solutions
     solutions: page.solutions ? {
       title: s(page.solutions.title),
       subtitle: s(page.solutions.subtitle),
       items: (page.solutions.items ?? []).map((item, i) => ({
-        icon: s(item.icon),
-        title: s(item.title),
-        description: s(item.description),
-        imageUrl: s(item.imageUrl),
-        ctaText: s(item.ctaText),
-        ctaUrl: s(item.ctaUrl),
-        displayOrder: i + 1,
-        isActive: true,
+        icon: s(item.icon), title: s(item.title), description: s(item.description),
+        imageUrl: s(item.imageUrl), ctaText: s(item.ctaText), ctaUrl: s(item.ctaUrl),
+        displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.solutions,
 
-    // 8. Projects
     projects: page.projects ? {
       sectionTitle: s(page.projects.sectionTitle),
       sectionSubtitle: s(page.projects.sectionSubtitle),
       items: (page.projects.items ?? []).map((p, i) => ({
-        title: s(p.title),
-        client: s(p.client),
-        description: s(p.description),
-        thumbnailUrl: s(p.thumbnailUrl),
-        resultText: s(p.resultText),
-        ctaText: s(p.ctaText),
-        ctaUrl: s(p.ctaUrl),
-        displayOrder: i + 1,
-        isActive: true,
+        title: s(p.title), client: s(p.client), description: s(p.description),
+        thumbnailUrl: s(p.thumbnailUrl), resultText: s(p.resultText),
+        ctaText: s(p.ctaText), ctaUrl: s(p.ctaUrl), displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.projects,
 
-    // 9. Testimonials
     testimonials: page.testimonials ? {
       title: s(page.testimonials.title),
       subtitle: s(page.testimonials.subtitle),
       items: (page.testimonials.items ?? []).map((t, i) => ({
-        authorName: s(t.authorName),
-        authorRole: s(t.authorRole),
-        authorCompany: s(t.authorCompany),
-        authorAvatarUrl: s(t.authorAvatarUrl),
-        content: s(t.content),
-        rating: n(t.rating, 5),
-        displayOrder: i + 1,
-        isActive: true,
+        authorName: s(t.authorName), authorRole: s(t.authorRole),
+        authorCompany: s(t.authorCompany), authorAvatarUrl: s(t.authorAvatarUrl),
+        content: s(t.content), rating: n(t.rating, 5), displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.testimonials,
 
-    // 10. Awards
     awards: page.awards ? {
       title: s(page.awards.title),
       subtitle: s(page.awards.subtitle),
       items: (page.awards.items ?? []).map((a, i) => ({
-        name: s(a.name),
-        organization: s(a.organization),
-        year: s(a.year),
-        logoUrl: s(a.logoUrl),
-        displayOrder: i + 1,
-        isActive: true,
+        name: s(a.name), organization: s(a.organization), year: s(a.year),
+        logoUrl: s(a.logoUrl), displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.awards,
 
-    // 11. Process
     process: page.process ? {
       title: s(page.process.title),
       subtitle: s(page.process.subtitle),
       steps: (page.process.steps ?? []).map((st, i) => ({
-        stepNumber: n(st.stepNumber, i + 1),
-        title: s(st.title),
-        description: s(st.description),
-        icon: s(st.icon),
-        duration: s(st.duration),
-        displayOrder: i + 1,
-        isActive: true,
+        stepNumber: n(st.stepNumber, i + 1), title: s(st.title), description: s(st.description),
+        icon: s(st.icon), duration: s(st.duration), displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.process,
 
-    // 12. Team — experts chỉ dùng để preview, memberTeamIds để submit
-    team: {
-      title: s(page.team?.title),
-      subtitle: s(page.team?.subtitle),
-      memberTeamIds: [],
-    },
+    team: { title: s(page.team?.title), subtitle: s(page.team?.subtitle), memberTeamIds: [] },
 
-    // 13. CTA
     ctaSection: page.ctaSection ? {
-      title: s(page.ctaSection.title),
-      subtitle: s(page.ctaSection.subtitle),
-      ctaText: s(page.ctaSection.ctaText),
-      ctaUrl: s(page.ctaSection.ctaUrl),
+      title: s(page.ctaSection.title), subtitle: s(page.ctaSection.subtitle),
+      ctaText: s(page.ctaSection.ctaText), ctaUrl: s(page.ctaSection.ctaUrl),
       formEnabled: b(page.ctaSection.formEnabled),
     } : initialLandingPage.ctaSection,
 
-    // 14. Q&A
     qnA: page.qnA ? {
       title: s(page.qnA.title),
       subtitle: s(page.qnA.subtitle),
       items: (page.qnA.items ?? []).map((q, i) => ({
-        question: s(q.question),
-        answer: s(q.answer),
-        displayOrder: i + 1,
-        isActive: true,
+        question: s(q.question), answer: s(q.answer), displayOrder: i + 1, isActive: true,
       })),
     } : initialLandingPage.qnA,
   };
+}
+
+// ============================================================
+// IMAGE UPLOAD FIELD — dùng chung cho mọi section có ảnh
+// ============================================================
+interface ImageUploadFieldProps {
+  value: string;
+  onChange: (url: string) => void;
+  folder?: string;
+  maxSizeMB?: number;
+  previewSize?: "sm" | "md" | "lg";
+}
+
+function ImageUploadField({ value, onChange, folder = "services", maxSizeMB = 2, previewSize = "md" }: ImageUploadFieldProps) {
+  const [uploading, setUploading] = useState(false);
+  const previewDim = previewSize === "sm" ? "w-14 h-10" : previewSize === "lg" ? "w-32 h-20" : "w-20 h-14";
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > maxSizeMB * 1024 * 1024) { alert(`File quá lớn! Tối đa ${maxSizeMB}MB`); return; }
+    try {
+      setUploading(true);
+      const response = await uploadApi.uploadImage(file, folder);
+      if (response.success && response.url) { onChange(response.url as string); }
+      else { alert(response.message || "Upload thất bại"); }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Không thể upload hình ảnh");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1 min-w-0">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFile}
+          disabled={uploading}
+          className={`block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-500/10 dark:file:text-brand-400 ${uploading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        />
+        {uploading ? (
+          <p className="mt-1 text-xs text-brand-500 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" />Đang upload...</p>
+        ) : value ? (
+          <p className="mt-1 text-xs text-gray-400 truncate">{value}</p>
+        ) : (
+          <p className="mt-1 text-xs text-gray-400">JPG, PNG, WEBP · Tối đa {maxSizeMB}MB</p>
+        )}
+      </div>
+      {value ? (
+        <div className="relative flex-shrink-0">
+          <img src={value} alt="preview" className={`${previewDim} object-cover rounded-lg border border-gray-200 dark:border-gray-700`} />
+          <button type="button" onClick={() => onChange("")}
+            className="absolute -top-2 -right-2 w-5 h-5 bg-error-500 text-white rounded-full flex items-center justify-center hover:bg-error-600">
+            <X className="w-3 h-3" />
+          </button>
+        </div>
+      ) : (
+        <div className={`${previewDim} flex-shrink-0 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-700 flex items-center justify-center`}>
+          <ImageIcon className="w-5 h-5 text-gray-300" />
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ============================================================
@@ -493,7 +489,6 @@ export default function ServiceManagement() {
   };
   const removeItem = <T,>(arr: T[], i: number): T[] => arr.filter((_, idx) => idx !== i);
 
-  // ── Feature handlers ─────────────────────────────────────────
   const handleAddFeature = () => setFormData(p => ({ ...p, features: [...p.features, { id: 0, content: "", displayOrder: p.features.length + 1, isActive: true }] }));
   const handleRemoveFeature = (i: number) => {
     const nf = formData.features.filter((_, idx) => idx !== i);
@@ -508,11 +503,7 @@ export default function ServiceManagement() {
     setFormData(p => ({ ...p, features: nf }));
   };
 
-  // ── Generic stat helpers ─────────────────────────────────────
-  const statHelpers = <K extends keyof LandingPageForm>(
-    key: K,
-    statsKey: string
-  ) => ({
+  const statHelpers = <K extends keyof LandingPageForm>(key: K, statsKey: string) => ({
     add: (empty: any) => setLP(p => ({ ...p, [key]: { ...(p[key] as any), [statsKey]: [...(p[key] as any)[statsKey], empty] } })),
     update: (i: number, f: string, v: string) => setLP(p => {
       const arr = [...(p[key] as any)[statsKey]]; arr[i] = { ...arr[i], [f]: v };
@@ -525,12 +516,10 @@ export default function ServiceManagement() {
   const aboutStats = statHelpers("about", "stats");
   const companyStats = statHelpers("aboutCompany", "stats");
 
-  // ── Highlights ───────────────────────────────────────────────
   const addHighlight = () => setLP(p => ({ ...p, highlights: [...p.highlights, { icon: "", title: "", description: "", displayOrder: p.highlights.length + 1, isActive: true }] }));
   const updateHighlight = (i: number, f: keyof HighlightForm, v: any) =>
     setLP(p => { const a = [...p.highlights]; a[i] = { ...a[i], [f]: v }; return { ...p, highlights: a }; });
 
-  // ── Pricing ──────────────────────────────────────────────────
   const addPackage = () => setLP(p => ({ ...p, pricing: { ...p.pricing, packages: [...p.pricing.packages, { name: "", price: "", priceNote: "", isPopular: false, ctaText: "", ctaUrl: "", displayOrder: p.pricing.packages.length + 1, features: [], isActive: true }] } }));
   const updatePackage = (i: number, f: keyof PricingPackageForm, v: any) =>
     setLP(p => { const a = [...p.pricing.packages]; a[i] = { ...a[i], [f]: v }; return { ...p, pricing: { ...p.pricing, packages: a } }; });
@@ -538,48 +527,39 @@ export default function ServiceManagement() {
   const updatePkgFeature = (pi: number, fi: number, v: string) => setLP(p => { const a = [...p.pricing.packages]; const f = [...a[pi].features]; f[fi] = v; a[pi] = { ...a[pi], features: f }; return { ...p, pricing: { ...p.pricing, packages: a } }; });
   const removePkgFeature = (pi: number, fi: number) => setLP(p => { const a = [...p.pricing.packages]; a[pi] = { ...a[pi], features: removeItem(a[pi].features, fi) }; return { ...p, pricing: { ...p.pricing, packages: a } }; });
 
-  // ── Client logos ─────────────────────────────────────────────
   const addLogo = () => setLP(p => ({ ...p, clientStats: { ...p.clientStats, logos: [...p.clientStats.logos, { name: "", logoUrl: "" }] } }));
   const updateLogo = (i: number, f: "name" | "logoUrl", v: string) =>
     setLP(p => { const a = [...p.clientStats.logos]; a[i] = { ...a[i], [f]: v }; return { ...p, clientStats: { ...p.clientStats, logos: a } }; });
 
-  // ── Solutions ────────────────────────────────────────────────
   const addSolution = () => setLP(p => ({ ...p, solutions: { ...p.solutions, items: [...p.solutions.items, { icon: "", title: "", description: "", imageUrl: "", ctaText: "", ctaUrl: "", displayOrder: p.solutions.items.length + 1, isActive: true }] } }));
   const updateSolution = (i: number, f: keyof SolutionItemForm, v: any) =>
     setLP(p => { const a = [...p.solutions.items]; a[i] = { ...a[i], [f]: v }; return { ...p, solutions: { ...p.solutions, items: a } }; });
 
-  // ── Projects ─────────────────────────────────────────────────
   const addProject = () => setLP(p => ({ ...p, projects: { ...p.projects, items: [...p.projects.items, { title: "", client: "", description: "", thumbnailUrl: "", resultText: "", ctaText: "", ctaUrl: "", displayOrder: p.projects.items.length + 1, isActive: true }] } }));
   const updateProject = (i: number, f: keyof ProjectItemForm, v: any) =>
     setLP(p => { const a = [...p.projects.items]; a[i] = { ...a[i], [f]: v }; return { ...p, projects: { ...p.projects, items: a } }; });
 
-  // ── Testimonials ─────────────────────────────────────────────
   const addTestimonial = () => setLP(p => ({ ...p, testimonials: { ...p.testimonials, items: [...p.testimonials.items, { authorName: "", authorRole: "", authorCompany: "", authorAvatarUrl: "", content: "", rating: 5, displayOrder: p.testimonials.items.length + 1, isActive: true }] } }));
   const updateTestimonial = (i: number, f: keyof TestimonialItemForm, v: any) =>
     setLP(p => { const a = [...p.testimonials.items]; a[i] = { ...a[i], [f]: v }; return { ...p, testimonials: { ...p.testimonials, items: a } }; });
 
-  // ── Awards ───────────────────────────────────────────────────
   const addAward = () => setLP(p => ({ ...p, awards: { ...p.awards, items: [...p.awards.items, { name: "", organization: "", year: "", logoUrl: "", displayOrder: p.awards.items.length + 1, isActive: true }] } }));
   const updateAward = (i: number, f: keyof AwardItemForm, v: any) =>
     setLP(p => { const a = [...p.awards.items]; a[i] = { ...a[i], [f]: v }; return { ...p, awards: { ...p.awards, items: a } }; });
 
-  // ── Process ──────────────────────────────────────────────────
   const addStep = () => setLP(p => ({ ...p, process: { ...p.process, steps: [...p.process.steps, { stepNumber: p.process.steps.length + 1, title: "", description: "", icon: "", duration: "", displayOrder: p.process.steps.length + 1, isActive: true }] } }));
   const updateStep = (i: number, f: keyof ProcessStepForm, v: any) =>
     setLP(p => { const a = [...p.process.steps]; a[i] = { ...a[i], [f]: v }; return { ...p, process: { ...p.process, steps: a } }; });
 
-  // ── Team ─────────────────────────────────────────────────────
   const addTeamMember = () => setLP(p => ({ ...p, team: { ...p.team, memberTeamIds: [...p.team.memberTeamIds, 0] } }));
   const updateTeamMember = (i: number, v: number) =>
     setLP(p => { const a = [...p.team.memberTeamIds]; a[i] = v; return { ...p, team: { ...p.team, memberTeamIds: a } }; });
   const removeTeamMember = (i: number) => setLP(p => ({ ...p, team: { ...p.team, memberTeamIds: removeItem(p.team.memberTeamIds, i) } }));
 
-  // ── QnA ──────────────────────────────────────────────────────
   const addQnA = () => setLP(p => ({ ...p, qnA: { ...p.qnA, items: [...p.qnA.items, { question: "", answer: "", displayOrder: p.qnA.items.length + 1, isActive: true }] } }));
   const updateQnA = (i: number, f: keyof QnAItemForm, v: any) =>
     setLP(p => { const a = [...p.qnA.items]; a[i] = { ...a[i], [f]: v }; return { ...p, qnA: { ...p.qnA, items: a } }; });
 
-  // ── Form handlers ────────────────────────────────────────────
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     let nv: string | number | boolean = value;
@@ -599,18 +579,14 @@ export default function ServiceManagement() {
     return Object.keys(ne).length === 0;
   };
 
-  // ── Select row ───────────────────────────────────────────────
   const handleSelectRow = async (service: Service) => {
     setSelectedId(service.id); setIsEditing(true); setErrors({}); setResolvedExperts([]);
     setFormData({ id: service.id, title: service.title, description: service.description, icon: service.icon || "", isActive: service.isActive, displayOrder: service.displayOrder, features: service.features.map(f => ({ id: f.id, content: f.content, displayOrder: f.displayOrder, isActive: f.isActive })) });
-
     const slug = service.slug;
     if (slug) {
       try {
         setLoadingPage(true);
         const pageData = await serviceApi.getBySlug(slug);
-      //         console.log("RAW pageData:", pageData);
-      // console.log("pageData keys:", pageData ? Object.keys(pageData) : "null");
         if (pageData) {
           setLandingData(mapPageDTOtoLanding(pageData as ServicePageData));
           setResolvedExperts(pageData.team?.experts ?? []);
@@ -626,187 +602,70 @@ export default function ServiceManagement() {
     setLandingData(initialLandingPage); setResolvedExperts([]); setErrors({}); setActiveTab("basic");
   };
 
-  // ── Build landing payload ────────────────────────────────────
   const buildLandingPayload = () => {
     const lp = landingData;
     return {
       slug: lp.slug || undefined,
       metaTitle: lp.metaTitle || undefined,
       metaDescription: lp.metaDescription || undefined,
-
-      // 1. Hero — map rõ fields, không spread thừa
       hero: lp.hero.title ? {
-        badge: lp.hero.badge || undefined,
-        title: lp.hero.title,
-        highlightText: lp.hero.highlightText || undefined,
-        subtitle: lp.hero.subtitle || undefined,
-        ctaText: lp.hero.ctaText || undefined,
-        ctaUrl: lp.hero.ctaUrl || undefined,
-        ctaSecondaryText: lp.hero.ctaSecondaryText || undefined,
-        ctaSecondaryUrl: lp.hero.ctaSecondaryUrl || undefined,
+        badge: lp.hero.badge || undefined, title: lp.hero.title,
+        highlightText: lp.hero.highlightText || undefined, subtitle: lp.hero.subtitle || undefined,
+        ctaText: lp.hero.ctaText || undefined, ctaUrl: lp.hero.ctaUrl || undefined,
+        ctaSecondaryText: lp.hero.ctaSecondaryText || undefined, ctaSecondaryUrl: lp.hero.ctaSecondaryUrl || undefined,
         heroImageUrl: lp.hero.heroImageUrl || undefined,
         stats: lp.hero.stats.map((s, i) => ({ value: s.value, label: s.label, displayOrder: i })),
       } : undefined,
-
-      // 2. About
       about: lp.about.content ? {
-        sectionTitle: lp.about.sectionTitle || undefined,
-        sectionSubtitle: lp.about.sectionSubtitle || undefined,
-        content: lp.about.content,
-        imageUrl: lp.about.imageUrl || undefined,
-        videoUrl: lp.about.videoUrl || undefined,
-        ctaText: lp.about.ctaText || undefined,
-        ctaUrl: lp.about.ctaUrl || undefined,
+        sectionTitle: lp.about.sectionTitle || undefined, sectionSubtitle: lp.about.sectionSubtitle || undefined,
+        content: lp.about.content, imageUrl: lp.about.imageUrl || undefined,
+        videoUrl: lp.about.videoUrl || undefined, ctaText: lp.about.ctaText || undefined, ctaUrl: lp.about.ctaUrl || undefined,
         stats: lp.about.stats.map((s, i) => ({ value: s.value, label: s.label, icon: s.icon || undefined, displayOrder: i })),
       } : undefined,
-
-      // 3. Highlights — thêm isActive: true
-      highlights: lp.highlights.length > 0
-        ? lp.highlights.map((h, i) => ({
-            icon: h.icon, title: h.title, description: h.description,
-            displayOrder: h.displayOrder ?? i, isActive: h.isActive,
-          }))
-        : undefined,
-
-      // 4. Pricing
+      highlights: lp.highlights.length > 0 ? lp.highlights.map((h, i) => ({ icon: h.icon, title: h.title, description: h.description, displayOrder: h.displayOrder ?? i, isActive: h.isActive })) : undefined,
       pricing: lp.pricing.packages.length > 0 ? {
-        title: lp.pricing.title || undefined,
-        subtitle: lp.pricing.subtitle || undefined,
-        packages: lp.pricing.packages.map((p, i) => ({
-          name: p.name, price: p.price,
-          priceNote: p.priceNote || undefined,
-          isPopular: p.isPopular,
-          ctaText: p.ctaText || undefined,
-          ctaUrl: p.ctaUrl || undefined,
-          displayOrder: p.displayOrder ?? i,
-          isActive: p.isActive,
-          features: p.features.filter(f => f.trim()),
-        })),
+        title: lp.pricing.title || undefined, subtitle: lp.pricing.subtitle || undefined,
+        packages: lp.pricing.packages.map((p, i) => ({ name: p.name, price: p.price, priceNote: p.priceNote || undefined, isPopular: p.isPopular, ctaText: p.ctaText || undefined, ctaUrl: p.ctaUrl || undefined, displayOrder: p.displayOrder ?? i, isActive: p.isActive, features: p.features.filter(f => f.trim()) })),
       } : undefined,
-
-      // 5. AboutCompany
       aboutCompany: (lp.aboutCompany.content || lp.aboutCompany.sectionTitle) ? {
-        sectionTitle: lp.aboutCompany.sectionTitle || undefined,
-        sectionSubtitle: lp.aboutCompany.sectionSubtitle || undefined,
-        content: lp.aboutCompany.content || undefined,
-        imageUrl: lp.aboutCompany.imageUrl || undefined,
-        ctaText: lp.aboutCompany.ctaText || undefined,
-        ctaUrl: lp.aboutCompany.ctaUrl || undefined,
+        sectionTitle: lp.aboutCompany.sectionTitle || undefined, sectionSubtitle: lp.aboutCompany.sectionSubtitle || undefined,
+        content: lp.aboutCompany.content || undefined, imageUrl: lp.aboutCompany.imageUrl || undefined,
+        ctaText: lp.aboutCompany.ctaText || undefined, ctaUrl: lp.aboutCompany.ctaUrl || undefined,
         stats: lp.aboutCompany.stats.map((s, i) => ({ value: s.value, label: s.label, icon: s.icon || undefined, displayOrder: i })),
       } : undefined,
-
-      // 6. ClientStats
       clientStats: lp.clientStats.totalClients ? {
-        sectionTitle: lp.clientStats.sectionTitle || undefined,
-        totalClients: lp.clientStats.totalClients,
+        sectionTitle: lp.clientStats.sectionTitle || undefined, totalClients: lp.clientStats.totalClients,
         description: lp.clientStats.description || undefined,
         logos: lp.clientStats.logos.map((l, i) => ({ name: l.name, logoUrl: l.logoUrl, displayOrder: i })),
       } : undefined,
-
-      // 7. Solutions — thêm isActive: true
       solutions: lp.solutions.items.length > 0 ? {
-        title: lp.solutions.title || undefined,
-        subtitle: lp.solutions.subtitle || undefined,
-        items: lp.solutions.items.map((item, i) => ({
-          icon: item.icon || undefined,
-          title: item.title,
-          description: item.description,
-          imageUrl: item.imageUrl || undefined,
-          ctaText: item.ctaText || undefined,
-          ctaUrl: item.ctaUrl || undefined,
-          displayOrder: item.displayOrder ?? i,
-          isActive: true,
-        })),
+        title: lp.solutions.title || undefined, subtitle: lp.solutions.subtitle || undefined,
+        items: lp.solutions.items.map((item, i) => ({ icon: item.icon || undefined, title: item.title, description: item.description, imageUrl: item.imageUrl || undefined, ctaText: item.ctaText || undefined, ctaUrl: item.ctaUrl || undefined, displayOrder: item.displayOrder ?? i, isActive: true })),
       } : undefined,
-
-      // 8. Projects — thêm isActive: true
       projects: lp.projects.items.length > 0 ? {
-        sectionTitle: lp.projects.sectionTitle || undefined,
-        sectionSubtitle: lp.projects.sectionSubtitle || undefined,
-        items: lp.projects.items.map((p, i) => ({
-          title: p.title,
-          client: p.client || undefined,
-          description: p.description || undefined,
-          thumbnailUrl: p.thumbnailUrl || undefined,
-          resultText: p.resultText || undefined,
-          ctaText: p.ctaText || undefined,
-          ctaUrl: p.ctaUrl || undefined,
-          displayOrder: p.displayOrder ?? i,
-          isActive: true,
-        })),
+        sectionTitle: lp.projects.sectionTitle || undefined, sectionSubtitle: lp.projects.sectionSubtitle || undefined,
+        items: lp.projects.items.map((p, i) => ({ title: p.title, client: p.client || undefined, description: p.description || undefined, thumbnailUrl: p.thumbnailUrl || undefined, resultText: p.resultText || undefined, ctaText: p.ctaText || undefined, ctaUrl: p.ctaUrl || undefined, displayOrder: p.displayOrder ?? i, isActive: true })),
       } : undefined,
-
-      // 9. Testimonials — thêm isActive: true
       testimonials: lp.testimonials.items.length > 0 ? {
-        title: lp.testimonials.title || undefined,
-        subtitle: lp.testimonials.subtitle || undefined,
-        items: lp.testimonials.items.map((t, i) => ({
-          authorName: t.authorName,
-          authorRole: t.authorRole || undefined,
-          authorCompany: t.authorCompany || undefined,
-          authorAvatarUrl: t.authorAvatarUrl || undefined,
-          content: t.content,
-          rating: t.rating,
-          displayOrder: t.displayOrder ?? i,
-          isActive: true,
-        })),
+        title: lp.testimonials.title || undefined, subtitle: lp.testimonials.subtitle || undefined,
+        items: lp.testimonials.items.map((t, i) => ({ authorName: t.authorName, authorRole: t.authorRole || undefined, authorCompany: t.authorCompany || undefined, authorAvatarUrl: t.authorAvatarUrl || undefined, content: t.content, rating: t.rating, displayOrder: t.displayOrder ?? i, isActive: true })),
       } : undefined,
-
-      // 10. Awards — thêm isActive: true
       awards: lp.awards.items.length > 0 ? {
-        title: lp.awards.title || undefined,
-        subtitle: lp.awards.subtitle || undefined,
-        items: lp.awards.items.map((a, i) => ({
-          name: a.name,
-          organization: a.organization,
-          year: a.year,
-          logoUrl: a.logoUrl || undefined,
-          displayOrder: a.displayOrder ?? i,
-          isActive: true,
-        })),
+        title: lp.awards.title || undefined, subtitle: lp.awards.subtitle || undefined,
+        items: lp.awards.items.map((a, i) => ({ name: a.name, organization: a.organization, year: a.year, logoUrl: a.logoUrl || undefined, displayOrder: a.displayOrder ?? i, isActive: true })),
       } : undefined,
-
-      // 11. Process — thêm isActive: true
       process: lp.process.steps.length > 0 ? {
-        title: lp.process.title || undefined,
-        subtitle: lp.process.subtitle || undefined,
-        steps: lp.process.steps.map((s, i) => ({
-          stepNumber: s.stepNumber,
-          title: s.title,
-          description: s.description,
-          icon: s.icon || undefined,
-          duration: s.duration || undefined,
-          displayOrder: s.displayOrder ?? i,
-          isActive: true,
-        })),
+        title: lp.process.title || undefined, subtitle: lp.process.subtitle || undefined,
+        steps: lp.process.steps.map((s, i) => ({ stepNumber: s.stepNumber, title: s.title, description: s.description, icon: s.icon || undefined, duration: s.duration || undefined, displayOrder: s.displayOrder ?? i, isActive: true })),
       } : undefined,
-
-      // 12. Team — members array (đã đúng)
       team: lp.team.memberTeamIds.length > 0 ? {
-        title: lp.team.title || undefined,
-        subtitle: lp.team.subtitle || undefined,
+        title: lp.team.title || undefined, subtitle: lp.team.subtitle || undefined,
         members: lp.team.memberTeamIds.map((id, idx) => ({ memberTeamId: id, displayOrder: idx + 1 })),
       } : undefined,
-
-      // 13. CTA
-      ctaSection: lp.ctaSection.title ? {
-        title: lp.ctaSection.title,
-        subtitle: lp.ctaSection.subtitle || undefined,
-        ctaText: lp.ctaSection.ctaText,
-        ctaUrl: lp.ctaSection.ctaUrl,
-        formEnabled: lp.ctaSection.formEnabled,
-      } : undefined,
-
-      // 14. QnA — thêm isActive: true (thiếu cái này items bị filter ra khi GET)
+      ctaSection: lp.ctaSection.title ? { title: lp.ctaSection.title, subtitle: lp.ctaSection.subtitle || undefined, ctaText: lp.ctaSection.ctaText, ctaUrl: lp.ctaSection.ctaUrl, formEnabled: lp.ctaSection.formEnabled } : undefined,
       qnA: lp.qnA.items.length > 0 ? {
-        title: lp.qnA.title || undefined,
-        subtitle: lp.qnA.subtitle || undefined,
-        items: lp.qnA.items.map((q, i) => ({
-          question: q.question,
-          answer: q.answer,
-          displayOrder: q.displayOrder ?? i,
-          isActive: q.isActive,
-        })),
+        title: lp.qnA.title || undefined, subtitle: lp.qnA.subtitle || undefined,
+        items: lp.qnA.items.map((q, i) => ({ question: q.question, answer: q.answer, displayOrder: q.displayOrder ?? i, isActive: q.isActive })),
       } : undefined,
     };
   };
@@ -841,7 +700,6 @@ export default function ServiceManagement() {
     s.title.toLowerCase().includes(searchTerm.toLowerCase()) || s.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ── Shorthand lp setter ──────────────────────────────────────
   const lp = landingData;
   const lpSet = <K extends keyof LandingPageForm>(key: K, patch: Partial<LandingPageForm[K]>) =>
     setLP(p => ({ ...p, [key]: { ...(p[key] as any), ...patch } }));
@@ -959,7 +817,15 @@ export default function ServiceManagement() {
                   <FieldRow label="Badge"><Input type="text" placeholder="🏆 Dịch vụ hàng đầu" value={lp.hero.badge} onChange={e => lpSet("hero", { badge: e.target.value })} /></FieldRow>
                   <FieldRow label="Title *"><Input type="text" placeholder="Tiêu đề chính" value={lp.hero.title} onChange={e => lpSet("hero", { title: e.target.value })} /></FieldRow>
                   <FieldRow label="Highlight Text"><Input type="text" placeholder="Từ được highlight" value={lp.hero.highlightText} onChange={e => lpSet("hero", { highlightText: e.target.value })} /></FieldRow>
-                  <FieldRow label="Hero Image URL"><Input type="text" placeholder="/images/hero.png" value={lp.hero.heroImageUrl} onChange={e => lpSet("hero", { heroImageUrl: e.target.value })} /></FieldRow>
+                  {/* ── Hero Image Upload ── */}
+                  <FieldRow label="Hero Image">
+                    <ImageUploadField
+                      value={lp.hero.heroImageUrl}
+                      onChange={v => lpSet("hero", { heroImageUrl: v })}
+                      folder="services/hero"
+                      previewSize="lg"
+                    />
+                  </FieldRow>
                   <FieldRow label="Subtitle" span={2}><TextArea value={lp.hero.subtitle} onChange={v => lpSet("hero", { subtitle: v })} placeholder="Mô tả ngắn dưới tiêu đề..." rows={2} /></FieldRow>
                   <FieldRow label="CTA Primary Text"><Input type="text" placeholder="Bắt đầu ngay" value={lp.hero.ctaText} onChange={e => lpSet("hero", { ctaText: e.target.value })} /></FieldRow>
                   <FieldRow label="CTA Primary URL"><Input type="text" placeholder="/lien-he" value={lp.hero.ctaUrl} onChange={e => lpSet("hero", { ctaUrl: e.target.value })} /></FieldRow>
@@ -974,7 +840,15 @@ export default function ServiceManagement() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <FieldRow label="Tiêu đề section"><Input type="text" placeholder="Về dịch vụ của chúng tôi" value={lp.about.sectionTitle} onChange={e => lpSet("about", { sectionTitle: e.target.value })} /></FieldRow>
                   <FieldRow label="Subtitle section"><Input type="text" placeholder="Phụ đề" value={lp.about.sectionSubtitle} onChange={e => lpSet("about", { sectionSubtitle: e.target.value })} /></FieldRow>
-                  <FieldRow label="Image URL"><Input type="text" placeholder="/images/about.png" value={lp.about.imageUrl} onChange={e => lpSet("about", { imageUrl: e.target.value })} /></FieldRow>
+                  {/* ── About Image Upload ── */}
+                  <FieldRow label="Image" span={2}>
+                    <ImageUploadField
+                      value={lp.about.imageUrl}
+                      onChange={v => lpSet("about", { imageUrl: v })}
+                      folder="services/about"
+                      previewSize="lg"
+                    />
+                  </FieldRow>
                   <FieldRow label="Video URL"><Input type="text" placeholder="https://youtube.com/..." value={lp.about.videoUrl} onChange={e => lpSet("about", { videoUrl: e.target.value })} /></FieldRow>
                   <FieldRow label="CTA Text"><Input type="text" placeholder="Tìm hiểu thêm" value={lp.about.ctaText} onChange={e => lpSet("about", { ctaText: e.target.value })} /></FieldRow>
                   <FieldRow label="CTA URL"><Input type="text" placeholder="/ve-chung-toi" value={lp.about.ctaUrl} onChange={e => lpSet("about", { ctaUrl: e.target.value })} /></FieldRow>
@@ -1042,8 +916,17 @@ export default function ServiceManagement() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <FieldRow label="Tiêu đề section"><Input type="text" placeholder="Về chúng tôi" value={lp.aboutCompany.sectionTitle} onChange={e => lpSet("aboutCompany", { sectionTitle: e.target.value })} /></FieldRow>
                   <FieldRow label="Subtitle"><Input type="text" placeholder="Phụ đề" value={lp.aboutCompany.sectionSubtitle} onChange={e => lpSet("aboutCompany", { sectionSubtitle: e.target.value })} /></FieldRow>
-                  <FieldRow label="Image URL"><Input type="text" placeholder="/images/company.png" value={lp.aboutCompany.imageUrl} onChange={e => lpSet("aboutCompany", { imageUrl: e.target.value })} /></FieldRow>
+                  {/* ── About Company Image Upload ── */}
+                  <FieldRow label="Image" span={2}>
+                    <ImageUploadField
+                      value={lp.aboutCompany.imageUrl}
+                      onChange={v => lpSet("aboutCompany", { imageUrl: v })}
+                      folder="services/company"
+                      previewSize="lg"
+                    />
+                  </FieldRow>
                   <FieldRow label="CTA Text"><Input type="text" placeholder="Tìm hiểu thêm" value={lp.aboutCompany.ctaText} onChange={e => lpSet("aboutCompany", { ctaText: e.target.value })} /></FieldRow>
+                  <FieldRow label="CTA URL"><Input type="text" placeholder="/ve-chung-toi" value={lp.aboutCompany.ctaUrl} onChange={e => lpSet("aboutCompany", { ctaUrl: e.target.value })} /></FieldRow>
                   <FieldRow label="Nội dung" span={2}><TextArea value={lp.aboutCompany.content} onChange={v => lpSet("aboutCompany", { content: v })} placeholder="Giới thiệu về công ty trong ngữ cảnh dịch vụ này..." rows={4} /></FieldRow>
                 </div>
                 <StatRows stats={lp.aboutCompany.stats} onAdd={() => companyStats.add({ value: "", label: "", icon: "" })} onUpdate={(i, f, v) => companyStats.update(i, f, v)} onRemove={i => companyStats.remove(i)} placeholder="Khách hàng" />
@@ -1058,12 +941,21 @@ export default function ServiceManagement() {
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between mb-3"><p className="text-sm font-medium text-gray-600">Logo ({lp.clientStats.logos.length})</p><AddBtn label="Thêm logo" onClick={addLogo} /></div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {lp.clientStats.logos.map((logo, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-lg border border-gray-200 dark:border-gray-700">
-                        <Input type="text" placeholder="Tên công ty" value={logo.name} onChange={e => updateLogo(i, "name", e.target.value)} />
-                        <Input type="text" placeholder="/logos/vingroup.png" value={logo.logoUrl} onChange={e => updateLogo(i, "logoUrl", e.target.value)} />
-                        <RemoveBtn onClick={() => setLP(p => ({ ...p, clientStats: { ...p.clientStats, logos: removeItem(p.clientStats.logos, i) } }))} />
+                      <div key={i} className="p-3 bg-gray-50 dark:bg-gray-800/40 rounded-lg border border-gray-200 dark:border-gray-700 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Input type="text" placeholder="Tên công ty" value={logo.name} onChange={e => updateLogo(i, "name", e.target.value)} />
+                          <RemoveBtn onClick={() => setLP(p => ({ ...p, clientStats: { ...p.clientStats, logos: removeItem(p.clientStats.logos, i) } }))} />
+                        </div>
+                        {/* ── Logo Image Upload ── */}
+                        <ImageUploadField
+                          value={logo.logoUrl}
+                          onChange={v => updateLogo(i, "logoUrl", v)}
+                          folder="logos"
+                          previewSize="sm"
+                          maxSizeMB={1}
+                        />
                       </div>
                     ))}
                     {lp.clientStats.logos.length === 0 && <p className="text-xs text-gray-400 text-center py-3">Chưa có logo nào</p>}
@@ -1085,8 +977,16 @@ export default function ServiceManagement() {
                         <div className="grid md:grid-cols-2 gap-3">
                           <FieldRow label="Icon (Lucide)"><Input type="text" placeholder="CheckCircle" value={item.icon} onChange={e => updateSolution(i, "icon", e.target.value)} /></FieldRow>
                           <FieldRow label="Tiêu đề *"><Input type="text" placeholder="Tối ưu hiệu suất" value={item.title} onChange={e => updateSolution(i, "title", e.target.value)} /></FieldRow>
-                          <FieldRow label="Image URL"><Input type="text" placeholder="/images/solution.png" value={item.imageUrl} onChange={e => updateSolution(i, "imageUrl", e.target.value)} /></FieldRow>
+                          {/* ── Solution Image Upload ── */}
+                          <FieldRow label="Image" span={2}>
+                            <ImageUploadField
+                              value={item.imageUrl}
+                              onChange={v => updateSolution(i, "imageUrl", v)}
+                              folder="services/solutions"
+                            />
+                          </FieldRow>
                           <FieldRow label="CTA Text"><Input type="text" placeholder="Tìm hiểu" value={item.ctaText} onChange={e => updateSolution(i, "ctaText", e.target.value)} /></FieldRow>
+                          <FieldRow label="CTA URL"><Input type="text" placeholder="/..." value={item.ctaUrl} onChange={e => updateSolution(i, "ctaUrl", e.target.value)} /></FieldRow>
                           <FieldRow label="Mô tả" span={2}><Input type="text" placeholder="Mô tả giải pháp..." value={item.description} onChange={e => updateSolution(i, "description", e.target.value)} /></FieldRow>
                         </div>
                         <div className="flex items-center gap-2 pt-1"><input type="checkbox" checked={item.isActive} onChange={e => updateSolution(i, "isActive", e.target.checked)} className="w-4 h-4 rounded" /><span className="text-sm text-gray-600 dark:text-gray-400">Hiển thị</span></div>
@@ -1112,7 +1012,15 @@ export default function ServiceManagement() {
                           <FieldRow label="Tên dự án *"><Input type="text" placeholder="Website thương mại điện tử" value={p.title} onChange={e => updateProject(i, "title", e.target.value)} /></FieldRow>
                           <FieldRow label="Khách hàng"><Input type="text" placeholder="Vingroup, FPT..." value={p.client} onChange={e => updateProject(i, "client", e.target.value)} /></FieldRow>
                           <FieldRow label="Kết quả đạt được"><Input type="text" placeholder="Tăng 300% traffic" value={p.resultText} onChange={e => updateProject(i, "resultText", e.target.value)} /></FieldRow>
-                          <FieldRow label="Thumbnail URL"><Input type="text" placeholder="/projects/project-1.png" value={p.thumbnailUrl} onChange={e => updateProject(i, "thumbnailUrl", e.target.value)} /></FieldRow>
+                          {/* ── Project Thumbnail Upload ── */}
+                          <FieldRow label="Thumbnail">
+                            <ImageUploadField
+                              value={p.thumbnailUrl}
+                              onChange={v => updateProject(i, "thumbnailUrl", v)}
+                              folder="projects"
+                              previewSize="lg"
+                            />
+                          </FieldRow>
                           <FieldRow label="CTA Text"><Input type="text" placeholder="Xem chi tiết" value={p.ctaText} onChange={e => updateProject(i, "ctaText", e.target.value)} /></FieldRow>
                           <FieldRow label="CTA URL"><Input type="text" placeholder="/portfolio/..." value={p.ctaUrl} onChange={e => updateProject(i, "ctaUrl", e.target.value)} /></FieldRow>
                           <FieldRow label="Mô tả" span={2}><TextArea value={p.description} onChange={v => updateProject(i, "description", v)} placeholder="Mô tả dự án..." rows={2} /></FieldRow>
@@ -1140,7 +1048,16 @@ export default function ServiceManagement() {
                           <FieldRow label="Tên *"><Input type="text" placeholder="Nguyễn Văn A" value={t.authorName} onChange={e => updateTestimonial(i, "authorName", e.target.value)} /></FieldRow>
                           <FieldRow label="Chức vụ"><Input type="text" placeholder="CEO, Marketing Manager..." value={t.authorRole} onChange={e => updateTestimonial(i, "authorRole", e.target.value)} /></FieldRow>
                           <FieldRow label="Công ty"><Input type="text" placeholder="Công ty ABC" value={t.authorCompany} onChange={e => updateTestimonial(i, "authorCompany", e.target.value)} /></FieldRow>
-                          <FieldRow label="Avatar URL"><Input type="text" placeholder="/avatars/user.png" value={t.authorAvatarUrl} onChange={e => updateTestimonial(i, "authorAvatarUrl", e.target.value)} /></FieldRow>
+                          {/* ── Avatar Upload ── */}
+                          <FieldRow label="Avatar">
+                            <ImageUploadField
+                              value={t.authorAvatarUrl}
+                              onChange={v => updateTestimonial(i, "authorAvatarUrl", v)}
+                              folder="avatars"
+                              previewSize="sm"
+                              maxSizeMB={1}
+                            />
+                          </FieldRow>
                           <FieldRow label="Rating (1-5)"><Input type="number" min="1" max="5" value={t.rating} onChange={e => updateTestimonial(i, "rating", parseInt(e.target.value) || 5)} /></FieldRow>
                           <FieldRow label="Nội dung *" span={2}><TextArea value={t.content} onChange={v => updateTestimonial(i, "content", v)} placeholder="Nội dung đánh giá..." rows={3} /></FieldRow>
                         </div>
@@ -1167,7 +1084,16 @@ export default function ServiceManagement() {
                           <FieldRow label="Tên giải *"><Input type="text" placeholder="Top 10 Dịch vụ SEO" value={award.name} onChange={e => updateAward(i, "name", e.target.value)} /></FieldRow>
                           <FieldRow label="Tổ chức *"><Input type="text" placeholder="Google, Forbes VN..." value={award.organization} onChange={e => updateAward(i, "organization", e.target.value)} /></FieldRow>
                           <FieldRow label="Năm"><Input type="text" placeholder="2024" value={award.year} onChange={e => updateAward(i, "year", e.target.value)} /></FieldRow>
-                          <FieldRow label="Logo URL"><Input type="text" placeholder="/logos/google-award.png" value={award.logoUrl} onChange={e => updateAward(i, "logoUrl", e.target.value)} /></FieldRow>
+                          {/* ── Award Logo Upload ── */}
+                          <FieldRow label="Logo">
+                            <ImageUploadField
+                              value={award.logoUrl}
+                              onChange={v => updateAward(i, "logoUrl", v)}
+                              folder="awards"
+                              previewSize="sm"
+                              maxSizeMB={1}
+                            />
+                          </FieldRow>
                         </div>
                         <div className="flex items-center gap-2 pt-1"><input type="checkbox" checked={award.isActive} onChange={e => updateAward(i, "isActive", e.target.checked)} className="w-4 h-4 rounded" /><span className="text-sm text-gray-600 dark:text-gray-400">Hiển thị</span></div>
                       </ItemCard>

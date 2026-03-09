@@ -22,15 +22,36 @@ interface PageProps {
 }
 
 export default async function ServicePage({ params }: PageProps) {
+  const { slug } = await params;
   let data;
+  console.log("[slug]:", slug);
   try {
-    data = await clientApi.getServicePage(params.slug);
+    data = await clientApi.getServicePage(slug);
+    console.log("[ServicePage] fetched data:", data);
   } catch (err) {
     console.error("[ServicePage] fetch error:", err);
     notFound();
   }
 
   if (!data) notFound();
+
+  // console.log("[ServicePage] rendering with data:", data);
+  // console.log("[ServicePage] data sections:", {
+  //   hero: !!data.hero,
+  //   about: !!data.about,
+  //   highlights: !!data.highlights?.length,
+  //   pricing: !!data.pricing,
+  //   aboutCompany: !!data.aboutCompany,
+  //   clientStats: !!data.clientStats,
+  //   solutions: !!data.solutions,
+  //   projects: !!data.projects,
+  //   testimonials: !!data.testimonials,
+  //   awards: !!data.awards,
+  //   process: !!data.process,
+  //   team: !!data.team,
+  //   ctaSection: !!data.ctaSection,
+  //   qnA: !!data.qnA,
+  // });
 
   return (
     <main>
@@ -43,7 +64,7 @@ export default async function ServicePage({ params }: PageProps) {
       {data.solutions    && <SolutionsSection     data={data.solutions} />}
       {data.projects     && <ProjectsSection      data={data.projects} />}
       {data.testimonials && <TestimonialsSection  data={data.testimonials} />}
-      {data.awards       && <AwardsSection        data={data.awards} />}
+      {/* {data.awards       && <AwardsSection        data={data.awards} />} */}
       {data.process      && <ProcessSection       data={data.process} />}
       {data.team         && <TeamSection          data={data.team} />}
       {data.ctaSection   && <CtaSection           data={data.ctaSection} />}

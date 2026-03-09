@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import type { ServiceSolutions } from "@/app/types";
+import type { ServiceSolutions, SolutionItem } from "@/app/types";
 
 interface SolutionsSectionProps {
   data: ServiceSolutions;
@@ -8,85 +8,203 @@ interface SolutionsSectionProps {
 
 export default function SolutionsSection({ data }: SolutionsSectionProps) {
   if (!data?.items?.length) return null;
+
+  const cardGradient = "linear-gradient(135deg, #57F5B2 0%, #37BADE 100%)";
+
+  // Nhóm items theo icon tag để phân vùng layout
+  const checkboxItems = data.items.filter((i) => i.icon === "checkbox");
+  const pillItems     = data.items.filter((i) => i.icon === "pill");
+  const descItem      = data.items.find((i)  => i.icon === "desc");
+
+  // Fallback nếu chưa tag icon: dùng slice theo thứ tự
+  const topCards = checkboxItems.length ? checkboxItems : data.items.slice(0, 3);
+  const pills    = pillItems.length     ? pillItems     : data.items.slice(3, 11);
+
+  // Flowchart hardcoded (vì đây là visual diagram, không phải data-driven)
+  const flowRows = [
+    ["Từ khóa hạt nhân (Cộ 5x1)", "Tách thành các chủ đề lần 2 (NG)", "Từ khóa hạt nhân CĐ 02"],
+    ["Keyword Planner",            "Danh sách từ khóa 5x2",             "Keyword Planner"],
+    ["Keywordtool.io",             "Keywordtool.io",                    "Keywordtool.io"],
+    ["Danh sách từ khóa 5x1",     "Keyword Planner",                   "Danh sách từ khóa 5x3"],
+    ["Tách thành các chủ đề lần 1 (5x2)", "Từ khóa hạt nhân (Cộ 01)", "Chia nhóm từ khóa"],
+  ];
+
+  // Cells với màu gradient xanh (highlight)
+  const greenCells = new Set(["0-0","1-1","2-0","2-1","2-2","3-1","4-2"]);
+  const blueCells  = new Set(["0-2","3-0","4-0","1-2","3-2"]);
+
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-14">
-          {data.title && (
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">
-              {data.title}
-            </h2>
-          )}
-          {data.subtitle && (
-            <p className="text-gray-500 text-lg max-w-xl mx-auto">{data.subtitle}</p>
-          )}
-          <div
-            className="mx-auto mt-4 h-1 w-20 rounded-full"
-            style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
-          />
+    <section className="py-16 bg-white">
+      <div className="max-w-6xl mx-auto px-8">
+
+        {/* ══ TOP ROW: Title left + 3 checkbox cards right ══ */}
+        <div className="grid lg:grid-cols-2 gap-10 items-start mb-14">
+
+          {/* LEFT */}
+          <div className="flex flex-col justify-center">
+            {data.subtitle && (
+              <span
+                className="text-xs font-bold uppercase tracking-widest mb-2 block"
+                style={{ color: "#999" }}
+              >
+                {data.subtitle}
+              </span>
+            )}
+            {data.title && (
+              <h2
+                className="font-extrabold leading-tight"
+                style={{
+                  fontSize: "clamp(20px, 3vw, 34px)",
+                  color: "#111",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.01em",
+                }}
+              >
+                {data.title}
+              </h2>
+            )}
+          </div>
+
+          {/* RIGHT — checkbox gradient cards */}
+          <div className="flex flex-col gap-3">
+            {topCards.map((item, i) => (
+              <div
+                key={i}
+                className="flex items-start gap-4 rounded-2xl px-5 py-4"
+                style={{ background: cardGradient }}
+              >
+                {/* Checkbox */}
+                <div
+                  className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center mt-0.5"
+                  style={{ background: "rgba(255,255,255,0.25)", border: "1.5px solid rgba(255,255,255,0.5)" }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 7l3.5 3.5L12 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium leading-relaxed" style={{ color: "#fff" }}>
+                  {item.description || item.title}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.items.map((item, i) => (
-            <div
-              key={i}
-              className="group relative rounded-3xl overflow-hidden border border-gray-100 hover:border-transparent hover:shadow-xl transition-all duration-300"
-              style={{ background: "#fff" }}
+        {/* ══ BOTTOM ROW: Method left + Desc+Flow right ══ */}
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+
+          {/* LEFT — method + pill grid */}
+          <div>
+            <span
+              className="text-xs font-bold uppercase tracking-widest block mb-1"
+              style={{ color: "#999" }}
             >
-              {/* Gradient hover overlay */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ background: "linear-gradient(135deg,#57F5B210,#37BADE15)" }}
-              />
+              PHƯƠNG PHÁP
+            </span>
+            <h3
+              className="font-extrabold leading-tight mb-1"
+              style={{
+                fontSize: "clamp(18px, 2.5vw, 28px)",
+                color: "#111",
+                textTransform: "uppercase",
+              }}
+            >
+              {(data as any).methodTitle ?? "SEO AI MAX ĐỘC QUYỀN"}
+            </h3>
+            {(data as any).methodSubtitle && (
+              <p className="text-xs text-gray-500 mb-5">
+                {(data as any).methodSubtitle}
+              </p>
+            )}
 
-              {/* Image */}
-              {item.imageUrl && (
-                <div className="relative h-44 overflow-hidden">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div
-                    className="absolute inset-0 opacity-30"
-                    style={{ background: "linear-gradient(to bottom, transparent, #37BADE)" }}
-                  />
-                </div>
-              )}
-
-              <div className="relative p-6">
-                {/* Icon badge */}
-                {item.icon && (
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
-                    style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
-                  >
-                    <span className="text-white text-lg">✦</span>
-                  </div>
-                )}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-transparent transition-all"
-                  style={{ backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)", WebkitBackgroundClip: "text", backgroundClip: "text" } as React.CSSProperties}
+            {/* Pill tag grid — 2 cols */}
+            <div className="grid grid-cols-2 gap-2">
+              {(pills.length ? pills : data.items.slice(3, 11)).map((pill, i) => (
+                <div
+                  key={i}
+                  className="rounded-full px-4 py-2 text-xs font-semibold text-center leading-snug"
+                  style={{
+                    border: "1.5px solid #37BADE",
+                    color: "#37BADE",
+                    background: "rgba(55,186,222,0.06)",
+                  }}
                 >
-                  {item.title}
-                </h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-4">{item.description}</p>
-                {item.ctaText && item.ctaUrl && (
-                  <a
-                    href={item.ctaUrl}
-                    className="inline-flex items-center gap-1 text-sm font-semibold"
-                    style={{ color: "#37BADE" }}
-                  >
-                    {item.ctaText}
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                  </a>
+                  {pill.title}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT — description box + flowchart */}
+          <div className="flex flex-col gap-4">
+
+            {/* Description gradient box */}
+            {descItem && (
+              <div
+                className="rounded-2xl px-5 py-4 text-sm leading-relaxed"
+                style={{ background: cardGradient, color: "#fff" }}
+              >
+                {descItem.description}
+              </div>
+            )}
+
+            {/* Flowchart table */}
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{ border: "1px solid #D8F0FA" }}
+            >
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
+                {flowRows.map((row, ri) =>
+                  row.map((cell, ci) => {
+                    const key = `${ri}-${ci}`;
+                    const isGreen = greenCells.has(key);
+                    const isBlue  = blueCells.has(key);
+                    return (
+                      <div
+                        key={key}
+                        style={{
+                          padding: "8px 10px",
+                          fontSize: "10px",
+                          fontWeight: 500,
+                          lineHeight: 1.45,
+                          color: isGreen || isBlue ? "#fff" : "#333",
+                          background: isGreen
+                            ? "linear-gradient(135deg,#57F5B2,#3DDACC)"
+                            : isBlue
+                            ? "linear-gradient(135deg,#3DDACC,#37BADE)"
+                            : "#fff",
+                          borderRight: ci < 2 ? "1px solid #D8F0FA" : "none",
+                          borderBottom: ri < 4 ? "1px solid #D8F0FA" : "none",
+                        }}
+                      >
+                        {cell}
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>
-          ))}
+          </div>
         </div>
+
+        {/* ══ CTA ══ */}
+        {(data as any).ctaText && (
+          <div className="flex justify-center mt-14">
+            <a
+              href={(data as any).ctaUrl ?? "#"}
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-full font-bold text-white text-sm transition-transform hover:scale-105"
+              style={{
+                background: cardGradient,
+                boxShadow: "0 6px 28px rgba(55,186,222,0.28)",
+              }}
+            >
+              <span>›</span>
+              {(data as any).ctaText}
+              <span>‹</span>
+            </a>
+          </div>
+        )}
+
       </div>
     </section>
   );

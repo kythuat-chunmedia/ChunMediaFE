@@ -8,44 +8,62 @@ interface AboutSectionProps {
 
 export default function AboutSection({ data }: AboutSectionProps) {
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        {(data.sectionTitle || data.sectionSubtitle) && (
-          <div className="text-center mb-14">
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col gap-6">
+
+        {/* ── ROW 1: Text (left, purple dark) + Image (right, purple light) ── */}
+        <div className="grid lg:grid-cols-2 gap-4 items-stretch">
+
+          {/* LEFT — dark purple text block */}
+          <div
+            className="rounded-3xl p-10 flex flex-col justify-center"
+            style={{
+              background: "linear-gradient(135deg, #57F5B2 0%, #37BADE 100%)",
+              minHeight: 280,
+            }}
+          >
             {data.sectionTitle && (
-              <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">
+              <h2
+                className="font-extrabold mb-5 leading-tight"
+                style={{
+                  color: "#0A3D2E",
+                  fontSize: "clamp(22px, 3vw, 34px)",
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                }}
+              >
                 {data.sectionTitle}
               </h2>
             )}
-            {data.sectionSubtitle && (
-              <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-                {data.sectionSubtitle}
-              </p>
-            )}
-            <div
-              className="mx-auto mt-4 h-1 w-20 rounded-full"
-              style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
-            />
-          </div>
-        )}
 
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
-          {/* LEFT: Image */}
-          {data.imageUrl && (
-            <div className="relative">
-              {/* Decorative blob behind image */}
-              <div
-                className="absolute -inset-4 rounded-3xl opacity-30 blur-2xl"
-                style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
-              />
+            {/* Divider */}
+            <div
+              style={{
+                width: 48,
+                height: 3,
+                borderRadius: 4,
+                background: "rgba(0,0,0,0.20)",
+                marginBottom: 20,
+              }}
+            />
+
+            {data.sectionSubtitle && (
+              <p
+                className="text-base leading-relaxed"
+                style={{ color: "rgba(0,50,35,0.82)" }}
+              ></p>
+            )}
+          </div>
+
+          {/* RIGHT — image block */}
+          {data.imageUrl ? (
+            <div className="relative rounded-3xl overflow-hidden" style={{ minHeight: 280 }}>
               <img
                 src={data.imageUrl}
                 alt={data.sectionTitle || "About"}
-                className="relative rounded-2xl shadow-xl w-full object-cover"
-                style={{ maxHeight: 420 }}
+                className="w-full h-full object-cover"
+                style={{ minHeight: 280 }}
               />
-              {/* Video play button overlay */}
               {data.videoUrl && (
                 <a
                   href={data.videoUrl}
@@ -64,44 +82,117 @@ export default function AboutSection({ data }: AboutSectionProps) {
                 </a>
               )}
             </div>
+          ) : (
+            /* fallback purple-light block if no image */
+            <div
+              className="rounded-3xl"
+              style={{
+                background: "linear-gradient(135deg, #7FFAD4 0%, #57D9F0 100%)",
+                minHeight: 280,
+              }}
+            />
+          )}
+        </div>
+
+        {/* ── Divider between rows ── */}
+        <div
+          style={{
+            height: 1,
+            background: "linear-gradient(90deg, transparent, #37BADE55, transparent)",
+            margin: "4px 0",
+          }}
+        />
+
+        {/* ── ROW 2: Image (left) + Text (right, purple dark) ── */}
+        <div className="grid lg:grid-cols-2 gap-4 items-stretch">
+
+          {/* LEFT — image / screenshot block */}
+          {data.imageUrl ? (
+            <div
+              className="rounded-3xl overflow-hidden border"
+              style={{
+                borderColor: "#B0EEE0",
+              }}
+            >
+              <img
+                src={data.imageUrl}
+                alt="detail"
+                className="w-full h-full object-cover"
+                style={{ minHeight: 280 }}
+              />
+            </div>
+          ) : (
+            <div
+              className="rounded-3xl border"
+              style={{
+                borderColor: "#B0EEE0",
+                minHeight: 280,
+                background: "#F0FDF8",
+              }}
+            />
           )}
 
-          {/* RIGHT: Content */}
-          <div>
-            <p className="text-gray-700 text-base leading-relaxed mb-8 whitespace-pre-line">
+          {/* RIGHT — dark purple content block */}
+          <div
+            className="rounded-3xl p-10 flex flex-col justify-center"
+            style={{
+              background: "linear-gradient(135deg, #57F5B2 0%, #37BADE 100%)",
+              minHeight: 280,
+            }}
+          >
+            {/* Sub-label */}
+            {data.sectionSubtitle && (
+              <span
+                className="text-xs font-bold uppercase tracking-widest mb-3 block"
+                style={{ color: "rgba(0,50,35,0.60)" }}
+              >
+                Điểm khác biệt
+              </span>
+            )}
+
+            {data.sectionTitle && (
+              <h3
+                className="font-extrabold mb-5 leading-tight"
+                style={{
+                  color: "#0A3D2E",
+                  fontSize: "clamp(20px, 2.5vw, 30px)",
+                  letterSpacing: "0.03em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {data.sectionTitle} CÓ GÌ KHÁC BIỆT?
+              </h3>
+            )}
+
+            <p
+              className="text-base leading-relaxed mb-8"
+              style={{ color: "rgba(0,50,35,0.82)" }}
+            >
               {data.content}
             </p>
 
             {/* Stats grid */}
             {data.stats && data.stats.length > 0 && (
-              <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-2 gap-3 mb-8">
                 {data.stats.map((stat, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-3 p-4 rounded-2xl border"
-                    style={{ borderColor: "#37BADE30", background: "linear-gradient(135deg,#57F5B208,#37BADE08)" }}
+                    className="flex items-center gap-3 p-3 rounded-2xl"
+                    style={{ background: "rgba(0,0,0,0.08)" }}
                   >
                     {stat.icon && (
                       <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0"
-                        style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
+                        className="w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm flex-shrink-0"
+                        style={{ background: "rgba(0,0,0,0.12)" }}
                       >
                         ✦
                       </div>
                     )}
                     <div>
-                      <div
-                        className="text-2xl font-black"
-                        style={{
-                          backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          backgroundClip: "text",
-                        }}
-                      >
-                        {stat.value}
+                      <div className="text-xl font-black" style={{ color: "#0A3D2E" }}>{stat.value}</div>
+                      <div className="text-xs font-medium" style={{ color: "rgba(0,50,35,0.65)" }}>
+                        {stat.label}
                       </div>
-                      <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
                     </div>
                   </div>
                 ))}
@@ -111,8 +202,12 @@ export default function AboutSection({ data }: AboutSectionProps) {
             {data.ctaText && data.ctaUrl && (
               <a
                 href={data.ctaUrl}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white text-sm shadow-md transition-transform hover:scale-105"
-                style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm transition-transform hover:scale-105 self-start"
+                style={{
+                  background: "rgba(0,0,0,0.10)",
+                  color: "#0A3D2E",
+                  border: "1.5px solid rgba(0,0,0,0.20)",
+                }}
               >
                 {data.ctaText}
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -122,6 +217,7 @@ export default function AboutSection({ data }: AboutSectionProps) {
             )}
           </div>
         </div>
+
       </div>
     </section>
   );

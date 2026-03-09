@@ -8,92 +8,255 @@ interface AboutCompanySectionProps {
 
 export default function AboutCompanySection({ data }: AboutCompanySectionProps) {
   if (!data) return null;
+
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-14 items-center">
-          {/* LEFT: Content */}
+    <section className="bg-white">
+
+      {/* ══ PART 1: Brand + Title + Image + Bullet list ══ */}
+      <div className="max-w-7xl mx-auto px-8 pt-16 pb-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* LEFT — brand label + title + subtitle */}
           <div>
+            {/* Brand label */}
+            <span
+              className="block text-sm font-extrabold mb-2 tracking-wider"
+              style={{
+                backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              SEONGON
+            </span>
+
+            {/* Main title */}
             {data.sectionTitle && (
-              <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">
+              <h2
+                className="font-extrabold leading-tight mb-3"
+                style={{
+                  fontSize: "clamp(22px, 3vw, 34px)",
+                  color: "#111",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.01em",
+                }}
+              >
                 {data.sectionTitle}
               </h2>
             )}
+
+            {/* Subtitle — gradient text */}
             {data.sectionSubtitle && (
               <p
-                className="text-lg font-semibold mb-6"
-                style={{ color: "#37BADE" }}
+                className="font-semibold text-sm leading-snug"
+                style={{
+                  backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.04em",
+                }}
               >
                 {data.sectionSubtitle}
               </p>
             )}
-            <div
-              className="h-1 w-16 rounded-full mb-6"
-              style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
-            />
-            {data.content && (
-              <p className="text-gray-600 leading-relaxed mb-8 whitespace-pre-line">
-                {data.content}
-              </p>
-            )}
+          </div>
 
-            {/* Stats */}
-            {data.stats && data.stats.length > 0 && (
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {data.stats.map((stat, i) => (
-                  <div
-                    key={i}
-                    className="p-4 rounded-2xl text-center"
-                    style={{
-                      background: "linear-gradient(135deg,#57F5B210,#37BADE10)",
-                      border: "1px solid #37BADE25",
-                    }}
-                  >
-                    <div
-                      className="text-3xl font-black mb-1"
-                      style={{
-                        backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
-                  </div>
-                ))}
+          {/* RIGHT — image with shapes + bullet list side by side */}
+          <div className="flex flex-col sm:flex-row items-center gap-8">
+
+            {/* Image with decorative blob shapes */}
+            {data.imageUrl && (
+              <div className="relative flex-shrink-0" style={{ width: 240 }}>
+                {/* Teal shape top-right */}
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    top: -8,
+                    right: -16,
+                    width: 80,
+                    height: 80,
+                    borderRadius: "50% 20% 50% 20%",
+                    background: "linear-gradient(135deg,#57F5B2,#37BADE)",
+                    opacity: 0.9,
+                    zIndex: 0,
+                  }}
+                />
+                {/* Pink shape bottom-left */}
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    bottom: -8,
+                    left: -8,
+                    width: 90,
+                    height: 55,
+                    borderRadius: "40% 60% 40% 60%",
+                    background: "linear-gradient(135deg,#F857A6,#C850C0)",
+                    opacity: 0.85,
+                    zIndex: 0,
+                  }}
+                />
+                <img
+                  src={data.imageUrl}
+                  alt={data.sectionTitle || "About company"}
+                  className="relative w-full object-cover object-top"
+                  style={{
+                    zIndex: 1,
+                    maxHeight: 300,
+                    filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.10))",
+                  }}
+                />
               </div>
             )}
 
-            {data.ctaText && data.ctaUrl && (
-              <a
-                href={data.ctaUrl}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white text-sm shadow-md hover:scale-105 transition-transform"
-                style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
-              >
-                {data.ctaText}
-              </a>
+            {/* Bullet list — stats as bullet points */}
+            {data.stats && data.stats.length > 0 && (
+              <ul className="flex flex-col gap-3 flex-1 min-w-0">
+                {data.stats.map((stat, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-sm"
+                    style={{ color: "#333" }}
+                  >
+                    <span
+                      className="flex-shrink-0 mt-1"
+                      style={{
+                        display: "inline-block",
+                        width: 3,
+                        height: 14,
+                        borderRadius: 2,
+                        background: "linear-gradient(180deg,#57F5B2,#37BADE)",
+                      }}
+                    />
+                    <span className="leading-snug">
+                      {stat.value && (
+                        <strong style={{ color: "#111" }}>{stat.value} </strong>
+                      )}
+                      {stat.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Fallback: parse content line by line if no stats */}
+            {(!data.stats || data.stats.length === 0) && data.content && (
+              <ul className="flex flex-col gap-3 flex-1 min-w-0">
+                {data.content.split("\n").filter(Boolean).map((line, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-sm"
+                    style={{ color: "#333" }}
+                  >
+                    <span
+                      className="flex-shrink-0 mt-1"
+                      style={{
+                        display: "inline-block",
+                        width: 3,
+                        height: 14,
+                        borderRadius: 2,
+                        background: "linear-gradient(180deg,#57F5B2,#37BADE)",
+                      }}
+                    />
+                    <span className="leading-snug">{line}</span>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
-
-          {/* RIGHT: Image */}
-          {data.imageUrl && (
-            <div className="relative">
-              <div
-                className="absolute -inset-3 rounded-3xl opacity-20 blur-xl"
-                style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
-              />
-              <img
-                src={data.imageUrl}
-                alt={data.sectionTitle || "About company"}
-                className="relative rounded-2xl shadow-xl w-full object-cover"
-                style={{ maxHeight: 420 }}
-              />
-            </div>
-          )}
         </div>
       </div>
+
+      {/* ══ Thin divider ══ */}
+      <div className="max-w-7xl mx-auto px-8">
+        <div
+          style={{
+            height: 1,
+            background: "linear-gradient(90deg, transparent, #C8EEF8, transparent)",
+          }}
+        />
+      </div>
+
+      {/* ══ PART 2: Big number + tagline ══ */}
+      <div className="max-w-7xl mx-auto px-8 py-14">
+        <div className="flex flex-col sm:flex-row items-baseline gap-6">
+
+          {/* Left — label + big number */}
+          <div className="flex-shrink-0">
+            <span
+              className="block font-semibold mb-1"
+              style={{ fontSize: "clamp(13px, 1.2vw, 16px)", color: "#444" }}
+            >
+              LÝ DO MÀ HƠN
+            </span>
+            <span
+              style={{
+                fontSize: "clamp(60px, 9vw, 100px)",
+                fontWeight: 900,
+                lineHeight: 1,
+                backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                display: "block",
+              }}
+            >
+              {/* Try to find the big stat value, fallback hardcode */}
+              {data.stats?.find(
+                (s) =>
+                  s.value?.includes("5.000") ||
+                  s.value?.includes("5000") ||
+                  s.value?.includes("5,000")
+              )?.value ?? "5.000+"}
+            </span>
+          </div>
+
+          {/* Right — tagline lines */}
+          <div className="flex flex-col justify-center gap-1">
+            <span
+              className="font-extrabold uppercase"
+              style={{ fontSize: "clamp(15px, 2vw, 26px)", color: "#111", lineHeight: 1.2 }}
+            >
+              DOANH NGHIỆP HÀNG ĐẦU
+            </span>
+            <span
+              className="font-extrabold uppercase"
+              style={{ fontSize: "clamp(15px, 2vw, 26px)", color: "#111", lineHeight: 1.2 }}
+            >
+              CHỌN SEONGON ĐỂ{" "}
+              <span
+                style={{
+                  backgroundImage: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                TRIỂN KHAI SEO AI MAX
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {/* CTA button */}
+        {data.ctaText && data.ctaUrl && (
+          <div className="mt-8">
+            <a
+              href={data.ctaUrl}
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-bold text-white text-sm hover:scale-105 transition-transform"
+              style={{
+                background: "linear-gradient(90deg,#57F5B2,#37BADE)",
+                boxShadow: "0 4px 20px rgba(55,186,222,0.30)",
+              }}
+            >
+              {data.ctaText}
+            </a>
+          </div>
+        )}
+      </div>
+
     </section>
   );
 }

@@ -8,112 +8,176 @@ interface PricingSectionProps {
 
 export default function PricingSection({ data }: PricingSectionProps) {
   if (!data) return null;
+
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-14">
-          {data.title && (
-            <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">{data.title}</h2>
-          )}
-          {data.subtitle && (
-            <p className="text-gray-500 text-lg max-w-xl mx-auto">{data.subtitle}</p>
-          )}
+    <section
+      className="py-20 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, #57F5B2 0%, #3DDACC 50%, #37BADE 100%)",
+      }}
+    >
+      {/* Subtle texture overlays */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 80% 50%, rgba(55,186,222,0.25) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute top-0 left-0 w-96 h-96 rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(87,245,178,0.20) 0%, transparent 70%)",
+          transform: "translate(-30%, -30%)",
+        }}
+      />
+
+      <div className="relative max-w-5xl mx-auto px-6">
+
+        {/* ── Title box ── */}
+        <div className="flex justify-center mb-8">
           <div
-            className="mx-auto mt-4 h-1 w-20 rounded-full"
-            style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
-          />
+            className="text-center px-12 py-6 rounded-2xl"
+            style={{
+              background: "#fff",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+              maxWidth: 600,
+              width: "100%",
+            }}
+          >
+            {data.title && (
+              <h2
+                className="font-extrabold leading-tight"
+                style={{
+                  fontSize: "clamp(20px, 3vw, 32px)",
+                  color: "#57F5B2",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.02em",
+                  backgroundImage: "linear-gradient(90deg, #57F5B2, #37BADE)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                {data.title}
+              </h2>
+            )}
+          </div>
         </div>
 
-        {/* Packages */}
+        {/* ── Subtitle ── */}
+        {data.subtitle && (
+          <p
+            className="text-center text-sm mb-10 max-w-2xl mx-auto leading-relaxed"
+            style={{ color: "rgba(0,50,35,0.80)" }}
+          >
+            {data.subtitle}
+          </p>
+        )}
+
+        {/* ── Pricing Table ── */}
         <div
-          className="grid gap-8"
+          className="rounded-2xl overflow-hidden"
           style={{
-            gridTemplateColumns: `repeat(${Math.min(data.packages?.length || 1, 3)}, minmax(0,1fr))`,
+            border: "1px solid rgba(255,255,255,0.30)",
+            background: "rgba(255,255,255,0.08)",
+            backdropFilter: "blur(8px)",
           }}
         >
+          {/* Table header */}
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: "2fr 1.5fr 1.5fr 2fr",
+              background: "rgba(0,0,0,0.12)",
+              borderBottom: "1px solid rgba(255,255,255,0.20)",
+            }}
+          >
+            {["Gói dịch vụ SEO", "Mức giá", "Thời gian SEO", "Loại KPIs"].map(
+              (col, i) => (
+                <div
+                  key={i}
+                  className="px-6 py-4 font-bold text-sm"
+                  style={{ color: "#fff" }}
+                >
+                  {col}
+                </div>
+              )
+            )}
+          </div>
+
+          {/* Table rows from packages */}
           {data.packages?.map((pkg, i) => (
             <div
               key={pkg.id || i}
-              className="relative rounded-3xl overflow-hidden flex flex-col"
-              style={
-                pkg.isPopular
-                  ? {
-                      background: "linear-gradient(135deg,#57F5B2,#37BADE)",
-                      boxShadow: "0 20px 60px rgba(55,186,222,0.35)",
-                      transform: "scale(1.04)",
-                    }
-                  : {
-                      background: "#fff",
-                      boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-                    }
-              }
+              className="grid transition-colors hover:bg-white/10"
+              style={{
+                gridTemplateColumns: "2fr 1.5fr 1.5fr 2fr",
+                borderBottom:
+                  i < (data.packages?.length ?? 0) - 1
+                    ? "1px solid rgba(255,255,255,0.15)"
+                    : "none",
+              }}
             >
-              {pkg.isPopular && (
-                <div className="absolute top-4 right-4 bg-white/25 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  PHỔ BIẾN NHẤT
-                </div>
-              )}
-              <div className="p-8 flex-1 flex flex-col">
-                <h3
-                  className={`text-xl font-bold mb-2 ${pkg.isPopular ? "text-white" : "text-gray-900"}`}
-                >
-                  {pkg.name}
-                </h3>
-                <div className="mb-6">
+              {/* Tên gói */}
+              <div
+                className="px-6 py-5 text-sm font-medium"
+                style={{ color: "#fff" }}
+              >
+                {pkg.name}
+              </div>
+
+              {/* Mức giá */}
+              <div
+                className="px-6 py-5 text-sm"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                {pkg.price}
+                {pkg.priceNote && (
                   <span
-                    className={`text-4xl font-black ${pkg.isPopular ? "text-white" : "text-gray-900"}`}
+                    className="block text-xs mt-0.5"
+                    style={{ color: "rgba(255,255,255,0.65)" }}
                   >
-                    {pkg.price}
+                    {pkg.priceNote}
                   </span>
-                  {pkg.priceNote && (
-                    <span className={`text-sm ml-1 ${pkg.isPopular ? "text-white/80" : "text-gray-400"}`}>
-                      {pkg.priceNote}
-                    </span>
-                  )}
-                </div>
-
-                <ul className="flex-1 space-y-3 mb-8">
-                  {pkg.features?.map((f, fi) => (
-                    <li key={fi} className="flex items-center gap-2">
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 18 18"
-                        fill="none"
-                        className="flex-shrink-0"
-                      >
-                        <circle cx="9" cy="9" r="9" fill={pkg.isPopular ? "rgba(255,255,255,0.3)" : "#57F5B230"} />
-                        <path
-                          d="M5 9l3 3 5-5"
-                          stroke={pkg.isPopular ? "#fff" : "#37BADE"}
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <span className={`text-sm ${pkg.isPopular ? "text-white" : "text-gray-700"}`}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {pkg.ctaText && pkg.ctaUrl && (
-                  <a
-                    href={pkg.ctaUrl}
-                    className="block text-center py-3 rounded-2xl font-bold text-sm transition-all hover:opacity-90"
-                    style={
-                      pkg.isPopular
-                        ? { background: "rgba(255,255,255,0.25)", color: "#fff", border: "2px solid rgba(255,255,255,0.5)" }
-                        : { background: "linear-gradient(90deg,#57F5B2,#37BADE)", color: "#fff" }
-                    }
-                  >
-                    {pkg.ctaText}
-                  </a>
                 )}
+              </div>
+
+              {/* Thời gian — dùng field duration nếu có, fallback features[0] */}
+              <div
+                className="px-6 py-5 text-sm"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                {(pkg as any).duration ?? pkg.features?.[0] ?? "—"}
+              </div>
+
+              {/* Loại KPIs — dùng field kpi nếu có, fallback features[1] */}
+              <div
+                className="px-6 py-5 text-sm"
+                style={{ color: "rgba(255,255,255,0.92)" }}
+              >
+                {(pkg as any).kpi ?? pkg.features?.[1] ?? "—"}
               </div>
             </div>
           ))}
         </div>
+
+        {/* ── CTA ── */}
+        {data.packages?.[0]?.ctaText && data.packages?.[0]?.ctaUrl && (
+          <div className="flex justify-center mt-12">
+            <a
+              href={data.packages[0].ctaUrl}
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-full font-bold text-sm transition-transform hover:scale-105"
+              style={{
+                background: "#fff",
+                color: "#37BADE",
+                boxShadow: "0 6px 28px rgba(0,0,0,0.15)",
+              }}
+            >
+              {data.packages[0].ctaText}
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );
