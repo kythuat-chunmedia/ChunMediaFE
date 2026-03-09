@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 // import Header from "@/app/components/template/Header";
 import Header from "@/app/components/client/Header";
 import HeroSection from "@/app/components/template/HeroSection";

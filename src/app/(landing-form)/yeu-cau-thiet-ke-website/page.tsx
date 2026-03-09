@@ -1,4 +1,4 @@
-
+export const dynamic = 'force-dynamic';
 import { LandingPage } from "@/app/components/landing";
 import BackgroundEffects from "@/app/components/landing/BackgroundEffects";
 import Header from "@/app/components/client/Header";
