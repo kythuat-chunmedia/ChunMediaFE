@@ -11,13 +11,13 @@ export interface Service {
   title: string;
   description: string;
   icon?: string;
+  image?: string; // ✅ Thêm mới
   isActive: boolean;
   displayOrder: number;
-  slug?: string; 
+  slug?: string;
   features: ServiceFeature[];
 }
 
-// Request types
 export interface CreateServiceFeatureRequest {
   content: string;
   displayOrder: number;
@@ -28,13 +28,14 @@ export interface CreateServiceRequest {
   title: string;
   description: string;
   icon?: string;
+  imageUrl?: string; // ✅ Thêm mới
   isActive: boolean;
   displayOrder: number;
   features: CreateServiceFeatureRequest[];
 }
 
 export interface UpdateServiceFeatureRequest {
-  id: number;  // 0 = new feature
+  id: number;
   content: string;
   displayOrder: number;
   isActive: boolean;
@@ -45,12 +46,12 @@ export interface UpdateServiceRequest {
   title: string;
   description: string;
   icon?: string;
+  imageUrl?: string; // ✅ Thêm mới
   isActive: boolean;
   displayOrder: number;
   features: UpdateServiceFeatureRequest[];
 }
 
-// Filter params
 export interface ServiceFilterParams {
   isActive?: boolean;
   page?: number;
