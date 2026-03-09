@@ -118,7 +118,7 @@ export default function HighlightsSection({
           <div
             style={{
               gridColumn: "2",
-              gridRow: "1 / 3",
+              gridRow: "0 / 3",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
