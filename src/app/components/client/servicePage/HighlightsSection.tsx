@@ -1,47 +1,37 @@
-// ============================================================
-// HighlightsSection.tsx
-// app/components/service-page/HighlightsSection.tsx
-// ============================================================
+"use client";
+import React from "react";
 import type { ServiceHighlight } from "@/app/types";
 
-interface Props { items: ServiceHighlight[] }
+interface HighlightsSectionProps {
+  highlights: ServiceHighlight[];
+}
 
-export default function HighlightsSection({ items }: Props) {
+export default function HighlightsSection({ highlights }: HighlightsSectionProps) {
+  if (!highlights?.length) return null;
   return (
-    <section className="py-20 px-6 bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto">
+    <section
+      className="py-16 relative overflow-hidden"
+      style={{ background: "linear-gradient(135deg,#57F5B2 0%,#37BADE 100%)" }}
+    >
+      {/* Decorative circles */}
+      <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-white/10 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-white/10 translate-x-1/3 translate-y-1/3 pointer-events-none" />
 
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(10,147,150,0.08)] border border-[rgba(10,147,150,0.2)] mb-5">
-            <span className="font-['Nunito_Sans'] text-xs font-bold tracking-widest uppercase text-[#0A9396]">Tại sao chọn chúng tôi</span>
-          </div>
-          <h2 className="font-['Be_Vietnam_Pro'] text-[clamp(1.7rem,3vw,2.5rem)] font-extrabold tracking-[-0.03em] text-[#1A1A1A]">
-            Lợi ích vượt trội bạn nhận được
-          </h2>
-        </div>
-
-        <div className={`grid gap-6 ${
-          items.length <= 3 ? "grid-cols-1 md:grid-cols-3"
-          : items.length === 4 ? "grid-cols-2 md:grid-cols-4"
-          : "grid-cols-2 md:grid-cols-3"
-        }`}>
-          {items.map((item, i) => (
-            <div key={i}
-              className="group relative bg-white border border-[rgba(10,147,150,0.1)] rounded-2xl p-7 overflow-hidden shadow-[0_2px_20px_rgba(10,147,150,0.05)] hover:border-[rgba(10,147,150,0.35)] hover:shadow-[0_12px_40px_rgba(10,147,150,0.12)] hover:-translate-y-1 transition-all duration-400">
-              {/* Top accent bar */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-linear-to-r from-[#0A9396] to-[#94D2BD] scale-x-0 group-hover:scale-x-100 transition-transform duration-400 origin-left" />
-
-              {/* Icon */}
-              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[rgba(10,147,150,0.1)] to-[rgba(148,210,189,0.1)] flex items-center justify-center text-3xl mb-5 group-hover:scale-110 transition-transform duration-300">
-                {item.icon}
+      <div className="relative max-w-7xl mx-auto px-6">
+        <div
+          className="grid gap-6"
+          style={{ gridTemplateColumns: `repeat(${Math.min(highlights.length, 4)}, minmax(0, 1fr))` }}
+        >
+          {highlights.map((h, i) => (
+            <div
+              key={i}
+              className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/30 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-white/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <span className="text-white text-2xl font-black">{i + 1}</span>
               </div>
-
-              <h3 className="font-['Be_Vietnam_Pro'] font-extrabold text-[#1A1A1A] text-base mb-2 group-hover:text-[#0A9396] transition-colors">
-                {item.title}
-              </h3>
-              <p className="font-['Nunito_Sans'] text-sm text-[#6C757D] leading-relaxed">
-                {item.description}
-              </p>
+              <h3 className="text-white font-bold text-lg mb-2">{h.title}</h3>
+              <p className="text-white/80 text-sm leading-relaxed">{h.description}</p>
             </div>
           ))}
         </div>

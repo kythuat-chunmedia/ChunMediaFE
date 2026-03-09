@@ -1,91 +1,53 @@
-// app/(pages)/dich-vu/[slug]/page.tsx
+// src/app/(client)/(main-page)/dich-vu/[slug]/page.tsx
+
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 import { clientApi } from "@/app/lib/api";
-import type { ServicePageData } from "@/app/types";
-
 import HeroSection from "@/app/components/client/servicePage/HeroSection";
+import AboutSection from "@/app/components/client/servicePage/AboutSection";
 import HighlightsSection from "@/app/components/client/servicePage/HighlightsSection";
-import ClientStatsSection from "@/app/components/client/servicePage/ClientStatsSection";
 import PricingSection from "@/app/components/client/servicePage/PricingSection";
-import ProcessSection from "@/app/components/client/servicePage/ProcessSection";
+import AboutCompanySection from "@/app/components/client/servicePage/AboutCompanySection";
+import ClientStatsSection from "@/app/components/client/servicePage/ClientStatsSection";
+import SolutionsSection from "@/app/components/client/servicePage/SolutionsSection";
+import ProjectsSection from "@/app/components/client/servicePage/ProjectsSection";
+import TestimonialsSection from "@/app/components/client/servicePage/TestimonialsSection";
 import AwardsSection from "@/app/components/client/servicePage/AwardsSection";
+import ProcessSection from "@/app/components/client/servicePage/ProcessSection";
 import TeamSection from "@/app/components/client/servicePage/TeamSection";
-import CTASection from "@/app/components/client/servicePage/CtaSection";
+import CtaSection from "@/app/components/client/servicePage/CtaSection";
+import QnASection from "@/app/components/client/servicePage/QnaSection";
 
-interface Props {
-    params: Promise<{ slug: string }>;
+interface PageProps {
+  params: { slug: string };
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-
-    const { slug } = await params;
-
-    try {
-        const page: ServicePageData = await clientApi.getServicePage(slug);
-        return {
-            title: page.metaTitle ?? page.hero.title,
-            description: page.metaDescription,
-        };
-    } catch {
-        return { title: "Dịch Vụ" };
-    }
-}
-
-export default async function ServiceSlugPage({ params }: Props) {
-    const { slug } = await params;
-console.log("Generating metadata for slug:", slug);
-let page: ServicePageData;
-console.log(0);
-try {
-    console.log(1);
-    page = await clientApi.getServicePage(slug);
-    console.log(2);
-    console.log(page);
-} catch (error) {
-    console.error("Error fetching service page for slug:", slug, error);
+export default async function ServicePage({ params }: PageProps) {
+  let data;
+  try {
+    data = await clientApi.getServicePage(params.slug);
+  } catch (err) {
+    console.error("[ServicePage] fetch error:", err);
     notFound();
-}
+  }
 
-    return (
-        <main>
-            {/* 1 — Hero */}
-            <HeroSection data={page.hero} />
+  if (!data) notFound();
 
-            {/* 2 — Điểm nổi bật: HighlightsSection nhận items (không phải data) */}
-            {page.highlights && page.highlights.length > 0 && (
-                <HighlightsSection items={page.highlights} />
-            )}
-
-            {/* 3 — Khách hàng: ClientStatsSection nhận data={{ ... }} */}
-            {page.clientStats && (
-                <ClientStatsSection data={page.clientStats} />
-            )}
-
-            {/* 4 — Bảng giá */}
-            {page.pricing && (
-                <PricingSection data={page.pricing} />
-            )}
-
-            {/* 5 — Quy trình */}
-            {page.process && (
-                <ProcessSection data={page.process} />
-            )}
-
-            {/* 6 — Giải thưởng */}
-            {page.awards && (
-                <AwardsSection data={page.awards} />
-            )}
-
-            {/* 7 — Đội ngũ: TeamSection nhận data có experts */}
-            {page.team && (
-                <TeamSection data={page.team} />
-            )}
-
-            {/* 8 — CTA + Form: CtaSection nhận data KHÔNG có experts */}
-            {page.ctaSection && (
-                <CTASection data={page.ctaSection} />
-            )}
-        </main>
-    );
+  return (
+    <main>
+      {data.hero         && <HeroSection          data={data.hero} />}
+      {data.about        && <AboutSection         data={data.about} />}
+      {data.highlights?.length ? <HighlightsSection highlights={data.highlights} /> : null}
+      {data.pricing      && <PricingSection       data={data.pricing} />}
+      {data.aboutCompany && <AboutCompanySection  data={data.aboutCompany} />}
+      {data.clientStats  && <ClientStatsSection   data={data.clientStats} />}
+      {data.solutions    && <SolutionsSection     data={data.solutions} />}
+      {data.projects     && <ProjectsSection      data={data.projects} />}
+      {data.testimonials && <TestimonialsSection  data={data.testimonials} />}
+      {data.awards       && <AwardsSection        data={data.awards} />}
+      {data.process      && <ProcessSection       data={data.process} />}
+      {data.team         && <TeamSection          data={data.team} />}
+      {data.ctaSection   && <CtaSection           data={data.ctaSection} />}
+      {data.qnA          && <QnASection           data={data.qnA} />}
+    </main>
+  );
 }

@@ -1,60 +1,76 @@
-// ============================================================
-// TeamSection.tsx
-// app/components/service-page/TeamSection.tsx
-// ============================================================
-import type { ServicePageData } from "@/app/types";
-import Image from "next/image";
+"use client";
+import React from "react";
+import type { ServiceTeam } from "@/app/types";
 
-type Props = { data: NonNullable<ServicePageData["team"]> }
+interface TeamSectionProps {
+  data: ServiceTeam;
+}
 
-export default function TeamSection({ data }: Props) {
+export default function TeamSection({ data }: TeamSectionProps) {
+  if (!data?.experts?.length) return null;
   return (
-    <section className="py-20 px-6 bg-white">
-      <div className="max-w-[1400px] mx-auto">
+    <section className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[rgba(10,147,150,0.08)] border border-[rgba(10,147,150,0.2)] mb-5">
-            <span className="font-['Nunito_Sans'] text-xs font-bold tracking-widest uppercase text-[#0A9396]">Đội ngũ</span>
-          </div>
-          <h2 className="font-['Be_Vietnam_Pro'] text-[clamp(1.7rem,3vw,2.5rem)] font-extrabold tracking-[-0.03em] text-[#1A1A1A] mb-3">
-            {data.title || "Đội Ngũ Chuyên Gia"}
-          </h2>
-          {data.subtitle && (
-            <p className="font-['Nunito_Sans'] text-[#6C757D] text-base">{data.subtitle}</p>
+          {data.title && (
+            <h2 className="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">{data.title}</h2>
           )}
+          {data.subtitle && (
+            <p className="text-gray-500 text-lg max-w-xl mx-auto">{data.subtitle}</p>
+          )}
+          <div
+            className="mx-auto mt-4 h-1 w-20 rounded-full"
+            style={{ background: "linear-gradient(90deg,#57F5B2,#37BADE)" }}
+          />
         </div>
 
-        <div className={`grid gap-8 ${
-          data.experts.length <= 2 ? "md:grid-cols-2 max-w-2xl mx-auto"
-          : data.experts.length === 3 ? "md:grid-cols-3"
-          : "md:grid-cols-4"
-        }`}>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {data.experts.map((expert, i) => (
-            <div key={i} className="group text-center">
+            <div
+              key={i}
+              className="group text-center p-6 rounded-3xl border border-gray-100 hover:border-transparent hover:shadow-xl transition-all duration-300"
+            >
               {/* Avatar */}
-              <div className="relative w-32 h-32 mx-auto mb-5">
-                <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#0A9396] to-[#94D2BD] p-[3px] group-hover:p-1 transition-all duration-300">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-[#E9ECEF]">
-                    <Image src={expert.avatarUrl} alt={expert.name} width={128} height={128}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  </div>
-                </div>
-                {expert.experience && (
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#EE9B00] rounded-full shadow-[0_4px_12px_rgba(238,155,0,0.3)] whitespace-nowrap">
-                    <span className="font-['Nunito_Sans'] text-[10px] font-extrabold text-white">{expert.experience}</span>
+              <div className="relative inline-block mb-4">
+                <div
+                  className="absolute inset-0 rounded-full blur-md opacity-0 group-hover:opacity-60 transition-opacity"
+                  style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
+                />
+                {expert.avatarUrl ? (
+                  <img
+                    src={expert.avatarUrl}
+                    alt={expert.name}
+                    className="relative w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                  />
+                ) : (
+                  <div
+                    className="relative w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-black shadow-lg"
+                    style={{ background: "linear-gradient(135deg,#57F5B2,#37BADE)" }}
+                  >
+                    {expert.name?.charAt(0)}
                   </div>
                 )}
               </div>
 
-              <h3 className="font-['Be_Vietnam_Pro'] font-extrabold text-[#1A1A1A] text-base mb-1 group-hover:text-[#0A9396] transition-colors">
-                {expert.name}
-              </h3>
-              <p className="font-['Nunito_Sans'] text-sm text-[#6C757D] mb-4">{expert.role}</p>
+              <h3 className="font-bold text-gray-900 text-base mb-1">{expert.name}</h3>
+              <p className="text-sm mb-2" style={{ color: "#37BADE" }}>{expert.role}</p>
+
+              {expert.experience && (
+                <p className="text-xs text-gray-400 mb-3">{expert.experience}</p>
+              )}
 
               {expert.specialties && expert.specialties.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 justify-center">
-                  {expert.specialties.map((s, si) => (
-                    <span key={si}
-                      className="font-['Nunito_Sans'] text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[rgba(10,147,150,0.07)] border border-[rgba(10,147,150,0.15)] text-[#0A9396]">
+                <div className="flex flex-wrap gap-1 justify-center">
+                  {expert.specialties.slice(0, 3).map((s, si) => (
+                    <span
+                      key={si}
+                      className="text-xs px-2 py-0.5 rounded-full"
+                      style={{
+                        background: "linear-gradient(90deg,#57F5B215,#37BADE15)",
+                        color: "#37BADE",
+                      }}
+                    >
                       {s}
                     </span>
                   ))}

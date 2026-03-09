@@ -146,6 +146,8 @@ class ApiClient {
 
     const headers: HeadersInit = {
       "Content-Type": "application/json",
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
       ...fetchConfig.headers,
     };
 
@@ -159,10 +161,11 @@ class ApiClient {
 
     const url = this.buildUrl(endpoint, params);
 
-    const response = await fetch(url, {
-      ...fetchConfig,
-      headers,
-    });
+const response = await fetch(url, {
+  ...fetchConfig,
+  headers,
+  cache: (fetchConfig as any).cache ?? "no-store",  // ← thêm dòng này
+});
 
     // Handle 401 - Token expired
     if (response.status === 401 && requireAuth) {
