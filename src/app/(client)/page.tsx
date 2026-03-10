@@ -66,6 +66,7 @@ import SeoMetadataSetter from '../lib/helper/SeoMetadataSetter';
 
 export default async function HomePage() {
   const portfolios = await clientApi.getPortfolios();
+  const services = await clientApi.getServicesPublic();
 
   let partners: Partner[] = [];
   try {
@@ -81,8 +82,8 @@ export default async function HomePage() {
 
       {/* Animated Background */}
       <div className="fixed inset-0 -z-10 bg-linear-to-br from-[#F8F9FA] to-[#E9ECEF]">
-        <div className="absolute -top-[200px] -right-[200px] w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(10,147,150,0.08)_0%,transparent_70%)] animate-[float_20s_ease-in-out_infinite]" />
-        <div className="absolute -bottom-[150px] -left-[150px] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(238,155,0,0.06)_0%,transparent_70%)] animate-[float_15s_ease-in-out_infinite_reverse]" />
+        <div className="absolute -top-50 -right-50 w-200 h-200 rounded-full bg-[radial-gradient(circle,rgba(10,147,150,0.08)_0%,transparent_70%)] animate-[float_20s_ease-in-out_infinite]" />
+        <div className="absolute -bottom-37.5 -left-37.5 w-150 h-150 rounded-full bg-[radial-gradient(circle,rgba(238,155,0,0.06)_0%,transparent_70%)] animate-[float_15s_ease-in-out_infinite_reverse]" />
       </div>
       <div
         className="fixed inset-0 -z-10 pointer-events-none"
@@ -95,7 +96,7 @@ export default async function HomePage() {
 
       <HeroSection />
       <StatsSection />
-      <ServicesSection />
+      <ServicesSection services={services}/>
       <OutstandingPortfolio portfolios={portfolios} />
       <CtaSection />
 
